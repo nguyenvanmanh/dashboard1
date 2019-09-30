@@ -8,8 +8,7 @@
           href="javascript:void(0)"
           class="page-logo-link press-scale-down d-flex align-items-center"
         >
-          <!-- <img src="../assets/img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo" /> -->
-          <img src="../assets/img/logo.png" alt />
+          <img src="../assets/img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo" />
           <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
           <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
         </a>
@@ -17,36 +16,47 @@
       <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
         <form>
           <div class="form-group">
-            <label class="form-label" for="username">Username</label>
+            <label class="form-label">Username</label>
             <input
+              v-validate="'required'"
+              :error-messages="errors.collect('username')"
               type="text"
-              id="username"
+              name="username"
               class="form-control"
               placeholder="your id or email"
-              value="drlantern@gotbootstrap.com"
-              v-model="username1"
+              v-model="users.username"
+              required
             />
           </div>
+          <v-text-field
+            v-model="username"
+            v-validate="'required|max:10'"
+            :counter="10"
+            :error-messages="errors.collect('username')"
+            label="User Name"
+            data-vv-name="username"
+            required
+          ></v-text-field>
           <div class="form-group">
-            <label class="form-label" for="password">Password</label>
+            <label class="form-label">Password</label>
             <input
-              type="password"
-              id="password"
+              type="text"
+              name="password"
               class="form-control"
-              placeholder="password"
-              value="password123"
-              v-model="password1"
+              placeholder="your password"
+              v-model="users.password"
+              v-validate="'required'"
             />
           </div>
+
           <div class="form-group text-left">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="rememberme" />
               <label class="custom-control-label" for="rememberme">Remember me for the next 30 days</label>
             </div>
           </div>
-          <!-- <router-link to="/"> -->
-          <a class="btn btn-primary float-right" role="button" @click="checkForm">Secure Login</a>
-          <!-- </router-link> -->
+
+          <a class="btn btn-primary float-right" role="button" type="submit" @click="addToAPI">LOGIN</a>
         </form>
       </div>
 
@@ -69,66 +79,33 @@
 </template>
 
 <script>
-// import vueRouter from "vue-router";
+import axios from "axios";
+
 export default {
   name: "login",
-  props: {
-    msg: String
-  },
   data() {
     return {
-      username1: "",
-      password1: "",
-      users: [
-        {
-          username: "admin1",
-          password: "123456"
-        },
-        {
-          username: "admin2",
-          password: "123456"
-        },
-        {
-          username: "admin3",
-          password: "123456"
-        },
-        {
-          username: "admin4",
-          password: "123456"
-        },
-        {
-          username: "admin5",
-          password: "123456"
-        }
-      ]
+      users: { username: "", password: "" }
     };
   },
   methods: {
-    checkForm() {
-      let temp = false;
-      for (let i = 0; i < this.users.length; i++) {
-        if (
-          this.username1 === this.users[i].username &&
-          this.password1 === this.users[i].password
-        ) {
-          temp = true;
-          this.$router.push({
-            path: "/"
-          });
-          break;
-        }
-      }
-      if (temp === false) {
-        alert("Login failed");
-      }
-
-      // if (
-      //   this.username1 === this.users.username &&
-      //   this.password1 === this.users.password
-      // ) {
-      //   console.log("dsdsd");
-
-      // }
+    addToAPI() {
+      let newUser = {
+        username: this.users.username,
+        password: this.users.password
+      };
+      console.log(newUser);
+      axios({
+        method: "post",
+        url: "http://localhost:3000/users",
+        data: newUser
+      })
+        .then(function(response) {
+          //  ..................
+        })
+        .catch(function(error) {
+          // window.getApp.$emit('Login Fail')
+        });
     }
   }
 };
