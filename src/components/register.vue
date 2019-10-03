@@ -11,7 +11,11 @@
                 href="javascript:void(0)"
                 class="page-logo-link press-scale-down d-flex align-items-center"
               >
-                <img src="../assets/img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo" />
+                <img
+                  src="../assets/img/logo.png"
+                  alt="SmartAdmin WebApp"
+                  aria-roledescription="logo"
+                />
                 <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
               </a>
             </div>
@@ -41,27 +45,27 @@
                   <div class="alert alert-primary text-dark" role="alert">
                     <strong>Heads Up!</strong> Due to server maintenance from 9:30GTA to 12GTA, the verification emails could be delayed by up to 10 minutes.
                   </div>
-                  <form id="js-login" novalidate action="intel_analytics_dashboard.html">
+                  <form v-on:submit.prevent="sendVerification">
                     <div class="form-group row">
                       <label class="col-xl-12 form-label" for="fname">Your first and last name</label>
                       <div class="col-6 pr-1">
-                        <input
-                          type="text"
-                          id="fname"
-                          class="form-control"
+                        <v-text-field
+                          v-model="users.firstname"
+                          :error-messages="errors.collect('name')"
                           placeholder="First Name"
+                          data-vv-name="name"
                           required
-                        />
+                        ></v-text-field>
                         <div class="invalid-feedback">No, you missed this one.</div>
                       </div>
                       <div class="col-6 pl-1">
-                        <input
-                          type="text"
-                          id="lname"
-                          class="form-control"
+                        <v-text-field
+                          v-model="users.lastname"
+                          :error-messages="errors.collect('name')"
                           placeholder="Last Name"
+                          data-vv-name="name"
                           required
-                        />
+                        ></v-text-field>
                         <div class="invalid-feedback">No, you missed this one.</div>
                       </div>
                     </div>
@@ -70,13 +74,12 @@
                         class="form-label"
                         for="emailverify"
                       >Email will be needed for verification and account recovery</label>
-                      <input
-                        type="email"
-                        id="emailverify"
-                        class="form-control"
-                        placeholder="Email for verification"
+                      <v-text-field
+                        v-model="users.username"
+                        :error-messages="errors.collect('name')"
+                        placeholder="Username"
                         required
-                      />
+                      ></v-text-field>
                       <div class="invalid-feedback">No, you missed this one.</div>
                       <div class="help-block">Your email will also be your username</div>
                     </div>
@@ -85,13 +88,13 @@
                         Pick a password:
                         <br />Don't reuse your bank password, we didn't spend a lot on security for this app.
                       </label>
-                      <input
-                        type="password"
-                        id="userpassword"
-                        class="form-control"
-                        placeholder="minimm 8 characters"
+                      <v-text-field
+                        v-model="users.password"
+                        :error-messages="errors.collect('name')"
+                        placeholder="Password"
+                        data-vv-name="name"
                         required
-                      />
+                      ></v-text-field>
                       <div class="invalid-feedback">Sorry, you missed this one.</div>
                       <div
                         class="help-block"
@@ -117,7 +120,6 @@
                     <div class="row no-gutters">
                       <div class="col-md-4 ml-auto text-right">
                         <button
-                          id="js-login-btn"
                           type="submit"
                           class="btn btn-block btn-danger btn-lg mt-3"
                         >Send verification</button>
@@ -144,10 +146,42 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "register",
-  props: {
-    msg: String
+  data() {
+    return {
+      users: { firstname: "", lastname: "", username: "", password: "" },
+      sendVerification: Function
+    };
+  },
+  mounted() {
+    this.sendVerification = () => {
+      // evt.preventDefault(); //prevents the default action
+      let newUser = {
+        firstname: this.users.firstname,
+        lastname: this.users.lastname,
+        username: this.users.username,
+        password: this.users.password
+      };
+      axios({
+        headers: {
+          Authorization: localStorage.getItem("tocken")
+        },
+        method: "POST",
+        url: "http://172.30.56.173:8080/rest/users?role=1",
+        data: newUser
+      })
+        .then(res => {
+          if (res.status === 201) {
+            alert("Register Success !");
+          }
+        })
+        .catch(() => {
+          alert("Register Failed");
+          return null;
+        });
+    };
   }
 };
 </script>

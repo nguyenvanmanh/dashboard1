@@ -15,40 +15,23 @@
       </div>
       <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
         <form>
-          <div class="form-group">
-            <label class="form-label">Username</label>
-            <input
-              v-validate="'required'"
-              :error-messages="errors.collect('username')"
-              type="text"
-              name="username"
-              class="form-control"
-              placeholder="your id or email"
-              v-model="users.username"
-              required
-            />
-          </div>
           <v-text-field
-            v-model="username"
-            v-validate="'required|max:10'"
-            :counter="10"
+            v-model="users.username"
+            v-validate="'required'"
             :error-messages="errors.collect('username')"
             label="User Name"
             data-vv-name="username"
             required
           ></v-text-field>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input
-              type="text"
-              name="password"
-              class="form-control"
-              placeholder="your password"
-              v-model="users.password"
-              v-validate="'required'"
-            />
-          </div>
-
+          <v-text-field
+            v-model="users.password"
+            v-validate="'required'"
+            :error-messages="errors.collect('password')"
+            label="Password"
+            data-vv-name="password"
+            required
+          ></v-text-field>
+          <p></p>
           <div class="form-group text-left">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="rememberme" />
@@ -80,33 +63,37 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "login",
   data() {
     return {
-      users: { username: "", password: "" }
+      users: { username: "", password: "" },
+      addToAPI: Function
     };
   },
-  methods: {
-    addToAPI() {
+
+  mounted() {
+    let _this = this;
+    this.addToAPI = () => {
       let newUser = {
         username: this.users.username,
         password: this.users.password
       };
-      console.log(newUser);
+
       axios({
         method: "post",
-        url: "http://localhost:3000/users",
+        url: "http://172.30.56.173:8080/rest/login",
         data: newUser
-      })
-        .then(function(response) {
-          //  ..................
-        })
-        .catch(function(error) {
-          // window.getApp.$emit('Login Fail')
-        });
-    }
+      }).then(function(response) {
+        if (response.status === 200) {
+          localStorage.setItem('tocken',response.data);
+          _this.$router.push({
+            path: "/"
+          });
+        }
+        
+      }).catch(()=>{ alert('Login Failed'); return null;});
+    };
   }
 };
 </script>

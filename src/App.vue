@@ -27,3 +27,4 @@ export default {
 @import "./assets/css/app.bundle.css";
 </style>
 
+
