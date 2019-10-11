@@ -50,7 +50,7 @@
                       <label class="col-xl-12 form-label" for="fname">Your first and last name</label>
                       <div class="col-6 pr-1">
                         <v-text-field
-                          v-model="users.firstname"
+                          v-model="users.firstName"
                           :error-messages="errors.collect('name')"
                           placeholder="First Name"
                           data-vv-name="name"
@@ -60,7 +60,7 @@
                       </div>
                       <div class="col-6 pl-1">
                         <v-text-field
-                          v-model="users.lastname"
+                          v-model="users.lastName"
                           :error-messages="errors.collect('name')"
                           placeholder="Last Name"
                           data-vv-name="name"
@@ -68,16 +68,27 @@
                         ></v-text-field>
                         <div class="invalid-feedback">No, you missed this one.</div>
                       </div>
+                      
                     </div>
                     <div class="form-group">
                       <label
                         class="form-label"
                         for="emailverify"
-                      >Email will be needed for verification and account recovery</label>
-                      <v-text-field
+                      >Email && Username will be needed for verification and account recovery</label>
+                      <div class="col-6 pl-1">
+                        <v-text-field
                         v-model="users.username"
                         :error-messages="errors.collect('name')"
                         placeholder="Username"
+                        required
+                      ></v-text-field>
+                        <div class="invalid-feedback">No, you missed this one.</div>
+                      </div>
+                      <v-text-field
+                        v-model="users.email"
+                        :error-messages="errors.collect('name')"
+                        suffix="@gmail.com"
+                        placeholder="Email"
                         required
                       ></v-text-field>
                       <div class="invalid-feedback">No, you missed this one.</div>
@@ -91,6 +102,7 @@
                       <v-text-field
                         v-model="users.password"
                         :error-messages="errors.collect('name')"
+                        :type=" 'password'"
                         placeholder="Password"
                         data-vv-name="name"
                         required
@@ -151,7 +163,7 @@ export default {
   name: "register",
   data() {
     return {
-      users: { firstname: "", lastname: "", username: "", password: "" },
+      users: { firstName: "", lastName: "",email:"", username: "", password: "" },
       sendVerification: Function
     };
   },
@@ -159,17 +171,15 @@ export default {
     this.sendVerification = () => {
       // evt.preventDefault(); //prevents the default action
       let newUser = {
-        firstname: this.users.firstname,
-        lastname: this.users.lastname,
+        firstName: this.users.firstName,
+        lastName: this.users.lastName,
+        email: this.users.email,
         username: this.users.username,
         password: this.users.password
       };
       axios({
-        headers: {
-          Authorization: localStorage.getItem("tocken")
-        },
         method: "POST",
-        url: "http://172.30.56.173:8080/rest/users?role=1",
+        url: "http://172.30.56.77:8080/rest/register",
         data: newUser
       })
         .then(res => {

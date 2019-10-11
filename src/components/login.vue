@@ -10,7 +10,6 @@
         >
           <img src="../assets/img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo" />
           <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
-          <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
         </a>
       </div>
       <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
@@ -27,6 +26,7 @@
             v-model="users.password"
             v-validate="'required'"
             :error-messages="errors.collect('password')"
+            :type=" 'password'"
             label="Password"
             data-vv-name="password"
             required
@@ -39,19 +39,8 @@
             </div>
           </div>
 
-          <a class="btn btn-primary float-right" role="button" type="submit" @click="addToAPI">LOGIN</a>
+          <a class="btn btn-primary float-right" role="button" type="submit" @click="addToAPI">Login</a>
         </form>
-      </div>
-
-      <div class="blankpage-footer text-center">
-        <a href="#">
-          <strong>Recover Password</strong>
-        </a> |
-        <router-link to="/register">
-          <a href="#">
-            <strong>Register Account</strong>
-          </a>
-        </router-link>
       </div>
     </div>
     <video poster="img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
@@ -82,17 +71,21 @@ export default {
 
       axios({
         method: "post",
-        url: "http://172.30.56.173:8080/rest/login",
+        url: "http://172.30.56.77:8080/rest/login",
         data: newUser
-      }).then(function(response) {
-        if (response.status === 200) {
-          localStorage.setItem('tocken',response.data);
-          _this.$router.push({
-            path: "/"
-          });
-        }
-        
-      }).catch(()=>{ alert('Login Failed'); return null;});
+      })
+        .then(function(response) {
+          if (response.status === 200) {
+            localStorage.setItem("tocken", response.data);
+            _this.$router.push({
+              path: "/"
+            });
+          }
+        })
+        .catch(() => {
+          alert("Login Failed");
+          return null;
+        });
     };
   }
 };
