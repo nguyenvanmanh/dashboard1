@@ -71,7 +71,7 @@ export default {
 
       axios({
         method: "post",
-        url: "http://172.30.56.77:8080/rest/login",
+        url: "http://192.168.9.119:8081/rest/login",
         data: newUser
       })
         .then(function(response) {
