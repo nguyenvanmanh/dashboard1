@@ -126,7 +126,7 @@ export default {
     let self = this; //closure
 
     axios
-      .get("http://192.168.9.171:8081/rest/getListDepartmentActive")
+      .get("http://192.168.9.119:8081/rest/getListDepartmentActive")
 
       .then(function(response) {
         self.departments = response.data;
@@ -172,7 +172,7 @@ export default {
 
   methods: {
     editDept(dept) {
-      this.editedIndex = this.departments.indexOf(dept);
+      this.editedI19ndex = this.departments.indexOf(dept);
       this.editedDept = Object.assign({}, dept);
       this.dialog = true;
     },
@@ -184,7 +184,7 @@ export default {
       confirm("Are you sure you want to delete this department?") &&
         axios
           .post(
-            `http://192.168.9.171:8081/rest/inActiveDepartment`,
+            `http://192.168.9.119:8081/rest/inActiveDepartment`,
             this.editedDept
           )
           .then(response => {
@@ -216,7 +216,7 @@ export default {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
         axios
           .post(
-            "http://192.168.9.171:8081/rest/updateDepartmentInfomation",
+            "http://192.168.9.119:8081/rest/updateDepartmentInfomation",
             this.editedDept
           )
           .then(response => {
@@ -235,7 +235,7 @@ export default {
         this.departments.push(this.editedDept);
         axios
           .post(
-            "http://192.168.9.171:8081/rest/insertDepartment",
+            "http://192.168.9.119:8081/rest/insertDepartment",
             this.editedDept
           )
           .then(response => {
@@ -255,7 +255,7 @@ export default {
       if (this.radios === "0") {
         console.log("made it to active");
         axios
-          .get("http://192.168.9.171:8081/rest/getListDepartmentActive")
+          .get("http://192.168.9.119:8081/rest/getListDepartmentActive")
 
           .then(function(response) {
             self.departments = response.data;
@@ -270,7 +270,7 @@ export default {
     else {
         console.log("made it to all");
         axios
-          .get("http://192.168.9.171:8081/rest/getAllListDepartment")
+          .get("http://192.168.9.119:8081/rest/getAllListDepartment")
 
           .then(function(response) {
             self.departments = response.data;
