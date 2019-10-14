@@ -10,8 +10,8 @@
             data-toggle="modal"
             data-target="#modal-shortcut"
           >
-            <img src="../assets/img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo" />
-            <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
+            <img src="../assets/img/logo.png" alt="Employee Management" aria-roledescription="logo" />
+            <span class="page-logo-text mr-1">Employee Management</span>
             <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
           </a>
         </div>
@@ -38,37 +38,11 @@
               </a>
             </div>
           </div>
-          <div class="info-card">
-            <img
-              src="../assets/img/demo/avatars/avatar-admin.png"
-              class="profile-image rounded-circle"
-              alt="Dr. Codex Lantern"
-            />
-            <div class="info-card-text">
-              <a href="#" class="d-flex align-items-center text-white">
-                <span class="text-truncate text-truncate-sm d-inline-block">Dr. Codex Lantern</span>
-              </a>
-              <span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>
-            </div>
-            <img src="../assets/img/card-backgrounds/cover-2-lg.png" class="cover" alt="cover" />
-            <a
-              href="#"
-              onclick="return false;"
-              class="pull-trigger-btn"
-              data-action="toggle"
-              data-class="list-filter-active"
-              data-target=".page-sidebar"
-              data-focus="nav_filter_input"
-            >
-              <i class="fal fa-angle-down"></i>
-            </a>
-          </div>
+          
+            
+             
           <ul id="js-nav-menu" class="nav-menu">
             <li>
-              <a href="#" title="Application Intel" data-filter-tags="application intel">
-                <i class="fal fa-info-circle"></i>
-                <span class="nav-link-text" data-i18n="nav.application_intel">Application Intel</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -131,10 +105,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Theme Settings" data-filter-tags="theme settings">
-                <i class="fal fa-cog"></i>
-                <span class="nav-link-text" data-i18n="nav.theme_settings">Theme Settings</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -187,10 +157,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Package Info" data-filter-tags="package info">
-                <i class="fal fa-tag"></i>
-                <span class="nav-link-text" data-i18n="nav.package_info">Package Info</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -230,12 +196,8 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-title">Tools & Components</li>
+            <li class="nav-title">Data Management</li>
             <li>
-              <a href="#" title="UI Components" data-filter-tags="ui components">
-                <i class="fal fa-window"></i>
-                <span class="nav-link-text" data-i18n="nav.ui_components">UI Components</span>
-              </a>
               <ul>
                 <li>
                   <a href="ui_alerts.html" title="Alerts" data-filter-tags="ui components alerts">
@@ -438,10 +400,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Utilities" data-filter-tags="utilities">
-                <i class="fal fa-bolt"></i>
-                <span class="nav-link-text" data-i18n="nav.utilities">Utilities</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -603,13 +561,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Font Icons" data-filter-tags="font icons">
-                <i class="fal fa-map-marker-alt"></i>
-                <span class="nav-link-text" data-i18n="nav.font_icons">Font Icons</span>
-                <span
-                  class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top"
-                >2,500+</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -749,14 +700,11 @@
               </ul>
             </li>
             <li>
-              
+              <router-link to="/sendingEmail" title="sendingEmail">
+                <i class="fal fa-th-list"></i>
+                <span class="nav-link-text" data-i18n="nav.tables">Send Email</span>
+              </router-link>
 
-                <router-link to="/sendingEmail"
-                title="sendingEmail">
-                 <i class="fal fa-th-list"></i>
-                  <span class="nav-link-text" data-i18n="nav.tables">Send Email</span>
-                </router-link>
-              
               <ul>
                 <li>
                   <a
@@ -782,11 +730,7 @@
               </ul>
             </li>
             <li>
-              <router-link 
-              to="/departments"
-              title="departments"
-              data-filter-tags="tables">
-              
+              <router-link to="/departments" title="departments" data-filter-tags="tables">
                 <i class="fal fa-th-list"></i>
                 <span class="nav-link-text" data-i18n="nav.tables">Departments Management</span>
               </router-link>
@@ -832,12 +776,8 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-title">Plugins & Addons</li>
+
             <li>
-              <a href="#" title="Plugins" data-filter-tags="plugins">
-                <i class="fal fa-shield-alt"></i>
-                <span class="nav-link-text" data-i18n="nav.plugins">Core Plugins</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -929,13 +869,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Datatables" data-filter-tags="datatables datagrid">
-                <i class="fal fa-table"></i>
-                <span class="nav-link-text" data-i18n="nav.datatables">Datatables</span>
-                <span
-                  class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top"
-                >235 KB</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -1087,10 +1020,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Statistics" data-filter-tags="statistics chart graphs">
-                <i class="fal fa-chart-pie"></i>
-                <span class="nav-link-text" data-i18n="nav.statistics">Statistics</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -1178,10 +1107,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Notifications" data-filter-tags="notifications">
-                <i class="fal fa-exclamation-circle"></i>
-                <span class="nav-link-text" data-i18n="nav.notifications">Notifications</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -1209,10 +1134,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Form Plugins" data-filter-tags="form plugins">
-                <i class="fal fa-credit-card-front"></i>
-                <span class="nav-link-text" data-i18n="nav.form_plugins">Form Plugins</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -1310,10 +1231,6 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Miscellaneous" data-filter-tags="miscellaneous">
-                <i class="fal fa-globe"></i>
-                <span class="nav-link-text" data-i18n="nav.miscellaneous">Miscellaneous</span>
-              </a>
               <ul>
                 <li>
                   <a
@@ -1362,12 +1279,8 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-title">Layouts & Apps</li>
+
             <li>
-              <a href="#" title="Pages" data-filter-tags="pages">
-                <i class="fal fa-plus-circle"></i>
-                <span class="nav-link-text" data-i18n="nav.pages">Page Views</span>
-              </a>
               <ul>
                 <li>
                   <a href="page_chat.html" title="Chat" data-filter-tags="pages chat">
@@ -1621,38 +1534,7 @@
             <i class="ni ni-chevron-right"></i>
             <i class="ni ni-chevron-right"></i>
           </a>
-          <ul class="list-table m-auto nav-footer-buttons">
-            <li>
-              <a
-                href="javascript:void(0);"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Chat logs"
-              >
-                <i class="fal fa-comments"></i>
-              </a>
-            </li>
-            <li>
-              <a
-                href="javascript:void(0);"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Support Chat"
-              >
-                <i class="fal fa-life-ring"></i>
-              </a>
-            </li>
-            <li>
-              <a
-                href="javascript:void(0);"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Make a call"
-              >
-                <i class="fal fa-phone"></i>
-              </a>
-            </li>
-          </ul>
+         
         </div>
         <!-- END NAV FOOTER -->
       </aside>
@@ -1767,150 +1649,9 @@
             </div>
             <!-- app shortcuts -->
             <div>
-              <a href="#" class="header-icon" data-toggle="dropdown" title="My Apps">
-                <i class="fal fa-cube"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-animated w-auto h-auto">
-                <div
-                  class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top"
-                >
-                  <h4 class="m-0 text-center color-white">
-                    Quick Shortcut
-                    <small class="mb-0 opacity-80">User Applications & Addons</small>
-                  </h4>
-                </div>
-                <div class="custom-scroll h-100">
-                  <ul class="app-list">
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-2 icon-stack-3x color-primary-600"></i>
-                          <i class="base-3 icon-stack-2x color-primary-700"></i>
-                          <i class="ni ni-settings icon-stack-1x text-white fs-lg"></i>
-                        </span>
-                        <span class="app-list-name">Services</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-2 icon-stack-3x color-primary-400"></i>
-                          <i class="base-10 text-white icon-stack-1x"></i>
-                          <i class="ni md-profile color-primary-800 icon-stack-2x"></i>
-                        </span>
-                        <span class="app-list-name">Account</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-9 icon-stack-3x color-success-400"></i>
-                          <i class="base-2 icon-stack-2x color-success-500"></i>
-                          <i class="ni ni-shield icon-stack-1x text-white"></i>
-                        </span>
-                        <span class="app-list-name">Security</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-18 icon-stack-3x color-info-700"></i>
-                          <span
-                            class="position-absolute pos-top pos-left pos-right color-white fs-md mt-2 fw-400"
-                          >28</span>
-                        </span>
-                        <span class="app-list-name">Calendar</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-7 icon-stack-3x color-info-500"></i>
-                          <i class="base-7 icon-stack-2x color-info-700"></i>
-                          <i class="ni ni-graph icon-stack-1x text-white"></i>
-                        </span>
-                        <span class="app-list-name">Stats</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-4 icon-stack-3x color-danger-500"></i>
-                          <i class="base-4 icon-stack-1x color-danger-400"></i>
-                          <i class="ni ni-envelope icon-stack-1x text-white"></i>
-                        </span>
-                        <span class="app-list-name">Messages</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-4 icon-stack-3x color-fusion-400"></i>
-                          <i class="base-5 icon-stack-2x color-fusion-200"></i>
-                          <i class="base-5 icon-stack-1x color-fusion-100"></i>
-                          <i class="fal fa-keyboard icon-stack-1x color-info-50"></i>
-                        </span>
-                        <span class="app-list-name">Notes</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-16 icon-stack-3x color-fusion-500"></i>
-                          <i class="base-10 icon-stack-1x color-primary-50 opacity-30"></i>
-                          <i class="base-10 icon-stack-1x fs-xl color-primary-50 opacity-20"></i>
-                          <i class="fal fa-dot-circle icon-stack-1x text-white opacity-85"></i>
-                        </span>
-                        <span class="app-list-name">Photos</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-19 icon-stack-3x color-primary-400"></i>
-                          <i class="base-7 icon-stack-2x color-primary-300"></i>
-                          <i class="base-7 icon-stack-1x fs-xxl color-primary-200"></i>
-                          <i class="base-7 icon-stack-1x color-primary-500"></i>
-                          <i class="fal fa-globe icon-stack-1x text-white opacity-85"></i>
-                        </span>
-                        <span class="app-list-name">Maps</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-5 icon-stack-3x color-success-700 opacity-80"></i>
-                          <i class="base-12 icon-stack-2x color-success-700 opacity-30"></i>
-                          <i class="fal fa-comment-alt icon-stack-1x text-white"></i>
-                        </span>
-                        <span class="app-list-name">Chat</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-5 icon-stack-3x color-warning-600"></i>
-                          <i class="base-7 icon-stack-2x color-warning-800 opacity-50"></i>
-                          <i class="fal fa-phone icon-stack-1x text-white"></i>
-                        </span>
-                        <span class="app-list-name">Phone</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="app-list-item hover-white">
-                        <span class="icon-stack">
-                          <i class="base-6 icon-stack-3x color-danger-600"></i>
-                          <i class="fal fa-chart-line icon-stack-1x text-white"></i>
-                        </span>
-                        <span class="app-list-name">Projects</span>
-                      </a>
-                    </li>
-                    <li class="w-100">
-                      <a href="#" class="btn btn-default mt-4 mb-2 pr-5 pl-5">Add more apps</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              
+             
+               
             </div>
             <!-- app message -->
             <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-messenger">
