@@ -749,13 +749,14 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Tables" data-filter-tags="tables">
-                <i class="fal fa-th-list"></i>
+              
 
-                <router-link to="/sendingEmail">
-                  <span class="nav-link-text" data-i18n="nav.tables">Tables</span>
+                <router-link to="/sendingEmail"
+                title="sendingEmail">
+                 <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Send Email</span>
                 </router-link>
-              </a>
+              
               <ul>
                 <li>
                   <a
@@ -781,10 +782,14 @@
               </ul>
             </li>
             <li>
-              <a href="#" title="Form Stuff" data-filter-tags="form stuff">
-                <i class="fal fa-edit"></i>
-                <span class="nav-link-text" data-i18n="nav.form_stuff">Form Stuff</span>
-              </a>
+              <router-link 
+              to="/departments"
+              title="departments"
+              data-filter-tags="tables">
+              
+                <i class="fal fa-th-list"></i>
+                <span class="nav-link-text" data-i18n="nav.tables">Departments Management</span>
+              </router-link>
               <ul>
                 <li>
                   <a
