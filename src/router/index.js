@@ -5,12 +5,13 @@ import login from "../components/login";
 import register from "../components/register";
 import sendingEmail from "../components/sendingEmail";
 import departments from "../components/departments";
+import editEmployee from "../components/editEmployee"
 
 Vue.use(Router)
 
 export default new Router({
     mode: "history",
-    routes :[
+    routes: [
         {
             path: "/",
             component: dashboard,
@@ -23,7 +24,8 @@ export default new Router({
                 {
                     path: "/departments",
                     name: "departments",
-                    component: departments
+                    component: departments,
+
                 }
             ]
         },
@@ -34,6 +36,11 @@ export default new Router({
         {
             path: "/register",
             component: register
+        },
+        {
+            path: "/departments/editEmployee/:status",
+            props: true,
+            component: editEmployee
         }
     ]
 })

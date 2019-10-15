@@ -33,7 +33,7 @@
                   <v-row>
                     <v-col cols="12" v-if="computedDialog">
                       <label>Department ID</label>
-                      <div>{{editedDept.departmentId}}</div>
+                      <div>{{editedDept.departmentId}}</div>   
                     </v-col>
                     <v-col cols="12" v-else></v-col>
                     <v-col cols="12">
@@ -43,12 +43,11 @@
                     <v-col cols="12" class="my-2" v-if="computedDialog">
                       <label>Number of Employees</label>
                       <span>{{editedDept.numberOfEmployees}}</span>
-
-                      <router-link to="/department/editEmployee">
-                        <v-icon small class="mr-2">mdi-plus</v-icon>
+                      <router-link to="/departments/editEmployee/add">
+                        <v-icon small class="mr-2" @click="clickAddEmployee">mdi-plus</v-icon>
                       </router-link>
-                      <router-link to="/department/editEmployee">
-                        <v-icon small class="mr-2">mdi-minus</v-icon>
+                      <router-link to="/departments/editEmployee/delete">
+                        <v-icon small class="mr-2" @click="clickRemoveEmployee">mdi-minus</v-icon>
                       </router-link>
                     </v-col>
                     <v-col cols="12" v-else></v-col>
@@ -67,16 +66,12 @@
         </v-toolbar>
       </template>
 
-      <template v-slot:item.action="{ item }" v-if="computeDeptStatus">
+      <template v-slot:item.action="{ item }" >
         <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
-        <v-icon small class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
+        <v-icon small class="mr-2" @click="deleteDept(item)" >mdi-delete</v-icon>
       </template>
-      <template v-else>
-        <v-container fluid>
-          <v-switch v-model="switch1" :label="`Switch 1: ${switch1.toString()}`"></v-switch>
-          <v-switch v-model="switch2" :label="`Switch 2: ${switch2.toString()}`"></v-switch>
-        </v-container>
-      </template>
+      
+      
     </v-data-table>
   </div>
 </template>
@@ -94,7 +89,8 @@ export default {
       editedIndex: -1,
       editedDept: {
         name: "",
-        numOfEmployees: 0
+        numOfEmployees: 0,
+        status: 1
       },
       defaultDept: {
         name: "",
@@ -111,7 +107,7 @@ export default {
         },
         { text: "Department Name", value: "departmentName", sortable: true },
         { text: "Number of Employees", value: "numberOfEmployees" },
-
+        { text: "Status", value: "status" },
         { text: "Action", value: "action", sortable: false }
       ]
     };
@@ -155,22 +151,25 @@ export default {
     computeDeptStatus() {
       //if department status is 0 (inactive), hide Edit and Delete buttons
       //if department status is 1 (active), leave them be
-      if (this.editedDept.status === 0) {
-        return this.seen == false;
-      } else {
-        return this.seen == true;
-      }
-    }
+     
+  },
   },
 
   watch: {
     dialog(val) {
       val || this.close();
     },
-    radios: "changeDeptStatus"
+    radios: "changeDeptStatus",
+    deptsStatus: "computeDeptStatus"
   },
 
   methods: {
+    employeeEditRoute(status) {
+      //when clicked on edit in each dept
+      //status can be either delete - or add + existing employee
+      this.$router.push("/departments/editEmployee" + status);
+    },
+
     editDept(dept) {
       this.editedIndex = this.departments.indexOf(dept);
       this.editedDept = Object.assign({}, dept);
@@ -271,6 +270,8 @@ export default {
           .get("http://192.168.9.171:8081/rest/getAllListDepartment")
 
           .then(function(response) {
+            // eslint-disable-next-line
+            console.log(response.data);
             self.departments = response.data;
           })
 
@@ -279,15 +280,22 @@ export default {
             console.log(err);
           });
       }
+    },
+    //add or remove employees in each dept
+    clickAddEmployee() {
+      console.log("click add employee");
+    },
+    clickRemoveEmployee() {
+      axios
+        .get("http://192.168.9.171:8081/rest/getListEmployeeOfDepartment")
+        .then(res => {
+          console.log(res);
+        });
     }
   }
 };
 </script>
 <style scoped>
-#department {
-  max-width: 950px;
-}
-
 .status-dropdown {
   position: relative;
   top: 4px;
