@@ -13,10 +13,10 @@
               >
                 <img
                   src="../assets/img/logo.png"
-                  alt="SmartAdmin WebApp"
+                  alt=""
                   aria-roledescription="logo"
                 />
-                <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
+                <span class="page-logo-text mr-1">CMC Employee Management</span>
               </a>
             </div>
             <span class="text-white opacity-50 ml-auto mr-2 hidden-sm-down">Already a member?</span>
@@ -31,20 +31,11 @@
             <div class="row">
               <div class="col-xl-12">
                 <h2 class="fs-xxl fw-500 mt-4 text-white text-center">
-                  Register now, its free!
-                  <small
-                    class="h3 fw-300 mt-3 mb-5 text-white opacity-60 hidden-sm-down"
-                  >
-                    Your registration is free for a limited time. Enjoy SmartAdmin on your mobile, desktop or tablet.
-                    <br />It is ready to go wherever you go!
-                  </small>
+                  Register now
                 </h2>
               </div>
               <div class="col-xl-6 ml-auto mr-auto">
                 <div class="card p-4 rounded-plus bg-faded">
-                  <div class="alert alert-primary text-dark" role="alert">
-                    <strong>Heads Up!</strong> Due to server maintenance from 9:30GTA to 12GTA, the verification emails could be delayed by up to 10 minutes.
-                  </div>
                   <form v-on:submit.prevent="sendVerification">
                     <div class="form-group row">
                       <label class="col-xl-12 form-label" for="fname">Your first and last name</label>
@@ -87,7 +78,7 @@
                       <v-text-field
                         v-model="users.email"
                         :error-messages="errors.collect('name')"
-                        suffix="@gmail.com"
+                        
                         placeholder="Email"
                         required
                       ></v-text-field>
@@ -112,7 +103,7 @@
                         class="help-block"
                       >Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</div>
                     </div>
-                    <div class="form-group demo">
+                    <!-- <div class="form-group demo">
                       <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="terms" required />
                         <label
@@ -128,7 +119,7 @@
                           for="newsletter"
                         >Sign up for newsletters (dont worry, we won't send so many)</label>
                       </div>
-                    </div>
+                    </div> -->
                     <div class="row no-gutters">
                       <div class="col-md-4 ml-auto text-right">
                         <button
@@ -156,7 +147,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 export default {
