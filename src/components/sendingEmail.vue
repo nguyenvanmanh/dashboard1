@@ -9,7 +9,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="primary"   v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark  v-on="on">New Item</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -73,7 +73,7 @@
           <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
+          <v-btn color="primary" dark @click="initialize">Reset</v-btn>
         </template>
       </v-data-table>
     </v-flex>
