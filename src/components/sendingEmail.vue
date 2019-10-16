@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       dialog: false,
-      radioGroup: 3,
+      radioGroup: 2,
       department: ["DU1", "DU2", "DU3"],
       headers: [
         {

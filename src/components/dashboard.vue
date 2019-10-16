@@ -38,9 +38,7 @@
               </a>
             </div>
           </div>
-          
-            
-             
+
           <ul id="js-nav-menu" class="nav-menu">
             <li>
               <ul>
@@ -1534,7 +1532,6 @@
             <i class="ni ni-chevron-right"></i>
             <i class="ni ni-chevron-right"></i>
           </a>
-         
         </div>
         <!-- END NAV FOOTER -->
       </aside>
@@ -1556,7 +1553,7 @@
             </a>
           </div>
           <!-- DOC: nav menu layout change shortcut -->
-         
+
           <!-- DOC: mobile button appears during mobile width -->
           <div class="hidden-lg-up">
             <a
@@ -1614,11 +1611,7 @@
               </a>
             </div>
             <!-- app shortcuts -->
-            <div>
-              
-             
-               
-            </div>
+            <div></div>
             <!-- app message -->
             <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-messenger">
               <i class="fal fa-globe"></i>
@@ -2113,7 +2106,6 @@
             </div>
             <!-- app user menu -->
             <div>
-              
               <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
                 <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
                   <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
@@ -2309,6 +2301,17 @@
 </template>
 <script>
 export default {
-  name: "dashboard"
+  name: "dashboard",
+  mounted() {
+    if (localStorage.getItem("tocken")) {
+      this.$router.push({
+        path: "/"
+      });
+    } else {
+      this.$router.push({
+        path: "/login"
+      });
+    }
+  }
 };
 </script>
