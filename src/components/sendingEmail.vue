@@ -164,9 +164,6 @@ export default {
         axios
           .delete("http://172.30.56.77:8080/rest/user-management", {
             headers: { Authorization: localStorage.getItem("tocken") }
-          })
-          .then(response => {
-            this.users.splice(index, 1);
           });
     },
 

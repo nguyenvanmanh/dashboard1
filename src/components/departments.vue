@@ -5,8 +5,8 @@
       :items="departments"
       :items-per-page="10"
       class="elevation-1"
-      data-app
-    >
+      data-app>
+    
       <template v-slot:top data-app>
         <v-toolbar flat color="white">
           <v-toolbar-title>Department Management</v-toolbar-title>
@@ -33,8 +33,9 @@
                   <v-row>
                     <v-col cols="12" v-if="computedDialog">
                       <label>Department ID</label>
-                      <div>{{editedDept.departmentId}}</div>   
+                      <div>{{editedDept.departmentId}}</div>
                     </v-col>
+
                     <v-col cols="12" v-else></v-col>
                     <v-col cols="12">
                       <label>Department name</label>
@@ -66,12 +67,17 @@
         </v-toolbar>
       </template>
 
-      <template v-slot:item.action="{ item }" >
-        <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
-        <v-icon small class="mr-2" @click="deleteDept(item)" >mdi-delete</v-icon>
+      <template v-slot:item.action="{ item }">
+        <v-row>
+          <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+          <v-col v-if="item.status == 1">
+            <v-icon small class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
+          </v-col>
+          <v-col v-else>
+            <v-icon small class="mr-2" @click="reactivate(item)">mdi-cached</v-icon>
+          </v-col>
+        </v-row>
       </template>
-      
-      
     </v-data-table>
   </div>
 </template>
@@ -84,13 +90,12 @@ export default {
     return {
       dialog: false,
       seen: true,
-      deptsStatus: 1,
+      showEditDelete: true,
       radios: "0",
       editedIndex: -1,
       editedDept: {
         name: "",
-        numOfEmployees: 0,
-        status: 1
+        numOfEmployees: 0
       },
       defaultDept: {
         name: "",
@@ -107,22 +112,18 @@ export default {
         },
         { text: "Department Name", value: "departmentName", sortable: true },
         { text: "Number of Employees", value: "numberOfEmployees" },
-        { text: "Status", value: "status" },
+        { text: "Status", value: "status"},
         { text: "Action", value: "action", sortable: false }
       ]
     };
   }, //end of data
-
-  // serializeId(id) {
-
-  // },
 
   mounted() {
     //load all active departments when the app first starts
     let self = this; //closure
 
     axios
-      .get("http://192.168.9.171:8081/rest/getListDepartmentActive")
+      .get("http://172.30.56.81:8081/rest/getListDepartmentActive")
 
       .then(function(response) {
         self.departments = response.data;
@@ -148,11 +149,15 @@ export default {
         return this.seen == true;
       }
     },
-    computeDeptStatus() {
-      //if department status is 0 (inactive), hide Edit and Delete buttons
-      //if department status is 1 (active), leave them be
-     
-  },
+    computeEditDelete() {
+      this.departments.forEach(dept => {
+        if (dept.status === 0) {
+          this.showEditDelete == false;
+        } else {
+          this.showEditDelete == true;
+        }
+      });
+    }
   },
 
   watch: {
@@ -160,10 +165,11 @@ export default {
       val || this.close();
     },
     radios: "changeDeptStatus",
-    deptsStatus: "computeDeptStatus"
+    
   },
 
   methods: {
+  
     employeeEditRoute(status) {
       //when clicked on edit in each dept
       //status can be either delete - or add + existing employee
@@ -183,7 +189,7 @@ export default {
       confirm("Are you sure you want to delete this department?") &&
         axios
           .post(
-            `http://192.168.9.171:8081/rest/inActiveDepartment`,
+            `http://172.30.56.81:8081/rest/inActiveDepartment`,
             this.editedDept
           )
           .then(response => {
@@ -215,7 +221,7 @@ export default {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
         axios
           .post(
-            "http://192.168.9.171:8081/rest/updateDepartmentInfomation",
+            "http://172.30.56.81:8081/rest/updateDepartmentInfomation",
             this.editedDept
           )
           .then(response => {
@@ -234,7 +240,7 @@ export default {
         this.departments.push(this.editedDept);
         axios
           .post(
-            "http://192.168.9.171:8081/rest/insertDepartment",
+            "http://172.30.56.81:8081/rest/insertDepartment",
             this.editedDept
           )
           .then(response => {
@@ -252,9 +258,8 @@ export default {
       let self = this;
       //O is inactive dept
       if (this.radios === "0") {
-        console.log("made it to active");
         axios
-          .get("http://192.168.9.171:8081/rest/getListDepartmentActive")
+          .get("http://172.30.56.81:8081/rest/getListDepartmentActive")
 
           .then(function(response) {
             self.departments = response.data;
@@ -265,14 +270,14 @@ export default {
             console.log(err);
           });
       } else {
-        console.log("made it to all");
         axios
-          .get("http://192.168.9.171:8081/rest/getAllListDepartment")
+          .get("http://172.30.56.81:8081/rest/getAllListDepartment")
 
           .then(function(response) {
             // eslint-disable-next-line
-            console.log(response.data);
+
             self.departments = response.data;
+            console.log("all department data", self.departments);
           })
 
           .catch(err => {
@@ -283,12 +288,14 @@ export default {
     },
     //add or remove employees in each dept
     clickAddEmployee() {
+      // eslint-disable-next-line
       console.log("click add employee");
     },
     clickRemoveEmployee() {
       axios
-        .get("http://192.168.9.171:8081/rest/getListEmployeeOfDepartment")
+        .get("http://172.30.56.81:8081/rest/getListEmployeeOfDepartment")
         .then(res => {
+          // eslint-disable-next-line
           console.log(res);
         });
     }
