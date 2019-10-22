@@ -252,7 +252,7 @@
   width: 80px;
   margin-left: -40px;
   background: rgba(255, 255, 255, 0.9);
-  transform: scale(1);
+  -webkit-transform: scale(1);
   border-radius: 8px;
   overflow: hidden; }
 
@@ -548,7 +548,7 @@ aside.page-sidebar ($nav-width, $nav-background)
 
 .dropzone.dz-drag-hover {
   border-style: dashed;
-  border-color: #81b56a; }
+  border-color: #886ab5; }
 
 .dropzone .dz-preview.dz-file-preview .dz-image {
   border-radius: 4px; }
