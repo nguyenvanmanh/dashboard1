@@ -92,32 +92,33 @@ export default {
     console.log(this.status);
   },
   methods: {
-    addEmployee() {},
-    deleteEmployee(id) {
-      this.editedEmployee = Object.assign({}, employee);
+  //   addEmployee() {},
+  //   deleteEmployee(id) {
+  //     this.editedEmployee = Object.assign({}, employee);
 
-      confirm("Are you sure you want to delete this employee?") &&
-        axios
-          .post(
-            `insert delete url here`,
-            this.editedEmployee
-          )
-          .then(response => {
-            if (response.status === 201) {
-              alert(
-                `Deleted employee ${this.editedEmployee.id} && ${this.editedEmployee.name} successfully!`
-              );
-              window.location.reload();
-            }
-          })
+  //     confirm("Are you sure you want to delete this employee?") &&
+  //       axios
+  //         .post(
+  //           `insert delete url here`,
+  //           this.editedEmployee
+  //         )
+  //         .then(response => {
+  //           if (response.status === 201) {
+  //             alert(
+  //               `Deleted employee ${this.editedEmployee.id} && ${this.editedEmployee.name} successfully!`
+  //             );
+  //             window.location.reload();
+  //           }
+  //         })
 
-          .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
-          });
-    }
-  }
-};
+  //         .catch(error => {
+  //           // eslint-disable-next-line
+  //           console.log(error.response);
+  //         });
+  //   }
+  // }
+}
+}
 </script>
 
 <style scoped>

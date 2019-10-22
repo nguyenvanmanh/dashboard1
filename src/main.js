@@ -8,7 +8,11 @@ import vuetify from './plugins/vuetify';
 // import sendingEmail from "./components/emailList.vue";
 import VeeValidate from "vee-validate";
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
+
 Vue.use(VeeValidate);
+
+window.$ = window.jQuery = require('jquery');
+
 
 
 // Vue.use(VueRouter);
