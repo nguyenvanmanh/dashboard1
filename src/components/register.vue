@@ -11,11 +11,7 @@
                 href="javascript:void(0)"
                 class="page-logo-link press-scale-down d-flex align-items-center"
               >
-                <img
-                  src="../assets/img/logo.png"
-                  alt=""
-                  aria-roledescription="logo"
-                />
+                <img src="../assets/img/logo.png" alt aria-roledescription="logo" />
                 <span class="page-logo-text mr-1">CMC Employee Management</span>
               </a>
             </div>
@@ -30,21 +26,19 @@
           <div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
             <div class="row">
               <div class="col-xl-12">
-                <h2 class="fs-xxl fw-500 mt-4 text-white text-center">
-                  Register now
-                </h2>
+                <h2 class="fs-xxl fw-500 mt-4 text-white text-center">Register now</h2>
               </div>
               <div class="col-xl-6 ml-auto mr-auto">
                 <div class="card p-4 rounded-plus bg-faded">
                   <form v-on:submit.prevent="sendVerification">
                     <div class="form-group row">
-                      <label class="col-xl-12 form-label" for="fname">Your first and last name</label>
+                      <label class="col-xl-12 form-label" for="fname">Your firstname</label>
                       <div class="col-6 pr-1">
                         <v-text-field
                           v-model="users.firstName"
                           :error-messages="errors.collect('name')"
-                          placeholder="First Name"
-                          data-vv-name="name"
+                          label="Firstname"
+                          outlined
                           required
                         ></v-text-field>
                         <div class="invalid-feedback">No, you missed this one.</div>
@@ -53,73 +47,58 @@
                         <v-text-field
                           v-model="users.lastName"
                           :error-messages="errors.collect('name')"
-                          placeholder="Last Name"
+                          label="Lastname"
+                          outlined
                           data-vv-name="name"
                           required
                         ></v-text-field>
                         <div class="invalid-feedback">No, you missed this one.</div>
                       </div>
-                      
-                    </div>
-                    <div class="form-group">
-                      <label
-                        class="form-label"
-                        for="emailverify"
-                      >Email && Username will be needed for verification and account recovery</label>
-                      <div class="col-6 pl-1">
-                        <v-text-field
-                        v-model="users.username"
-                        :error-messages="errors.collect('name')"
-                        placeholder="Username"
-                        required
-                      ></v-text-field>
-                        <div class="invalid-feedback">No, you missed this one.</div>
-                      </div>
-                      <v-text-field
-                        v-model="users.email"
-                        :error-messages="errors.collect('name')"
-                        
-                        placeholder="Email"
-                        required
-                      ></v-text-field>
-                      <div class="invalid-feedback">No, you missed this one.</div>
-                      <div class="help-block">Your email will also be your username</div>
-                    </div>
+                    </div>                   
                     <div class="form-group">
                       <label class="form-label" for="userpassword">
                         Pick a password:
                         <br />Don't reuse your bank password, we didn't spend a lot on security for this app.
                       </label>
                       <v-text-field
+                        v-model="users.email"
+                        :error-messages="errors.collect('name')"
+                        label="Email"
+                        outlined
+                        required
+                      ></v-text-field>
+                      <v-text-field
+                          v-model="users.username"
+                          :error-messages="errors.collect('name')"
+                          label="Date of Birth"
+                          outlined
+                          required
+                        ></v-text-field>
+                      <v-text-field
+                        v-model="users.username"
+                        :error-messages="errors.collect('name')"
+                        label="Username"
+                        outlined
+                        required
+                      ></v-text-field>
+                      <v-text-field
                         v-model="users.password"
                         :error-messages="errors.collect('name')"
                         :type=" 'password'"
-                        placeholder="Password"
-                        data-vv-name="name"
+                        label="Password"
+                        outlined
+                        required
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="users.password"
+                        :error-messages="errors.collect('name')"
+                        :type=" 'password'"
+                        label="Retype password"
+                        outlined
                         required
                       ></v-text-field>
                       <div class="invalid-feedback">Sorry, you missed this one.</div>
-                      <div
-                        class="help-block"
-                      >Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</div>
                     </div>
-                    <!-- <div class="form-group demo">
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="terms" required />
-                        <label
-                          class="custom-control-label"
-                          for="terms"
-                        >I agree to terms & conditions</label>
-                        <div class="invalid-feedback">You must agree before proceeding</div>
-                      </div>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="newsletter" />
-                        <label
-                          class="custom-control-label"
-                          for="newsletter"
-                        >Sign up for newsletters (dont worry, we won't send so many)</label>
-                      </div>
-                    </div> -->
                     <div class="row no-gutters">
                       <div class="col-md-4 ml-auto text-right">
                         <button
@@ -153,7 +132,13 @@ export default {
   name: "register",
   data() {
     return {
-      users: { firstName: "", lastName: "",email:"", username: "", password: "" },
+      users: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        username: "",
+        password: ""
+      },
       sendVerification: Function
     };
   },

@@ -8,7 +8,14 @@ import vuetify from './plugins/vuetify';
 // import sendingEmail from "./components/emailList.vue";
 import VeeValidate from "vee-validate";
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import 'pace-progressbar';
+import 'pace-progressbar/themes/blue/pace-theme-minimal.css';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 Vue.use(VeeValidate);
+
+
 
 
 // Vue.use(VueRouter);

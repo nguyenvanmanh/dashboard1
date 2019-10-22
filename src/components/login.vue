@@ -19,6 +19,7 @@
               v-model="users.username"
               :rules="usernameRules"
               label="Username"
+              outlined
               required
               autofocus
             ></v-text-field>
@@ -27,6 +28,7 @@
               :type="'password'"
               :rules="passwordRules"
               label="Password"
+              outlined
               required
             ></v-text-field>
             <p></p>
