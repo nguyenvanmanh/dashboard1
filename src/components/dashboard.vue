@@ -38,13 +38,15 @@
               </a>
             </div>
           </div>
-          
-            
-             
+
           <ul id="js-nav-menu" class="nav-menu">
-            <li>
+            <li class="active" >
+              <a href="#" title="Application Intel" data-filter-tags="application intel">
+                <i class="fal fa-info-circle"></i>
+                <span class="nav-link-text" data-i18n="nav.application_intel">Application Intel</span>
+              </a>
               <ul>
-                <li>
+                <li class="active">
                   <a
                     href="intel_analytics_dashboard.html"
                     title="Analytics Dashboard"
@@ -66,40 +68,6 @@
                       class="nav-link-text"
                       data-i18n="nav.application_intel_marketing_dashboard"
                     >Marketing Dashboard</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="intel_introduction.html"
-                    title="Introduction"
-                    data-filter-tags="application intel introduction"
-                  >
-                    <span
-                      class="nav-link-text"
-                      data-i18n="nav.application_intel_introduction"
-                    >Introduction</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="intel_privacy.html"
-                    title="Privacy"
-                    data-filter-tags="application intel privacy"
-                  >
-                    <span class="nav-link-text" data-i18n="nav.application_intel_privacy">Privacy</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="intel_build_notes.html"
-                    title="Build Notes"
-                    data-filter-tags="application intel build notes"
-                  >
-                    <span
-                      class="nav-link-text"
-                      data-i18n="nav.application_intel_build_notes"
-                    >Build Notes</span>
-                    <span class>v4.0.1</span>
                   </a>
                 </li>
               </ul>
@@ -1534,7 +1502,6 @@
             <i class="ni ni-chevron-right"></i>
             <i class="ni ni-chevron-right"></i>
           </a>
-         
         </div>
         <!-- END NAV FOOTER -->
       </aside>
@@ -1556,7 +1523,7 @@
             </a>
           </div>
           <!-- DOC: nav menu layout change shortcut -->
-         
+
           <!-- DOC: mobile button appears during mobile width -->
           <div class="hidden-lg-up">
             <a
@@ -1759,8 +1726,6 @@
                   </ul>
                 </div>
               </div>
-             
-               
             </div>
             <!-- app message -->
             <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-messenger">
@@ -2262,12 +2227,12 @@
                 title="drlantern@gotbootstrap.com"
                 class="header-icon d-flex align-items-center justify-content-center ml-2"
               >
-              <img
+                <img
                   src="../assets/img/demo/avatars/avatar-admin.png"
                   class="profile-image rounded-circle"
                   alt="Dr. Codex Lantern"
                 />
-                </a>
+              </a>
               <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
                 <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
                   <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
@@ -2285,7 +2250,61 @@
                       >drlantern@gotbootstrap.com</span>
                     </div>
                   </div>
+                  <!-- Begin filter sidebar dropdown-->
+                  <a
+                    href="#"
+                    onclick="return false;"
+                    class="pull-trigger-btn"
+                    data-action="toggle"
+                    data-class="list-filter-active"
+                    data-target=".page-sidebar"
+                    data-focus="nav_filter_input"
+                  >
+                    <i class="fal fa-angle-down"></i>
+                  </a>
+                  <!--End filter sidebar dropdown-->
                 </div>
+
+                <!--Begin Application Intel-->
+                <ul id="js-nav-menu" class="nav-menu">
+                  <li class="nav-title">
+                    <a href="#" title="Application Intel" data-filter-tags="application intel">
+                      <i class="fal fa-info-circle"></i>
+                      <span
+                        class="nav-link-text"
+                        data-i18n="nav.application_intel"
+                      >Application Intel</span>
+                    </a>
+                    <ul>
+                      <li>
+                        <a
+                          href="intel_analytics_dashboard.html"
+                          title="Analytics Dashboard"
+                          data-filter-tags="application intel analytics dashboard"
+                        >
+                          <span
+                            class="nav-link-text"
+                            data-i18n="nav.application_intel_analytics_dashboard"
+                          >Analytics Dashboard</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="intel_marketing_dashboard.html"
+                          title="Marketing Dashboard"
+                          data-filter-tags="application intel marketing dashboard"
+                        >
+                          <span
+                            class="nav-link-text"
+                            data-i18n="nav.application_intel_marketing_dashboard"
+                          >Marketing Dashboard</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <!--End Application Intel -->
+
                 <div class="dropdown-divider m-0"></div>
                 <a href="#" class="dropdown-item" data-action="app-reset">
                   <span data-i18n="drpdwn.reset_layout">Reset Layout</span>
@@ -2462,8 +2481,7 @@
   </div>
   <!--END Page wrapper-->
   <!--BEGIN Quick Menu-->
-   <!-- to add more items, please make sure to change the variable '$menu-items: number;' in your _page-components-shortcut.scss -->
-   
+  <!-- to add more items, please make sure to change the variable '$menu-items: number;' in your _page-components-shortcut.scss -->
 </template>
 <script>
 export default {
