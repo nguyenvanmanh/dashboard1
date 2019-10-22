@@ -43,9 +43,9 @@
         </form>
       </div>
     </div>
-    <!-- <video poster="img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
-      <source src="../assets/media/video/cc.webm" type="video/webm" />
-      <source src="../assets/media/video/cc.mp4" type="video/mp4" />
+    <!-- <video poster="./assets/img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
+      <source src="./assets/media/video/cc.webm" type="video/webm" />
+      <source src="./assets/media/video/cc.mp4" type="video/mp4" />
     </video> -->
   </div>
 </template>

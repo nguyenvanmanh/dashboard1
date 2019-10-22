@@ -44,31 +44,39 @@
               <a href="#" title="Application Intel" data-filter-tags="application intel">
                 <i class="fal fa-info-circle"></i>
                 <span class="nav-link-text" data-i18n="nav.application_intel">Application Intel</span>
+               
               </a>
               <ul>
-                <li class="active">
-                  <a
+                <li >
+                  <router-link 
+                  to="/intel_analytics_dashboard" 
+                  title="Analytics Dashboard" 
+                  data-filter-tags="application intel analytics dashboard">
+                    
+                     <span
+                      class="nav-link-text"
+                      data-i18n="nav.application_intel_analytics_dashboard"
+                    >Analytics Dashboard</span>
+                  </router-link>
+                  <!-- <a
                     href="intel_analytics_dashboard.html"
                     title="Analytics Dashboard"
                     data-filter-tags="application intel analytics dashboard"
                   >
-                    <span
-                      class="nav-link-text"
-                      data-i18n="nav.application_intel_analytics_dashboard"
-                    >Analytics Dashboard</span>
-                  </a>
+                   
+                  </a> -->
                 </li>
                 <li>
-                  <a
-                    href="intel_marketing_dashboard.html"
-                    title="Marketing Dashboard"
-                    data-filter-tags="application intel marketing dashboard"
-                  >
+                  <router-link 
+                  to="/intel_marketing_dashboard" 
+                  title="marketing Dashboard" 
+                  data-filter-tags="application intel marketing dashboard">
+                  
                     <span
                       class="nav-link-text"
                       data-i18n="nav.application_intel_marketing_dashboard"
                     >Marketing Dashboard</span>
-                  </a>
+                  </router-link>
                 </li>
               </ul>
             </li>
@@ -2250,23 +2258,11 @@
                       >drlantern@gotbootstrap.com</span>
                     </div>
                   </div>
-                  <!-- Begin filter sidebar dropdown-->
-                  <a
-                    href="#"
-                    onclick="return false;"
-                    class="pull-trigger-btn"
-                    data-action="toggle"
-                    data-class="list-filter-active"
-                    data-target=".page-sidebar"
-                    data-focus="nav_filter_input"
-                  >
-                    <i class="fal fa-angle-down"></i>
-                  </a>
-                  <!--End filter sidebar dropdown-->
+                 
                 </div>
 
                 <!--Begin Application Intel-->
-                <ul id="js-nav-menu" class="nav-menu">
+                <!-- <ul id="js-nav-menu" class="nav-menu">
                   <li class="nav-title">
                     <a href="#" title="Application Intel" data-filter-tags="application intel">
                       <i class="fal fa-info-circle"></i>
@@ -2302,7 +2298,7 @@
                       </li>
                     </ul>
                   </li>
-                </ul>
+                </ul> -->
                 <!--End Application Intel -->
 
                 <div class="dropdown-divider m-0"></div>

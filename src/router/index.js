@@ -6,6 +6,8 @@ import register from "../components/register";
 import sendingEmail from "../components/sendingEmail";
 import departments from "../components/departments";
 import editEmployee from "../components/editEmployee"
+import analytics_dashboard from "../components/IntelAnalytics_Dashboard"
+import marketing_dashboard from "../components/Marketing_Dashboard"
 
 Vue.use(Router)
 
@@ -26,6 +28,16 @@ export default new Router({
                     name: "departments",
                     component: departments,
 
+                },
+                {
+                    path: "/intel_analytics_dashboard",
+                    name: "analytics_dashboard",
+                    component: analytics_dashboard
+                },
+                {
+                    path: "/intel_marketing_dashboard",
+                    name: "marketing_dashboard",
+                    component: marketing_dashboard
                 }
             ]
         },
