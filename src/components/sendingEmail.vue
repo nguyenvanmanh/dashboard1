@@ -9,7 +9,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark  v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark v-on="on">New Item</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -161,10 +161,9 @@ export default {
     deleteItem(item) {
       const index = this.users.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        axios
-          .delete("http://172.30.56.77:8080/rest/user-management", {
-            headers: { Authorization: localStorage.getItem("tocken") }
-          });
+        axios.delete("http://172.30.56.77:8080/rest/user-management", {
+          headers: { Authorization: localStorage.getItem("tocken") }
+        });
     },
 
     close() {
