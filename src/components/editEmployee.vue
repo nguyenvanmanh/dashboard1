@@ -14,118 +14,132 @@
           <v-toolbar-title>{{status}} Employee</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-           
-         <!-- <v-btn color="primary" dark class="mb-2" v-on="on">Delete All</v-btn>
-     -->
+
+          <!-- <v-btn color="primary" dark class="mb-2" v-on="on">Delete All</v-btn>
+          -->
         </v-toolbar>
       </template>
-     
 
       <template v-slot:item.action="{ item }" v-if="status==='add'">
-        <v-icon small @click="addEmployee">add</v-icon>
+        <v-icon small @click="addEmployee(item)">add</v-icon>
       </template>
 
       <template v-slot:item.action="{ item }" v-else>
-        <v-icon small @click="deleteEmployee">delete</v-icon>
+        <v-icon small>delete</v-icon>
       </template>
     </v-data-table>
     <div>
       <button @click="goBackToDepartments">Go Back</button>
+      <button @click="submit">Submit</button>
     </div>
   </div>
 </template>
 
 <script>
+const base_ip_address = "http://172.30.56.87";
+const base_port = 8081;
+const base_url = `${base_ip_address}:${base_port}`;
+
 import axios from "axios";
 export default {
   name: "editemployee",
+
   props: ["status"],
   data() {
     return {
+      testUser: [
+        {
+          userId: 1,
+          firstName: "duc",
+          lastName: "duc",
+          email: "admin@gmail.com",
+          seniority: 1,
+          userRoleId: 1,
+          roleId: 1,
+          roleName: "admin",
+          userDepartmentId: 1,
+          departmentId: 6,
+          departmentName: "dada"
+        }
+      ],
+
       selected: [],
       headers: [
         {
           text: "First Name",
-          value: "first_name"
+          value: "firstName"
         },
         {
           text: "Last Name",
-          value: "last_name"
+          value: "lastName"
         },
         {
           text: "Email",
           value: "email"
         },
         {
-          text: "Tenure",
-          value: "tenure"
+          text: "Seniority",
+          value: "seniority"
         },
         {
           text: "Role Name",
-          value: "role name"
+          value: "roleName"
         },
         {
           text: "Action",
           value: "action"
         }
       ],
-      existingUsers: [
-        {
-          id: 1,
-          first_name: "Chau",
-          last_name: "Tran",
-          tenure: "1",
-          email: "cmtran@gmail.com"
-        },
-        {
-          id: 2,
-          first_name: "Quan",
-          last_name: "Chua",
-          email: "qt@yahoo.com"
-        }
-      ]
+      existingUsers: []
     };
   },
 
   mounted() {
-    // axios
-    //   .get("")
-    //   .then(res => console.log(res))
-    //   .catch(err => console.log(err));
-    console.log(this.status);
+    let departmentId = localStorage.getItem("departmentId");
+    let self = this;
+    axios
+      .get(`${base_url}/rest/getListEmployeeNotInDepartment/${departmentId}`)
+      .then(function(response) {
+        self.existingUsers = response.data;
+        // console.log(response.data)
+        console.log("lslkdjfslkdf", self.existingUsers);
+      })
+
+      .catch(err => console.log(err));
+      
+      
   },
   methods: {
-    goBackToDepartments(){
-      this.$router.push("/departments")
-      window.location.reload()
+    submit() {
+      axios
+        .post(`${base_url}/rest/addNewEmployeeToDepartment`, this.testUser)
+        .then(function(response) {
+          if (response.status.code === 201) {
+            alert("Successfully user ${} added to department ${}");
+          }
+        })
+
+        .catch(err => console.log(err));
+    },
+    goBackToDepartments() {
+      this.$router.push("/departments");
+      window.location.reload();
+    },
+    addEmployee(user) {
+      console.log("user", user);
+      let self = this;
+      axios
+        .post(`${base_url}/rest/addNewEmployeeToDepartment`, testUser)
+        .then(function(response) {
+          //  if(response.status.code === 200){
+          //     alert('Successfully user ${} added to department ${}')
+          //  }
+        })
+
+        .catch(err => console.log(err));
     }
-  //   addEmployee() {},
-  //   deleteEmployee(id) {
-  //     this.editedEmployee = Object.assign({}, employee);
-
-  //     confirm("Are you sure you want to delete this employee?") &&
-  //       axios
-  //         .post(
-  //           `insert delete url here`,
-  //           this.editedEmployee
-  //         )
-  //         .then(response => {
-  //           if (response.status === 201) {
-  //             alert(
-  //               `Deleted employee ${this.editedEmployee.id} && ${this.editedEmployee.name} successfully!`
-  //             );
-  //             window.location.reload();
-  //           }
-  //         })
-
-  //         .catch(error => {
-  //           // eslint-disable-next-line
-  //           console.log(error.response);
-  //         });
-  //   }
-  // }
-}
-}
+  }
+};
 </script>
 
 <style scoped>

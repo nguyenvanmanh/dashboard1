@@ -200,6 +200,7 @@ export default {
     editDept(dept) {
       this.editedIndex = this.departments.indexOf(dept);
       this.editedDept = Object.assign({}, dept);
+      localStorage.setItem("departmentId", dept.departmentId)
       this.dialog = true;
     },
     deleteDept(dept) {
@@ -225,14 +226,7 @@ export default {
           });
     },
 
-    reactivate(dept) {
-      //change status of the selected dept to 1
-     
-      if (dept.status == 0) {
-         console.log("inactive");
-      }
-    },
-
+    
     close() {
       //close dialog
       this.dialog = false;
