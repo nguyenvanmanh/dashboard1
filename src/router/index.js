@@ -30,6 +30,11 @@ export default new Router({
 
                 },
                 {
+                    path: "departments/editEmployee/:status",
+                    props: true,
+                    component: editEmployee
+                },
+                {
                     path: "/intel_analytics_dashboard",
                     name: "analytics_dashboard",
                     component: analytics_dashboard
@@ -49,10 +54,6 @@ export default new Router({
             path: "/register",
             component: register
         },
-        {
-            path: "/departments/editEmployee/:status",
-            props: true,
-            component: editEmployee
-        }
+        
     ]
 })

@@ -1,23 +1,41 @@
+
 <template>
+
   <div id="department">
+    
     <v-data-table
       :headers="headers"
       :items="departments"
       :items-per-page="10"
+      :search="search"
       class="elevation-1"
-      data-app>
-    
+      data-app
+    >
       <template v-slot:top data-app>
         <v-toolbar flat color="white">
           <v-toolbar-title>Department Management</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <div class="flex-grow-1"></div>
+          <!-- Implement search bar-->
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <!--End searchbar-->
 
+          <!--Implement Active and All radio buttons-->
           <v-radio-group v-model="radios" row :mandatory="false">
             <v-radio label="Active" value="0">Active</v-radio>
             <v-radio label="All" value="1">All</v-radio>
           </v-radio-group>
+          <!--End radio buttons-->
 
+          <!--Implement popup dialog form-->
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on }">
               <v-btn color="primary" dark class="mb-2" v-on="on">New Department</v-btn>
@@ -35,15 +53,18 @@
                       <label>Department ID</label>
                       <div>{{editedDept.departmentId}}</div>
                     </v-col>
-
                     <v-col cols="12" v-else></v-col>
                     <v-col cols="12">
                       <label>Department name</label>
                       <v-text-field required v-model="editedDept.departmentName"></v-text-field>
                     </v-col>
+                    <v-col cols="12">
+                      <label>Department Code</label>
+                      <v-text-field required v-model="editedDept.departmentCode"></v-text-field>
+                    </v-col>
                     <v-col cols="12" class="my-2" v-if="computedDialog">
                       <label>Number of Employees</label>
-                      <span>{{editedDept.numberOfEmployees}}</span>
+                      <span>{{editedDept.numOfEmployees}}</span>
                       <router-link to="/departments/editEmployee/add">
                         <v-icon small class="mr-2" @click="clickAddEmployee">mdi-plus</v-icon>
                       </router-link>
@@ -64,9 +85,10 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <!--End popup dialog-->
         </v-toolbar>
       </template>
-
+      <!--Implement edit, delete and reactivate buttons for each department-->
       <template v-slot:item.action="{ item }">
         <v-row>
           <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
@@ -78,20 +100,27 @@
           </v-col>
         </v-row>
       </template>
+      <!--End buttons -->
     </v-data-table>
   </div>
 </template>
 
 <script>
+const base_ip_address = "http://172.30.56.87"
+const base_port = 8081
+const base_url = `${base_ip_address}:${base_port}`
+
 const axios = require("axios");
 export default {
   name: "department",
   data() {
     return {
+      loading: true,
       dialog: false,
       seen: true,
-      showEditDelete: true,
+      search: "",
       radios: "0",
+      deptIndex: -1,
       editedIndex: -1,
       editedDept: {
         name: "",
@@ -111,33 +140,36 @@ export default {
           value: "id"
         },
         { text: "Department Name", value: "departmentName", sortable: true },
+        { text: "Department Code", value: "departmentCode", sortable: true },
         { text: "Number of Employees", value: "numberOfEmployees" },
-        { text: "Status", value: "status"},
+        { text: "Status", value: "status" },
         { text: "Action", value: "action", sortable: false }
       ]
     };
-  }, //end of data
+  },
 
   mounted() {
     //load all active departments when the app first starts
-    let self = this; //closure
+    let self = this;
 
     axios
-      .get("http://172.30.56.81:8081/rest/getListDepartmentActive")
+      .get(`${base_url}/rest/getListDepartmentActive`)
 
       .then(function(response) {
         self.departments = response.data;
+        
       })
 
       .catch(err => {
         // eslint-disable-next-line
         console.log(err);
+       
       });
   },
 
   computed: {
     formTitle() {
-      //conditionals for dialog title
+      //conditionals to render dialog title
       return this.editedIndex === -1 ? "New Department" : "Edit Department";
     },
     computedDialog() {
@@ -148,15 +180,6 @@ export default {
       } else {
         return this.seen == true;
       }
-    },
-    computeEditDelete() {
-      this.departments.forEach(dept => {
-        if (dept.status === 0) {
-          this.showEditDelete == false;
-        } else {
-          this.showEditDelete == true;
-        }
-      });
     }
   },
 
@@ -164,14 +187,12 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    radios: "changeDeptStatus",
-    
+    radios: "changeDeptStatus"
   },
 
   methods: {
-  
     employeeEditRoute(status) {
-      //when clicked on edit in each dept
+      //when clicked on Edit button in each dept
       //status can be either delete - or add + existing employee
       this.$router.push("/departments/editEmployee" + status);
     },
@@ -188,10 +209,7 @@ export default {
 
       confirm("Are you sure you want to delete this department?") &&
         axios
-          .post(
-            `http://172.30.56.81:8081/rest/inActiveDepartment`,
-            this.editedDept
-          )
+          .post(`${base_url}/rest/inActiveDepartment`, this.editedDept)
           .then(response => {
             if (response.status === 201) {
               alert(
@@ -205,6 +223,14 @@ export default {
             // eslint-disable-next-line
             console.log(error.response);
           });
+    },
+
+    reactivate(dept) {
+      //change status of the selected dept to 1
+     
+      if (dept.status == 0) {
+         console.log("inactive");
+      }
     },
 
     close() {
@@ -221,7 +247,7 @@ export default {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
         axios
           .post(
-            "http://172.30.56.81:8081/rest/updateDepartmentInfomation",
+            `${base_url}/rest/updateDepartmentInfomation`,
             this.editedDept
           )
           .then(response => {
@@ -239,13 +265,10 @@ export default {
       } else {
         this.departments.push(this.editedDept);
         axios
-          .post(
-            "http://172.30.56.81:8081/rest/insertDepartment",
-            this.editedDept
-          )
+          .post(`${base_url}/rest/insertDepartment`, this.editedDept)
           .then(response => {
             if (response.status === 201) {
-              alert(`New Department successfully added!`);
+              alert("New Department successfully added!");
               window.location.reload();
             }
           });
@@ -259,7 +282,7 @@ export default {
       //O is inactive dept
       if (this.radios === "0") {
         axios
-          .get("http://172.30.56.81:8081/rest/getListDepartmentActive")
+          .get(`${base_url}/rest/getListDepartmentActive`)
 
           .then(function(response) {
             self.departments = response.data;
@@ -271,7 +294,7 @@ export default {
           });
       } else {
         axios
-          .get("http://172.30.56.81:8081/rest/getAllListDepartment")
+          .get(`${base_url}/rest/getAllListDepartment`)
 
           .then(function(response) {
             // eslint-disable-next-line
@@ -293,7 +316,7 @@ export default {
     },
     clickRemoveEmployee() {
       axios
-        .get("http://172.30.56.81:8081/rest/getListEmployeeOfDepartment")
+        .get(`${base_url}/rest/getListEmployeeOfDepartment`)
         .then(res => {
           // eslint-disable-next-line
           console.log(res);
@@ -302,6 +325,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .status-dropdown {
   position: relative;

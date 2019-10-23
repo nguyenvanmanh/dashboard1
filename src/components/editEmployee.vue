@@ -29,6 +29,9 @@
         <v-icon small @click="deleteEmployee">delete</v-icon>
       </template>
     </v-data-table>
+    <div>
+      <button @click="goBackToDepartments">Go Back</button>
+    </div>
   </div>
 </template>
 
@@ -92,6 +95,10 @@ export default {
     console.log(this.status);
   },
   methods: {
+    goBackToDepartments(){
+      this.$router.push("/departments")
+      window.location.reload()
+    }
   //   addEmployee() {},
   //   deleteEmployee(id) {
   //     this.editedEmployee = Object.assign({}, employee);
