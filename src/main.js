@@ -14,7 +14,7 @@ const options = {
   failedColor: '#584475',
   thickness: '3px',
   transition: {
-    speed: '3s',
+    speed: '0.8s',
     termination: 300
   },
   location: 'top',

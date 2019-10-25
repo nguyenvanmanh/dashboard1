@@ -100,6 +100,10 @@ export default {
         { text: "UserName", value: "username" },
         { text: "UserName", value: "password" },
         { text: "Date of Birth", value: "dob" },
+        { text: "Registed Date", value: "registedDate" },
+        { text: "Activated Date Date", value: "activatedDate" },
+        { text: "End Date", value: "endDate" },
+        { text: "Seniority", value: "seniority" },
         { text: "Actions", value: "action", sortable: false }
       ],
       users: [],

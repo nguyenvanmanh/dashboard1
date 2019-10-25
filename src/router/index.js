@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import dashboard from "../components/dashboard";
 import login from "../components/login";
 import register from "../components/register";
-import sendingEmail from "../components/sendingEmail";
+import employeeManagement from "../components/employeeManagement";
 import departments from "../components/departments";
 import editEmployee from "../components/editEmployee"
 
@@ -17,9 +17,9 @@ export default new Router({
             component: dashboard,
             children: [
                 {
-                    path: "/sendingEmail",
-                    name: "sendingEmail",
-                    component: sendingEmail
+                    path: "/employeeManagement",
+                    name: "employeeManagement",
+                    component: employeeManagement
                 },
                 {
                     path: "/departments",

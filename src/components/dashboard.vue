@@ -739,9 +739,9 @@
                 </ul>
               </li>
               <li>
-                <router-link to="/sendingEmail" title="sendingEmail" data-filter-tags="tables">
+                <router-link to="/employeeManagement" title="employeeManagement" data-filter-tags="tables">
                   <i class="fal fa-th-list"></i>
-                  <span class="nav-link-text" data-i18n="nav.tables">Send Email</span>
+                  <span class="nav-link-text" data-i18n="nav.tables">Employee Management</span>
                 </router-link>
 
                 <ul>
@@ -2425,10 +2425,13 @@
                     </div>
                   </div>
                   <div class="dropdown-divider m-0"></div>
-                  <a class="dropdown-item fw-500 pt-3 pb-3" href="page_login-alt.html">
-                    <span data-i18n="drpdwn.page-logout">Logout</span>
-                    <span class="float-right fw-n">&commat;codexlantern</span>
-                  </a>
+                  <router-link to="/login" title="Redirect to register page">
+                    <a class="dropdown-item fw-500 pt-3 pb-3">
+                      <span data-i18n="drpdwn.page-logout">Logout</span>
+
+                      <span class="float-right fw-n">&commat;codexlantern</span>
+                    </a>
+                  </router-link>
                 </div>
               </div>
             </div>
