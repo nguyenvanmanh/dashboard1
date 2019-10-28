@@ -10,6 +10,7 @@ import analytics_dashboard from "../components/IntelAnalytics_Dashboard";
 import marketing_dashboard from "../components/Marketing_Dashboard";
 import roleManagement from "../components/roleManagement";
 import employeeManagement from "../components/employeeManagement"
+import campaigns from "../components/campaigns"
 Vue.use(Router)
 
 export default new Router({
@@ -23,6 +24,11 @@ export default new Router({
                     path: "/sendingEmail",
                     name: "sendingEmail",
                     component: sendingEmail
+                },
+                {
+                    path: "/campaigns",
+                    name: "campaigns",
+                    component: campaigns
                 },
                 {
                     path: "/roleManagement",
