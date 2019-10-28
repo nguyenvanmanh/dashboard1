@@ -5,9 +5,10 @@ import login from "../components/login";
 import register from "../components/register";
 import sendingEmail from "../components/sendingEmail";
 import departments from "../components/departments";
-import editEmployee from "../components/editEmployee"
-import analytics_dashboard from "../components/IntelAnalytics_Dashboard"
-import marketing_dashboard from "../components/Marketing_Dashboard"
+import editEmployee from "../components/editEmployee";
+import analytics_dashboard from "../components/IntelAnalytics_Dashboard";
+import marketing_dashboard from "../components/Marketing_Dashboard";
+import roleManagement from "../components/roleManagement";
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
                     path: "/sendingEmail",
                     name: "sendingEmail",
                     component: sendingEmail
+                },
+                {
+                    path: "/roleManagement",
+                    name: "roleManagement",
+                    component: roleManagement
                 },
                 {
                     path: "/departments",
@@ -44,6 +50,7 @@ export default new Router({
                     name: "marketing_dashboard",
                     component: marketing_dashboard
                 }
+
             ]
         },
         {
@@ -54,6 +61,6 @@ export default new Router({
             path: "/register",
             component: register
         },
-        
+
     ]
 })

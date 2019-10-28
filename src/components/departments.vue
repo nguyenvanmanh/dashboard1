@@ -4,12 +4,12 @@
   <div id="department">
     
     <v-data-table
-      :headers="headers"
-      :items="departments"
-      :items-per-page="10"
-      :search="search"
-      class="elevation-1"
-      data-app
+        :headers="headers"
+        :items="departments"
+        :items-per-page="10"
+        :search="search"
+        class="elevation-1"
+        data-app
     >
       <template v-slot:top data-app>
         <v-toolbar flat color="white">

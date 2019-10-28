@@ -9,7 +9,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark  v-on="on">New Item</v-btn>
+                    <v-btn color="primary" dark  v-on="on">New Item</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -73,7 +73,10 @@
           <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" dark @click="initialize">Reset</v-btn>
+           <label>File
+        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+      </label>
+           <v-btn v-on:click="submitFile()">Submit</v-btn>
         </template>
       </v-data-table>
     </v-flex>
@@ -98,7 +101,7 @@ export default {
         { text: "Lastname", value: "lastName" },
         { text: "Email", value: "email" },
         { text: "UserName", value: "username" },
-        { text: "UserName", value: "password" },
+        { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
         { text: "Actions", value: "action", sortable: false }
       ],
@@ -138,6 +141,29 @@ export default {
     this.initialize();
   },
   methods: {
+
+     handleFileUpload(){
+      this.file = this.$refs.file.files[0];
+    },
+
+    submitFile(){
+ let formData = new FormData();
+  formData.append('file', this.file);
+  axios.post("http://172.30.56.81:8080/email/coverExcel",
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+              }
+            ).then(function(){
+          console.log('SUCCESS!!');
+        })
+        .catch(function(){
+          console.log('FAILURE!!');
+        });
+    },
+
     fetchUsers() {
       axios
         .get("http://172.30.56.77:8080/rest/user-management", {
@@ -164,6 +190,9 @@ export default {
         axios
           .delete("http://172.30.56.77:8080/rest/user-management", {
             headers: { Authorization: localStorage.getItem("tocken") }
+          })
+          .then(response => {
+            this.users.splice(index, 1);
           });
     },
 
