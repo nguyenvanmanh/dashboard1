@@ -1,8 +1,8 @@
 
 <template>
 
-  <div id="department">
-    
+  <div id="app">
+   
     <v-data-table
       :headers="headers"
       :items="departments"
@@ -55,21 +55,25 @@
                     </v-col>
                     <v-col cols="12" v-else></v-col>
                     <v-col cols="12">
-                      <label>Department name</label>
+                      <label>Department Name</label>
                       <v-text-field required v-model="editedDept.departmentName"></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <label>Department Code</label>
                       <v-text-field required v-model="editedDept.departmentCode"></v-text-field>
                     </v-col>
+                    <v-col cols="12"  v-if="computedDialog">
+                      <label>Department Status:</label>
+                      <span> {{editedDept.isActivated===0? "Inactive": "Active"}}</span>
+                    </v-col>
                     <v-col cols="12" class="my-2" v-if="computedDialog">
                       <label>Number of Employees</label>
                       <span>{{editedDept.numOfEmployees}}</span>
                       <router-link to="/departments/editEmployee/add">
-                        <v-icon small class="mr-2" @click="clickAddEmployee">mdi-plus</v-icon>
+                        <v-icon small class="mr-2">mdi-plus</v-icon>
                       </router-link>
                       <router-link to="/departments/editEmployee/delete">
-                        <v-icon small class="mr-2" @click="clickRemoveEmployee">mdi-minus</v-icon>
+                        <v-icon small class="mr-2">mdi-minus</v-icon>
                       </router-link>
                     </v-col>
                     <v-col cols="12" v-else></v-col>
@@ -91,8 +95,10 @@
       <!--Implement edit, delete and reactivate buttons for each department-->
       <template v-slot:item.action="{ item }">
         <v-row>
-          <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
-          <v-col v-if="item.status == 1">
+         
+           <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+          <v-col v-if="item.isActivated == 1">
+            
             <v-icon small class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
           </v-col>
           <v-col v-else>
@@ -101,12 +107,15 @@
         </v-row>
       </template>
       <!--End buttons -->
+    
     </v-data-table>
+   
   </div>
+  
 </template>
 
 <script>
-const base_ip_address = "http://172.30.56.87"
+const base_ip_address = "http://172.30.56.189"
 const base_port = 8081
 const base_url = `${base_ip_address}:${base_port}`
 
@@ -120,7 +129,6 @@ export default {
       seen: true,
       search: "",
       radios: "0",
-      deptIndex: -1,
       editedIndex: -1,
       editedDept: {
         name: "",
@@ -137,19 +145,19 @@ export default {
           text: "#",
           align: "left",
           sortable: false,
-          value: "id"
+          value: "departmentId"
         },
         { text: "Department Name", value: "departmentName", sortable: true },
         { text: "Department Code", value: "departmentCode", sortable: true },
         { text: "Number of Employees", value: "numberOfEmployees" },
-        { text: "Status", value: "status" },
+        
         { text: "Action", value: "action", sortable: false }
       ]
     };
   },
 
   mounted() {
-    //load all active departments when the app first starts
+    //load all active departments on screen when the app first starts
     let self = this;
 
     axios
@@ -173,7 +181,7 @@ export default {
       return this.editedIndex === -1 ? "New Department" : "Edit Department";
     },
     computedDialog() {
-      //if New Department dialog, then hide id and numOfEmployees
+      //if 'New Department' dialog, then hide id and numOfEmployees
       //else don't hide
       if (this.editedIndex === -1) {
         return this.seen == false;
@@ -191,16 +199,17 @@ export default {
   },
 
   methods: {
-    employeeEditRoute(status) {
-      //when clicked on Edit button in each dept
-      //status can be either delete - or add + existing employee
-      this.$router.push("/departments/editEmployee" + status);
-    },
+    // employeeEditRoute(status) {
+    //   //when clicked on Edit button in each dept
+    //   //status can be either delete - or add + existing employee
+    //   this.$router.push("/departments/editEmployee" + status);
+    // },
 
     editDept(dept) {
       this.editedIndex = this.departments.indexOf(dept);
       this.editedDept = Object.assign({}, dept);
       localStorage.setItem("departmentId", dept.departmentId)
+     
       this.dialog = true;
     },
     deleteDept(dept) {
