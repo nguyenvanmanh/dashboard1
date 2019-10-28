@@ -9,7 +9,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark v-on="on">New Item</v-btn>
+                    <v-btn color="primary" dark  v-on="on">New Item</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -103,10 +103,6 @@ export default {
         { text: "UserName", value: "username" },
         { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
-        { text: "Registed Date", value: "registedDate" },
-        { text: "Activated Date Date", value: "activatedDate" },
-        { text: "End Date", value: "endDate" },
-        { text: "Seniority", value: "seniority" },
         { text: "Actions", value: "action", sortable: false }
       ],
       users: [],
