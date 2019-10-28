@@ -9,7 +9,7 @@ import editEmployee from "../components/editEmployee";
 import analytics_dashboard from "../components/IntelAnalytics_Dashboard";
 import marketing_dashboard from "../components/Marketing_Dashboard";
 import roleManagement from "../components/roleManagement";
-
+import employeeManagement from "../components/employeeManagement"
 Vue.use(Router)
 
 export default new Router({
@@ -49,7 +49,12 @@ export default new Router({
                     path: "/intel_marketing_dashboard",
                     name: "marketing_dashboard",
                     component: marketing_dashboard
-                }
+                },
+                {
+                    path: "/employeeManagement",
+                    name: "employeeManagement",
+                    component: employeeManagement
+                },
 
             ]
         },
