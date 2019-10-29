@@ -17,20 +17,20 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" dark class="mb-2" v-on="on"  @click="addEmployee(item)">Add All</v-btn>
-         
+          <v-btn color="primary" dark class="mb-2" @click="submitEmployeeToDept" v-if="status==='add'">Add All</v-btn>
+           <v-btn color="primary" dark class="mb-2"  @click="removeEmployeeFromDept" v-else>Delete All</v-btn>
         </v-toolbar>
       
        {{selected}}
       </template>
     <!--Add Employee to Department-->
       <template v-slot:item.action="{ item }" v-if="status==='add'">
-        <v-icon small @click="addEmployee(item)">add</v-icon>
+        <v-icon small @click="submitEmployeeToDept">add</v-icon>
        
       </template>
     <!--Remove Employee from Department -->
       <template v-slot:item.action="{ item }" v-else>
-        <v-icon small>delete</v-icon>
+        <v-icon small @click="removeEmployeeFromDept">delete</v-icon>
       </template>
     </v-data-table>
     <div>
@@ -44,11 +44,12 @@
 const base_ip_address = "http://172.30.56.189";
 const base_port = 8081;
 const base_url = `${base_ip_address}:${base_port}`;
-let departmentId = localStorage.getItem("departmentId"); //fix this 
+// let departmentId = localStorage.getItem("departmentId"); 
+
 import axios from "axios";
 export default {
   name: "editemployee",
-  props: ["status"],
+  props: ["status", "departmentId"],
   data() {
     return {
       testUser: [
@@ -66,7 +67,7 @@ export default {
           departmentName: "dada"
         }
       ],
-
+      existingUsers: [],
       selected: [],
       headers: [
         {
@@ -90,16 +91,16 @@ export default {
           value: "action"
         }
       ],
-      existingUsers: []
+      
     };
   },
 
   mounted() {
     
-    
+    //when the page first loads, display a list of employees NOT belonging to the selected department
     let self = this;
     axios
-      .get(`${base_url}/rest/getListEmployeeNotInDepartment/${departmentId}`)
+      .get(`${base_url}/rest/getListEmployeeNotInDepartment/${this.$props.departmentId}`)
       .then(function(response) {
         self.existingUsers = response.data;
       //  console.log(self.existingUsers)
@@ -110,33 +111,46 @@ export default {
       
   },
   methods: {
-   
     goBackToDepartments() {
       this.$router.push("/departments");
-      window.location.reload();
     },
-    addEmployee(user) {
+
+    addNewEmployeeToDepartment(){
+      let selectedEmployees = this.selected;
+ 
+    // add the new departmentId to the departments array
+    for(let i=0; i < selectedEmployees.length; i++){
+      //loop through each employee object in the selectedEmployees array
+      //find the departments array 
+      //push the departmentId that the selected employees need to be added to
+        selectedEmployees[i]["departments"].push({"departmentId": Number(this.$props.departmentId)})
+    }
+    // console.log(selectedEmployees)
+     return selectedEmployees;
+    },
+
+    submitEmployeeToDept() {
       let self = this;
       
+      if(this.selected.length ==0){
+        alert("Please select an employee!")
+        return;
+      }
+      
     axios
-        .post(`${base_url}/rest/addNewEmployeeToDepartment`, this.selected)
+        .post(`${base_url}/rest/addNewEmployeeToDepartment`, this.addNewEmployeeToDepartment())
         .then(function(response) {
-          //add an array of "selected" employees to the current department
-          let numOfAddedEmployees = self.selected.length
-           if (response.status === 201) {
-              alert(
-                `Added employees successfully!`
-              );
-        
-            
-              // this.$router.push("/departments");
-              window.location.reload();
+          //add an array of "selected" employees to the selected department
+           if (response.status === 200) {
+              alert(`Added employees successfully!`);
             }
         })
-
         .catch(err => console.log(err));
-    }
+      
+    },
   }
+  
+    
 };
 </script>
 
@@ -144,4 +158,6 @@ export default {
 .v-toolbar__title {
   text-transform: capitalize;
 }
+.theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background-color: 	#1E90FF;}
 </style>

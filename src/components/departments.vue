@@ -67,14 +67,23 @@
                       <span> {{editedDept.isActivated===0? "Inactive": "Active"}}</span>
                     </v-col>
                     <v-col cols="12" class="my-2" v-if="computedDialog">
-                      <label>Number of Employees</label>
+                      <label>Number of Employees: </label>
                       <span>{{editedDept.numOfEmployees}}</span>
-                      <router-link to="/departments/editEmployee/add">
+                      <!-- <router-link to="/departments/editEmployee/add/">
+                        <v-icon small class="mr-2">mdi-plus</v-icon>
+                      </router-link> -->
+                       <!-- <router-link to="/departments/editEmployee/delete">
+                        <v-icon small class="mr-2">mdi-minus</v-icon>
+                      </router-link> -->
+                      
+                       <router-link  :to="'/departments/editEmployee/add/'+ editedDept.departmentId">
                         <v-icon small class="mr-2">mdi-plus</v-icon>
                       </router-link>
-                      <router-link to="/departments/editEmployee/delete">
+                       <router-link  :to="'/departments/editEmployee/delete/'+ editedDept.departmentId">
                         <v-icon small class="mr-2">mdi-minus</v-icon>
                       </router-link>
+                     
+                     
                     </v-col>
                     <v-col cols="12" v-else></v-col>
                   </v-row>
@@ -339,4 +348,6 @@ export default {
 button {
   margin-right: 3px;
 }
+.theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background-color: 	#1E90FF;}
 </style>
