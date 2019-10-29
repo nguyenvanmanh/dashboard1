@@ -5,6 +5,7 @@
         <v-data-table
           :headers="headersTitle"
           :items="users"
+          :search="search"
           sort-by="userId"
           class="elevation-1"
           data-app
@@ -12,11 +13,27 @@
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
+              <!-- Implement search bar-->
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
               <v-divider class="mx-4" inset vertical></v-divider>
               <div class="flex-grow-1"></div>
+              <!--End searchbar-->
+              <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">New Item</v-btn>
+                  <v-btn color="primary" dark v-on="on">ADD NEW USER</v-btn>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -100,15 +117,28 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <!--End  User management's Edit Information Table -->
             </v-toolbar>
           </template>
+          <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon color="teal darken-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon color="green darken-2" v-if="item.isActivated === 0">radio_button_checked</v-icon>
-            <v-icon color="red lighten-2" v-if="item.isActivated === 1">radio_button_unchecked</v-icon>
+            <v-icon
+              color="green darken-2"
+              v-if="item.isActivated === 0"
+              @click="showDialog"
+            >radio_button_checked</v-icon>
+            <v-icon
+              color="red lighten-2"
+              v-if="item.isActivated === 1"
+              @click="showDialog"
+            >radio_button_unchecked</v-icon>
             <v-icon color="purple darken-2" dark @click="showDialog">supervised_user_circle</v-icon>
+            <v-icon color="teal darken-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon color="red" @click="deleteItem(item)">delete</v-icon>
           </template>
+          <!-- End Action Icon-->
         </v-data-table>
+        <!--Set Department table pop up (Icon is supervised_user_circle ) -->
         <v-dialog v-model="dialog1" max-width="600px">
           <v-card>
             <v-card-title>
@@ -135,6 +165,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <!--End Set Department table pop up-->
       </v-flex>
     </v-layout>
   </v-app>
@@ -149,6 +180,7 @@ export default {
       modal: false,
       check_activate: false,
       check_inactivate: false,
+      search: "",
       show1: false,
       rules: {
         required: value => !!value || "Required."
@@ -164,7 +196,7 @@ export default {
         { text: "Lastname", value: "lastName" },
         { text: "Email", value: "email" },
         { text: "UserName", value: "username" },
-        { text: "UserName", value: "password" },
+        { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
         { text: "Registed Date", value: "registedDate" },
         { text: "Activated Date Date", value: "activatedDate" },
@@ -206,9 +238,10 @@ export default {
     this.initialize();
   },
   methods: {
+    // get employee's information from database by using axios
     fetchUsers() {
       axios
-        .get("http://localhost:3000/user", {
+        .get("http://172.30.56.241:8081/rest/users", {
           headers: { Authorization: localStorage.getItem("tocken") }
         })
         .then(response => {
@@ -218,23 +251,24 @@ export default {
     initialize() {
       this.fetchUsers();
     },
-
+    // Edit Employee's Information
     editItem(item) {
       this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      localStorage.setItem("userId", item.userId);
       this.dialog = true;
     },
+    // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
     showDialog() {
       this.dialog1 = true;
     },
-    // deleteItem(item) {
-    //   const index = this.users.indexOf(item);
-    //   confirm("Are you sure you want to delete this item?") &&
-    //     axios.delete("http://172.30.56.77:8080/rest/user-management", {
-    //       headers: { Authorization: localStorage.getItem("tocken") }
-    //     });
-    // },
-
+    // Delete employee
+    deleteItem(item) {
+      const index = this.users.indexOf(item);
+      confirm("Are you sure you want to delete this item?") &&
+        this.users.splice(index, 1);
+    },
+    // Close dilog Edited employee's information
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -242,32 +276,26 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-
+    // Save dialog Edited employee's information
     save() {
       if (this.editedIndex > -1) {
-        axios
-          .post("" + this.editedItem.id, {
-            firstName: this.editedItem.firstName,
-            lastName: this.editedItem.lastName,
-            email: this.editedItem.email,
-            username: this.editedItem.username,
-            password: this.editedItem.password,
-            dob: this.editedItem.dob
-          })
-          .then(response => {});
         Object.assign(this.users[this.editedIndex], this.editedItem);
-      } else {
         axios
-          .post("", {
-            firstName: this.editedItem.firstName,
-            lastName: this.editedItem.lastName,
-            email: this.editedItem.email,
-            username: this.editedItem.username,
-            password: this.editedItem.password,
-            dob: this.editedItem.dob
+          .post(
+            "http://172.30.56.241:8081/rest/user-management",
+            this.editedItem
+          )
+          .then(response => {
+            if (response.status === 200) {
+              alert(`Update user's information successfully !`);
+              window.location.reload();
+            }
           })
-          .then(response => {});
-
+          .catch(error => {
+            // eslint-disable-next-line
+            console.log(error.response);
+          });
+      } else {
         this.users.push(this.editedItem);
       }
       this.close();
