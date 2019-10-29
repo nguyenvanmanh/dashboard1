@@ -75,7 +75,7 @@
                        <!-- <router-link to="/departments/editEmployee/delete">
                         <v-icon small class="mr-2">mdi-minus</v-icon>
                       </router-link> -->
-                      
+
                        <router-link  :to="'/departments/editEmployee/add/'+ editedDept.departmentId">
                         <v-icon small class="mr-2">mdi-plus</v-icon>
                       </router-link>
@@ -217,7 +217,6 @@ export default {
     editDept(dept) {
       this.editedIndex = this.departments.indexOf(dept);
       this.editedDept = Object.assign({}, dept);
-      localStorage.setItem("departmentId", dept.departmentId)
      
       this.dialog = true;
     },
