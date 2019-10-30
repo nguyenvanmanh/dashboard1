@@ -823,6 +823,20 @@
               </li>
 
               <li>
+                <router-link to="/uploadCustomer" title="uploadCustomer" data-filter-tags="tables">
+                  <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Upload Customer</span>
+                </router-link>
+              </li>
+
+              <li>
+                <router-link to="/templateMagement" title="templateMagement" data-filter-tags="tables">
+                  <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Template Management</span>
+                </router-link>
+              </li>
+
+              <li>
                 <ul>
                   <li>
                     <a
