@@ -30,6 +30,13 @@
               <v-divider class="mx-4" inset vertical></v-divider>
               <div class="flex-grow-1"></div>
               <!--End searchbar-->
+              <!--Implement Active and All radio buttons-->
+              <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
+                <v-radio label="Inactive Users" value="0"></v-radio>
+                <v-radio label="Active Users" value="1"></v-radio>
+                <v-radio label="All" value="2"></v-radio>
+              </v-radio-group>
+              <!--End radio buttons-->
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
@@ -58,7 +65,6 @@
                           <v-text-field
                             v-model="editedItem.password"
                             :append-icon="show1 ? 'visibility' : 'visibility_off'"
-                            :rules="[rules.required, rules.min]"
                             :type="show1 ? 'text' : 'password'"
                             name="input-10-1"
                             label="Password"
@@ -70,7 +76,6 @@
                           <v-text-field
                             v-model="editedItem.verified_password"
                             :append-icon="show1 ? 'visibility' : 'visibility_off'"
-                            :rules="[rules.required, rules.min]"
                             :type="show1 ? 'text' : 'password'"
                             name="input-10-1"
                             label="Verify your password "
@@ -122,19 +127,14 @@
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon
-              color="green darken-2"
-              v-if="item.isActivated === 0"
-              @click="showDialog"
-            >radio_button_checked</v-icon>
+            <v-icon color="green darken-2" v-if="item.isActivated === 1">radio_button_checked</v-icon>
             <v-icon
               color="red lighten-2"
-              v-if="item.isActivated === 1"
+              v-if="item.isActivated === 0 || null"
               @click="showDialog"
             >radio_button_unchecked</v-icon>
             <v-icon color="purple darken-2" dark @click="showDialog">supervised_user_circle</v-icon>
             <v-icon color="teal darken-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon color="red" @click="deleteItem(item)">delete</v-icon>
           </template>
           <!-- End Action Icon-->
         </v-data-table>
@@ -180,11 +180,9 @@ export default {
       modal: false,
       check_activate: false,
       check_inactivate: false,
-      search: "",
       show1: false,
-      rules: {
-        required: value => !!value || "Required."
-      },
+      search: "",
+      radios: "2",
       headersTitle: [
         {
           text: "UserID",
@@ -198,8 +196,9 @@ export default {
         { text: "UserName", value: "username" },
         { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
-        { text: "Registed Date", value: "registedDate" },
-        { text: "Activated Date Date", value: "activatedDate" },
+        { text: "Department", value: "departmentCodeAll" },
+        { text: "Registed Date", value: "registeredDate" },
+        { text: "Activated Date", value: "activatedDate" },
         { text: "End Date", value: "endDate" },
         { text: "Seniority", value: "seniority" },
         { text: "Actions", value: "action", sortable: false }
@@ -212,7 +211,9 @@ export default {
         email: "",
         username: "",
         password: "",
-        dob: ""
+        dob: "",
+        departmentCodeAll: "",
+        registeredDate: ""
       },
       defaultItem: {
         firstName: "",
@@ -220,7 +221,9 @@ export default {
         email: "",
         username: "",
         password: "",
-        dob: ""
+        dob: "",
+        departmentCodeAll: "",
+        registeredDate: ""
       }
     };
   },
@@ -232,16 +235,20 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
+    radios: "changeUsersStatus"
   },
   created() {
     this.initialize();
   },
+  // updated() {
+  //   this.getDepartment();
+  // },
   methods: {
     // get employee's information from database by using axios
     fetchUsers() {
       axios
-        .get("http://172.30.56.241:8081/rest/users", {
+        .get("http://172.30.56.241:8081/rest/users/list", {
           headers: { Authorization: localStorage.getItem("tocken") }
         })
         .then(response => {
@@ -251,6 +258,18 @@ export default {
     initialize() {
       this.fetchUsers();
     },
+    // get Department Name & Role
+    // getDepartment() {
+    //   if (this.users != null) {
+    //     for (let i = 0; i < this.users.length; i++) {
+    //       let departmentNames = this.users[i].listDepartment;
+    //       for (let j = 0; j < departmentNames.length; j++) {
+    //         let department = departmentNames[j].departmentName;
+    //         console.log("DepartmentName:::", department);
+    //       }
+    //     }
+    //   }
+    // },
     // Edit Employee's Information
     editItem(item) {
       this.editedIndex = this.users.indexOf(item);
@@ -261,12 +280,6 @@ export default {
     // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
     showDialog() {
       this.dialog1 = true;
-    },
-    // Delete employee
-    deleteItem(item) {
-      const index = this.users.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.users.splice(index, 1);
     },
     // Close dilog Edited employee's information
     close() {
@@ -281,10 +294,7 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem);
         axios
-          .post(
-            "http://172.30.56.241:8081/rest/user-management",
-            this.editedItem
-          )
+          .post("http://172.30.56.241:8081/rest/users/edit", this.editedItem)
           .then(response => {
             if (response.status === 200) {
               alert(`Update user's information successfully !`);
@@ -297,8 +307,62 @@ export default {
           });
       } else {
         this.users.push(this.editedItem);
+        axios
+          .post("http://172.30.56.241:8081/rest/users/add", this.editedItem)
+          .then(response => {
+            if (response.status === 200) {
+              alert(`Add a new user successfully !`);
+              window.location.reload();
+            }
+          });
       }
       this.close();
+    },
+    //Active & Inactive Users Button
+    changeUsersStatus() {
+      //Active vs Inactive Users-> load corresponding data
+      let self = this;
+      //O is inactive dept
+      if (this.radios === "1") {
+        axios
+          .get(`http://172.30.56.241:8081/rest/users/list/1`)
+
+          .then(function(response) {
+            self.users = response.data;
+          })
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      }
+      if (this.radios === "0") {
+        axios
+          .get(`http://172.30.56.241:8081/rest/users/list/0`)
+
+          .then(function(response) {
+            // eslint-disable-next-line
+            self.users = response.data;
+          })
+
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      }
+      if (this.radios === "2") {
+        axios
+          .get(`http://172.30.56.241:8081/rest/users/list`)
+
+          .then(function(response) {
+            // eslint-disable-next-line
+            self.users = response.data;
+          })
+
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      }
     }
   }
 };
