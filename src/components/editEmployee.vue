@@ -41,7 +41,7 @@
 </template>
 
 <script>
-const base_ip_address = "http://192.168.8.133";
+const base_ip_address = "http://172.30.56.57";
 const base_port = 8081;
 const base_url = `${base_ip_address}:${base_port}`;
 // let departmentId = localStorage.getItem("departmentId"); 
@@ -115,22 +115,6 @@ export default {
       this.$router.push("/departments");
     },
 
-    addNewEmployeeToDepartment(){
-      let selectedEmployees = this.selected;
-    
-     
-    //add the new departmentId to the departments array
-    for(let i=0; i < selectedEmployees.length; i++){
-      //loop through each employee object in the selectedEmployees array
-      //find the departments array 
-      //push the departmentId that the selected employees need to be added to
-        selectedEmployees[i]["departments"].unshift({"departmentId": Number(this.$props.departmentId)})
-       
-    }
-  
-    return selectedEmployees;
-    },
-
     submitEmployeeToDept() {
       let self = this;
       
@@ -138,12 +122,22 @@ export default {
         alert("Please select an employee!")
         return;
       }
-   
+    let selectedEmployees = this.selected.slice();
+    
+     //add the new departmentId to the departments array
+    for(let i=0; i < selectedEmployees.length; i++){
+      //loop through each employee object in the selectedEmployees array
+      //find the departments array 
+      //push the departmentId that the selected employees need to be added to
+        selectedEmployees[i]["departments"].unshift({"departmentId": Number(this.$props.departmentId)})
+       
+    }
+    
     axios
-        .post(`${base_url}/rest/addNewEmployeeToDepartment`, this.addNewEmployeeToDepartment())
+        .post(`${base_url}/rest/addNewEmployeeToDepartment`, selectedEmployees)
         .then(function(response) {
           //add an array of "selected" employees to the selected department
-          // if(response.status==400)
+          if(response.status== 201){console.log("Successs")}
            console.log(response)
           
          

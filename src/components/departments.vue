@@ -124,7 +124,7 @@
 </template>
 
 <script>
-const base_ip_address = "http://192.168.8.133"
+const base_ip_address = "http://172.30.56.57"
 const base_port = 8081
 const base_url = `${base_ip_address}:${base_port}`
 
