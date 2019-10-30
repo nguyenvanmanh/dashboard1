@@ -41,7 +41,7 @@
 </template>
 
 <script>
-const base_ip_address = "http://172.30.56.189";
+const base_ip_address = "http://192.168.8.133";
 const base_port = 8081;
 const base_url = `${base_ip_address}:${base_port}`;
 // let departmentId = localStorage.getItem("departmentId"); 
@@ -96,7 +96,7 @@ export default {
   },
 
   mounted() {
-    
+   
     //when the page first loads, display a list of employees NOT belonging to the selected department
     let self = this;
     axios
@@ -117,16 +117,18 @@ export default {
 
     addNewEmployeeToDepartment(){
       let selectedEmployees = this.selected;
- 
-    // add the new departmentId to the departments array
+    
+     
+    //add the new departmentId to the departments array
     for(let i=0; i < selectedEmployees.length; i++){
       //loop through each employee object in the selectedEmployees array
       //find the departments array 
       //push the departmentId that the selected employees need to be added to
-        selectedEmployees[i]["departments"].push({"departmentId": Number(this.$props.departmentId)})
+        selectedEmployees[i]["departments"].unshift({"departmentId": Number(this.$props.departmentId)})
+       
     }
-    // console.log(selectedEmployees)
-     return selectedEmployees;
+  
+    return selectedEmployees;
     },
 
     submitEmployeeToDept() {
@@ -136,14 +138,16 @@ export default {
         alert("Please select an employee!")
         return;
       }
-      
+   
     axios
         .post(`${base_url}/rest/addNewEmployeeToDepartment`, this.addNewEmployeeToDepartment())
         .then(function(response) {
           //add an array of "selected" employees to the selected department
-           if (response.status === 200) {
-              alert(`Added employees successfully!`);
-            }
+          // if(response.status==400)
+           console.log(response)
+          
+         
+           
         })
         .catch(err => console.log(err));
       

@@ -124,7 +124,7 @@
 </template>
 
 <script>
-const base_ip_address = "http://172.30.56.189"
+const base_ip_address = "http://192.168.8.133"
 const base_port = 8081
 const base_url = `${base_ip_address}:${base_port}`
 
@@ -217,7 +217,6 @@ export default {
     editDept(dept) {
       this.editedIndex = this.departments.indexOf(dept);
       this.editedDept = Object.assign({}, dept);
-     
       this.dialog = true;
     },
     deleteDept(dept) {
@@ -241,6 +240,12 @@ export default {
             // eslint-disable-next-line
             console.log(error.response);
           });
+    },
+
+    reactivate(dept){
+      //change status of inactive department to 1
+      //restore the 'delete' icon for the reactivated department
+      // isActivated == 1;
     },
 
     
@@ -311,7 +316,7 @@ export default {
             // eslint-disable-next-line
 
             self.departments = response.data;
-            console.log("all department data", self.departments);
+            // console.log("all department data", self.departments);
           })
 
           .catch(err => {
@@ -320,19 +325,19 @@ export default {
           });
       }
     },
-    //add or remove employees in each dept
-    clickAddEmployee() {
-      // eslint-disable-next-line
-      console.log("click add employee");
-    },
-    clickRemoveEmployee() {
-      axios
-        .get(`${base_url}/rest/getListEmployeeOfDepartment`)
-        .then(res => {
-          // eslint-disable-next-line
-          console.log(res);
-        });
-    }
+    
+    // clickAddEmployee() {
+    //   // eslint-disable-next-line
+    //   console.log("click add employee");
+    // },
+    // clickRemoveEmployee() {
+    //   axios
+    //     .get(`${base_url}/rest/getListEmployeeOfDepartment`)
+    //     .then(res => {
+    //       // eslint-disable-next-line
+    //       console.log(res);
+    //     });
+    // }
   }
 };
 </script>
