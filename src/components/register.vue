@@ -197,7 +197,7 @@ export default {
       };
       axios({
         method: "POST",
-        url: "http://172.30.56.77:8080/rest/register",
+        url: "http://172.30.56.241:8081/rest/register",
         data: newUser
       })
         .then(res => {

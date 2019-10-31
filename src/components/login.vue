@@ -160,7 +160,7 @@ export default {
       };
       axios({
         method: "post",
-        url: "http://172.30.56.81:8081/rest/login",
+        url: " http://172.30.56.241:8081/rest/login",
         data: newUser
       })
         .then(function(response) {

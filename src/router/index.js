@@ -11,6 +11,8 @@ import marketing_dashboard from "../components/Marketing_Dashboard";
 import roleManagement from "../components/roleManagement";
 import employeeManagement from "../components/employeeManagement"
 import campaigns from "../components/campaigns"
+import templateMagement from '../components/TemplateManagement'
+
 Vue.use(Router)
 
 export default new Router({
@@ -21,9 +23,9 @@ export default new Router({
             component: dashboard,
             children: [
                 {
-                    path: "/sendingEmail",
-                    name: "sendingEmail",
-                    component: sendingEmail
+                    path: "/uploadCustomer",
+                    name: "uploadCustomer",
+                    component: sendingEmail  // updload customers
                 },
                 {
                     path: "/campaigns",
@@ -60,6 +62,11 @@ export default new Router({
                     path: "/employeeManagement",
                     name: "employeeManagement",
                     component: employeeManagement
+                },
+                {
+                    path: "/templateMagement",
+                    name: "templateMagement",
+                    component: templateMagement
                 },
 
             ]

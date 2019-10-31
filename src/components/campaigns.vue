@@ -168,7 +168,7 @@ export default {
       newCampaign: {},
       selected: [],
       customers: [],
-      selectedCustomer: {},
+      selectedCustomer: [],
       campaigns: [],
       dialogs: {
         addCampaign: false,
