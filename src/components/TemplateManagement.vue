@@ -23,6 +23,7 @@
 
               <v-card-text>
                 <v-container>
+                    
                   <v-row v-model="row_input">
                     <v-col cols="12">
                       <v-text-field label="Title" v-model="title_input" required></v-text-field>
@@ -52,7 +53,7 @@
 
 <script>
 import axios from "axios";
-const base_ip_address = "http://192.168.56.178";
+const base_ip_address = "http://192.168.32.88";
 const base_port = 8081;
 const base_url = `${base_ip_address}:${base_port}`;
 export default {
@@ -125,6 +126,8 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
+      this.title_input=""
+      this.body_input=""
     },
 
     save() {

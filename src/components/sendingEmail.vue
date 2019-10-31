@@ -12,7 +12,7 @@
       <template>
         <v-card>
           <v-card-title>
-            Exels
+            Upload Customer
             <!-- Implement search bar-->
             <v-spacer></v-spacer>
             <v-text-field
@@ -41,7 +41,7 @@
 
 <script>
 import axios from "axios";
-const base_ip_address = "http://192.168.56.178";
+const base_ip_address = "http://192.168.32.88";
 const base_port = 8081;
 const base_url = `${base_ip_address}:${base_port}`;
 export default {
@@ -102,25 +102,6 @@ export default {
           this.errored = true;
         });
     },
-    base64ToArrayBuffer(base64) {
-      var binaryString = window.atob(base64);
-      var binaryLen = binaryString.length;
-      var bytes = new Uint8Array(binaryLen);
-      for (var i = 0; i < binaryLen; i++) {
-        var ascii = binaryString.charCodeAt(i);
-        bytes[i] = ascii;
-      }
-      return bytes;
-    },
-
-    saveByteArray(reportName, byte) {
-      var blob = new Blob([byte], { type: "application/xlsx" });
-      var link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      var fileName = reportName;
-      link.download = fileName;
-      link.click();
-    },
 
     submitFile() {
       let formData = new FormData();
@@ -128,17 +109,16 @@ export default {
       axios
         .post(`${base_url}/email/cover-excel-to-DB`, formData, {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/vnd.ms-excel",
+            "Content-Disposition": "attachment; filename='\test.xlsx\'",
           }
         })
         .then(function(response) {
-          var sampleArr = base64ToArrayBuffer(response.data);
-          // this.saveByteArray("downloadfile",response.data)
-          console.log("response.data", typeOf(sampleArr));
+          window.open(`${base_url}/email/cover-excel-to-File`);
           console.log("SUCCESS!!");
         })
         .catch(function() {
-          console.log("FAILURE!!");
+          console.log("FAILURE!!!");
         });
     },
     initialize() {},
