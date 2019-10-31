@@ -137,19 +137,19 @@ export default {
         alert("Please select an employee to add!");
         return;
       }
-      let selectedEmployees = this.selected.slice();
+      let selectedEmployeesToAdd = this.selected.slice();
 
       //add the new departmentId to the departments array
-      for (let i = 0; i < selectedEmployees.length; i++) {
+      for (let i = 0; i < selectedEmployeesToAdd.length; i++) {
         //loop through each employee object in the selectedEmployees array
         //find the departments array
         //push the departmentId that the selected employees need to be added to
-        selectedEmployees[i]["departments"].unshift({
+        selectedEmployeesToAdd[i]["departments"].unshift({
           departmentId: Number(this.$props.departmentId)
         });
       }
       axios
-        .post(`${base_url}/rest/addNewEmployeeToDepartment`, selectedEmployees)
+        .post(`${base_url}/rest/addNewEmployeeToDepartment`, selectedEmployeesToAdd)
         .then(function(response) {
           //add an array of "selected" employees to the selected department
           if (response.status == 201) {
@@ -165,15 +165,15 @@ export default {
         alert("Please select an employee to remove!");
         return;
       }
-      let selectedEmployees = this.selected.slice()
-      for (let i = 0; i < selectedEmployees.length; i++) {
-        selectedEmployees[i]["departments"].unshift({
+      let selectedEmployeesToRemove = this.selected.slice()
+      for (let i = 0; i < selectedEmployeesToRemove.length; i++) {
+        selectedEmployeesToRemove[i]["departments"].unshift({
           departmentId: Number(this.$props.departmentId)
         });
       }
       axios
         .post(
-          `${base_url}/rest/removeEmployeeFromDepartment`, selectedEmployees
+          `${base_url}/rest/removeEmployeeFromDepartment`, selectedEmployeesToRemove
         )
         .then(function(response) {
           if (response.status == 201) {
