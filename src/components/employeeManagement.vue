@@ -178,6 +178,8 @@
 </template>
 <script>
 import axios from "axios";
+import * as API from "../service/API"
+
 export default {
   data() {
     return {
@@ -254,7 +256,7 @@ export default {
     // get employee's information from database by using axios
     fetchUsers() {
       axios
-        .get("http://172.30.56.241:8081/rest/users/list", {
+        .get( API.BASEURL + "/rest/users/list", {
           headers: { Authorization: localStorage.getItem("token") }
         })
         .then(response => {
@@ -288,7 +290,7 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem);
         axios
-          .post("http://172.30.56.241:8081/rest/users/edit", this.editedItem)
+          .post( API.BASEURL+"/rest/users/edit", this.editedItem)
           .then(response => {
             if (response.status === 200) {
               alert(`Update user's information successfully !`);
@@ -302,7 +304,7 @@ export default {
       } else {
         this.users.push(this.editedItem);
         axios
-          .post("http://172.30.56.241:8081/rest/users/add", this.editedItem)
+          .post( API.BASEURL + "/rest/users/add", this.editedItem)
           .then(response => {
             if (response.status === 200) {
               alert(`Add a new user successfully !`);
@@ -319,7 +321,7 @@ export default {
       //O is inactive dept
       if (this.radios === "1") {
         axios
-          .get(`http://172.30.56.241:8081/rest/users/list/1`)
+          .get(`${API.BASEURL}/rest/users/list/1`)
 
           .then(function(response) {
             self.users = response.data;
@@ -331,7 +333,7 @@ export default {
       }
       if (this.radios === "0") {
         axios
-          .get(`http://172.30.56.241:8081/rest/users/list/0`)
+          .get(`${API.BASEURL}/rest/users/list/0`)
 
           .then(function(response) {
             // eslint-disable-next-line
@@ -345,7 +347,7 @@ export default {
       }
       if (this.radios === "2") {
         axios
-          .get(`http://172.30.56.241:8081/rest/users/list`)
+          .get(`${API.BASEURL}/rest/users/list`)
 
           .then(function(response) {
             // eslint-disable-next-line

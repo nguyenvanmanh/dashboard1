@@ -110,9 +110,10 @@
 </template>
 
 <script>
+import * as API from '../service/API'
 const base_ip_address = "http://172.30.56.57";
 const base_port = 8081;
-const base_url = `${base_ip_address}:${base_port}`;
+const base_url = API.BASEURL;
 const axios = require("axios");
 export default {
   name: "roleManagement",

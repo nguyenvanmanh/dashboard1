@@ -66,9 +66,9 @@
 
 <script>
 import axios from "axios";
-const base_ip_address = "http://192.168.32.88";
-const base_port = 8081;
-const base_url = `${base_ip_address}:${base_port}`;
+import * as API from "../service/API"
+
+const base_url = API.BASEURL;
 export default {
   data: () => ({
     dialog: false,

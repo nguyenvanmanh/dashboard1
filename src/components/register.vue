@@ -160,6 +160,7 @@
   </v-app>
 </template>
 <script>
+import * as API from "../service/API"
 import axios from "axios";
 export default {
   name: "register",
@@ -197,7 +198,7 @@ export default {
       };
       axios({
         method: "POST",
-        url: "http://172.30.56.241:8081/rest/register",
+        url: API.BASEURL,
         data: newUser
       })
         .then(res => {

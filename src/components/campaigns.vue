@@ -157,8 +157,8 @@
 <script>
 
 import axios from "axios";
-
-const baseUrl = 'http://localhost:8081';
+import * as API from "../service/API"
+const baseUrl = API.BASEURL;
 export default {
   data() {
     return {

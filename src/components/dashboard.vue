@@ -739,6 +739,30 @@
                 </ul>
               </li>
               <li>
+                  <router-link 
+                  to="/intel_marketing_dashboard" 
+                  title="marketing Dashboard" 
+                  data-filter-tags="application intel marketing dashboard">
+                  
+                    <span
+                      class="nav-link-text"
+                      data-i18n="nav.application_intel_marketing_dashboard"
+                    >Marketing Dashboard</span>
+                  </router-link>
+                </li>
+                <li >
+                  <router-link 
+                  to="/intel_analytics_dashboard" 
+                  title="Analytics Dashboard" 
+                  data-filter-tags="application intel analytics dashboard">
+                    
+                     <span
+                      class="nav-link-text"
+                      data-i18n="nav.application_intel_analytics_dashboard"
+                    >Analytics Dashboard</span>
+                  </router-link>
+              </li>
+              <li>
                 <router-link
                   to="/employeeManagement"
                   title="employeeManagement"
