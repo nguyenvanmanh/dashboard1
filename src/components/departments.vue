@@ -280,8 +280,10 @@ export default {
             }
           })
           .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
+            // // eslint-disable-next-line
+            // console.log(error.response);
+            alert(` ${error.response.data}`);
+            window.location.reload();
           });
       } else {
         this.departments.push(this.editedDept);
@@ -295,8 +297,9 @@ export default {
           })
           .catch(error => {
             // eslint-disable-next-line
-             alert("Duplicated Department name!!! Please Check!!!");
-              window.location.reload();
+             alert(` ${error.response.data}`);
+             
+              window.location.reload(); //need to fix: update without loading 
           });
       }
       this.close();
