@@ -105,13 +105,13 @@
       <template v-slot:item.action="{ item }">
         <v-row>
          
-           <v-icon small class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+           <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
           <v-col v-if="item.isActivated == 1">
             
-            <v-icon small class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
+            <v-icon class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
           </v-col>
           <v-col v-else>
-            <v-icon small class="mr-2" @click="reactivate(item)">mdi-cached</v-icon>
+            <v-icon class="mr-2" @click="reactivate(item)">mdi-cached</v-icon>
           </v-col>
         </v-row>
       </template>
@@ -224,13 +224,13 @@ export default {
 
       this.editedDept = Object.assign({}, dept);
 
-      confirm("Are you sure you want to delete this department?") &&
+      confirm("Are you sure you want to remove this department?") &&
         axios
           .post(`${base_url}/rest/inActiveDepartment`, this.editedDept)
           .then(response => {
             if (response.status === 201) {
               alert(
-                `Deleted department ${this.editedDept.departmentName} successfully!`
+                `Removed department ${this.editedDept.departmentName} successfully!`
               );
               window.location.reload();
             }
@@ -244,9 +244,8 @@ export default {
 
     reactivate(dept){
       //change status of inactive department to 1
-      //restore the 'delete' icon for the reactivated department
-      dept.isActivated == 1;
-      console.log('dept',dept)
+      dept.isActivated = 1;
+      //send back to db the updated status
     },
 
     

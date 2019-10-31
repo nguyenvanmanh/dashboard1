@@ -28,11 +28,11 @@
       </template>
       <!--Add Employee to Department-->
       <template v-slot:item.action="{ item }" v-if="status==='add'">
-        <v-icon small @click="submitEmployeeToDept">add</v-icon>
+        <v-icon @click="submitEmployeeToDept">add</v-icon>
       </template>
       <!--Remove Employee from Department -->
       <template v-slot:item.action="{ item }" v-else>
-        <v-icon small @click="removeEmployeeFromDept">delete</v-icon>
+        <v-icon @click="removeEmployeeFromDept">delete</v-icon>
       </template>
     </v-data-table>
     <div>
@@ -97,18 +97,33 @@ export default {
   },
 
   mounted() {
-    //when the page first loads, display a list of employees NOT belonging to the selected department
     let self = this;
-    axios
-      .get(
-        `${base_url}/rest/getListEmployeeNotInDepartment/${this.$props.departmentId}`
-      )
-      .then(function(response) {
-        self.existingUsers = response.data;
-        //  console.log(self.existingUsers)
-      })
 
-      .catch(err => console.log(err));
+    if (this.$props.status == "add") {
+      axios
+        .get(
+          `${base_url}/rest/getListEmployeeNotInDepartment/${this.$props.departmentId}`
+        )
+        .then(function(response) {
+          self.existingUsers = response.data;
+          // console.log(response.data)
+        })
+
+        .catch(err => console.log(err));
+    }
+
+    if (this.$props.status == "delete") {
+      axios
+        .get(
+          `${base_url}/rest/getListEmployeeOfDepartment/${this.$props.departmentId}`
+        )
+        .then(function(response) {
+          self.existingUsers = response.data;
+          
+        })
+
+        .catch(err => console.log(err));
+    }
   },
   methods: {
     goBackToDepartments() {
@@ -139,7 +154,7 @@ export default {
           //add an array of "selected" employees to the selected department
           if (response.status == 201) {
             console.log("Success");
-            window.location.reload();
+            window.location.reload(); //needs to re-render without reloadinig page
           }
           console.log(response);
         })
@@ -151,16 +166,9 @@ export default {
         alert("Please select an employee to remove!");
         return;
       }
-      let selectedEmployees = this.selected.slice();
-      for (let i = 0; i < selectedEmployees.length; i++) {
-        selectedEmployees[i]["departments"].unshift({
-          departmentId: Number(this.$props.departmentId)
-        });
-      }
       axios
         .post(
-          `${base_url}/rest/removeEmployeeFromDepartment`,
-          selectedEmployees
+          `${base_url}/rest/removeEmployeeFromDepartment`, this.selected
         )
         .then(function(response) {
           if (response.status == 201) {
