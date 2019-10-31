@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-data-table :headers="headers" :items="dataTemplates" sort-by="calories" class="elevation-1">
+    <v-data-table :headers="headers" :items="dataTemplates" sort-by="calories" class="elevation-1" :search="search">
       <template v-slot:item.index="{ item }">
         <!-- {{dem}} -->
         {{dataTemplates.map(function(x) {
@@ -10,8 +10,21 @@
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>Templates Management</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+         <v-divider class="mx-4" inset vertical></v-divider>
+          <div class="flex-grow-1"></div>
+
+          <!-- Implement search bar-->
           <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <!--End searchbar-->
+
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on }">
               <v-btn color="primary" dark class="mb-2" v-on="on">New Template</v-btn>
@@ -23,6 +36,7 @@
 
               <v-card-text>
                 <v-container>
+                    
                   <v-row v-model="row_input">
                     <v-col cols="12">
                       <v-text-field label="Title" v-model="title_input" required></v-text-field>
@@ -52,12 +66,13 @@
 
 <script>
 import axios from "axios";
-const base_ip_address = "http://192.168.56.178";
+const base_ip_address = "http://192.168.32.88";
 const base_port = 8081;
 const base_url = `${base_ip_address}:${base_port}`;
 export default {
   data: () => ({
     dialog: false,
+    search: "",
     headers: [
       {
         text: "Index",
@@ -125,6 +140,8 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
+      this.title_input=""
+      this.body_input=""
     },
 
     save() {

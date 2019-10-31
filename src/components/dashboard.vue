@@ -832,6 +832,16 @@
                   <span class="nav-link-text" data-i18n="nav.tables">Upload Customer</span>
                 </router-link>
               </li>
+               <li>
+                <router-link to="/campaigns" title="Campaigns" data-filter-tags="tables">
+                  <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Campaigns</span>
+                </router-link>
+                <router-link to="/roleManagement" title="RoleManagement" data-filter-tags="tables">
+                  <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Role Management</span>
+                </router-link>
+              </li>
 
               <li>
                 <router-link

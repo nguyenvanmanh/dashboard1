@@ -10,6 +10,7 @@ import analytics_dashboard from "../components/IntelAnalytics_Dashboard";
 import marketing_dashboard from "../components/Marketing_Dashboard";
 import roleManagement from "../components/roleManagement";
 import employeeManagement from "../components/employeeManagement"
+import campaigns from "../components/campaigns"
 import templateMagement from '../components/TemplateManagement'
 
 Vue.use(Router)
@@ -29,6 +30,11 @@ export default new Router({
                     component: sendingEmail  // updload customers
                 },
                 {
+                    path: "/campaigns",
+                    name: "campaigns",
+                    component: campaigns
+                },
+                {
                     path: "/roleManagement",
                     name: "roleManagement",
                     component: roleManagement
@@ -40,8 +46,9 @@ export default new Router({
 
                 },
                 {
-                    path: "departments/editEmployee/:status",
+                    path: "departments/editEmployee/:status/:departmentId",
                     props: true,
+                    name: editEmployee,
                     component: editEmployee
                 },
                 {
