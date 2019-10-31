@@ -604,6 +604,10 @@
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Campaigns</span>
                 </router-link>
+                <router-link to="/roleManagement" title="RoleManagement" data-filter-tags="tables">
+                  <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Role Management</span>
+                </router-link>
               </li>
             </ul>
             <div class="filter-message js-filter-message bg-success-600"></div>
