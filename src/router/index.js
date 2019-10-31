@@ -3,9 +3,14 @@ import Router from 'vue-router'
 import dashboard from "../components/dashboard";
 import login from "../components/login";
 import register from "../components/register";
-import employeeManagement from "../components/employeeManagement";
+import sendingEmail from "../components/sendingEmail";
 import departments from "../components/departments";
-import editEmployee from "../components/editEmployee"
+import editEmployee from "../components/editEmployee";
+import analytics_dashboard from "../components/IntelAnalytics_Dashboard";
+import marketing_dashboard from "../components/Marketing_Dashboard";
+import roleManagement from "../components/roleManagement";
+import employeeManagement from "../components/employeeManagement"
+import templateMagement from '../components/TemplateManagement'
 
 Vue.use(Router)
 
@@ -17,16 +22,47 @@ export default new Router({
             component: dashboard,
             children: [
                 {
-                    path: "/employeeManagement",
-                    name: "employeeManagement",
-                    component: employeeManagement
+                    path: "/uploadCustomer",
+                    name: "uploadCustomer",
+                    component: sendingEmail  // updload customers
+                },
+                {
+                    path: "/roleManagement",
+                    name: "roleManagement",
+                    component: roleManagement
                 },
                 {
                     path: "/departments",
                     name: "departments",
                     component: departments,
 
-                }
+                },
+                {
+                    path: "departments/editEmployee/:status",
+                    props: true,
+                    component: editEmployee
+                },
+                {
+                    path: "/intel_analytics_dashboard",
+                    name: "analytics_dashboard",
+                    component: analytics_dashboard
+                },
+                {
+                    path: "/intel_marketing_dashboard",
+                    name: "marketing_dashboard",
+                    component: marketing_dashboard
+                },
+                {
+                    path: "/employeeManagement",
+                    name: "employeeManagement",
+                    component: employeeManagement
+                },
+                {
+                    path: "/templateMagement",
+                    name: "templateMagement",
+                    component: templateMagement
+                },
+
             ]
         },
         {
@@ -37,10 +73,6 @@ export default new Router({
             path: "/register",
             component: register
         },
-        {
-            path: "/departments/editEmployee/:status",
-            props: true,
-            component: editEmployee
-        }
+
     ]
 })

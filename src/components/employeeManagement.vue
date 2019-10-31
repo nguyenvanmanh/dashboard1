@@ -241,9 +241,7 @@ export default {
   created() {
     this.initialize();
   },
-  // updated() {
-  //   this.getDepartment();
-  // },
+
   methods: {
     // get employee's information from database by using axios
     fetchUsers() {
@@ -258,18 +256,6 @@ export default {
     initialize() {
       this.fetchUsers();
     },
-    // get Department Name & Role
-    // getDepartment() {
-    //   if (this.users != null) {
-    //     for (let i = 0; i < this.users.length; i++) {
-    //       let departmentNames = this.users[i].listDepartment;
-    //       for (let j = 0; j < departmentNames.length; j++) {
-    //         let department = departmentNames[j].departmentName;
-    //         console.log("DepartmentName:::", department);
-    //       }
-    //     }
-    //   }
-    // },
     // Edit Employee's Information
     editItem(item) {
       this.editedIndex = this.users.indexOf(item);

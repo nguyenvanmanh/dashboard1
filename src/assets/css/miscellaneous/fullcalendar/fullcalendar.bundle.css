@@ -536,7 +536,7 @@ from https://feathericons.com/ and built with IcoMoon
 .fc-icon {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'fcicons' !important;
-  speak: none;
+  /* speak: none; */
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -1666,7 +1666,7 @@ h6 small,
   background: linear-gradient(180deg, #6e4e9e 25%, #62468d 50%, #0c7cd5 75%, #0960a5 100%);
   color: #886ab5;
   background-clip: text;
-  text-fill-color: transparent;
+  /* text-fill-color: transparent; */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: none; }
