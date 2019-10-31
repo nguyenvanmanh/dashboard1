@@ -245,7 +245,8 @@ export default {
     reactivate(dept){
       //change status of inactive department to 1
       //restore the 'delete' icon for the reactivated department
-      // isActivated == 1;
+      dept.isActivated == 1;
+      console.log('dept',dept)
     },
 
     

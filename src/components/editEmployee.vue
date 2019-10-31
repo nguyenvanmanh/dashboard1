@@ -146,6 +146,7 @@ export default {
         .catch(err => console.log(err));
     },
     removeEmployeeFromDept() {
+      //need refactoring
       if (this.selected.length == 0) {
         alert("Please select an employee to remove!");
         return;
