@@ -153,26 +153,30 @@ export default {
         .then(function(response) {
           //add an array of "selected" employees to the selected department
           if (response.status == 201) {
-            console.log("Success");
+            // console.log("Success");
             window.location.reload(); //needs to re-render without reloadinig page
           }
-          console.log(response);
         })
         .catch(err => console.log(err));
     },
     removeEmployeeFromDept() {
-      //need refactoring
+      //repeated code - need refactoring!
       if (this.selected.length == 0) {
         alert("Please select an employee to remove!");
         return;
       }
+      let selectedEmployees = this.selected.slice()
+      for (let i = 0; i < selectedEmployees.length; i++) {
+        selectedEmployees[i]["departments"].unshift({
+          departmentId: Number(this.$props.departmentId)
+        });
+      }
       axios
         .post(
-          `${base_url}/rest/removeEmployeeFromDepartment`, this.selected
+          `${base_url}/rest/removeEmployeeFromDepartment`, selectedEmployees
         )
         .then(function(response) {
           if (response.status == 201) {
-            console.log("Success");
             window.location.reload();
           }
         })
