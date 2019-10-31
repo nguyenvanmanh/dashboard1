@@ -84,7 +84,7 @@
                         outlined
                         type="error"
                         v-if="isCheck"
-                      >Incorrect username or password !</v-alert>
+                      >Incorrect username or password</v-alert>
                       <div class="form-group text-left">
                         <label for="rememberme">
                           New user?
