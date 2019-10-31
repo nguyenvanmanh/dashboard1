@@ -222,15 +222,16 @@ export default {
     deleteDept(dept) {
       //get id => click ok=> call API
 
-      this.editedDept = Object.assign({}, dept);
+      // this.editedDept = Object.assign({}, dept);
 
       confirm("Are you sure you want to remove this department?") &&
         axios
-          .post(`${base_url}/rest/inActiveDepartment`, this.editedDept)
+          .post(`${base_url}/rest/inActiveDepartment`, dept)
           .then(response => {
             if (response.status === 201) {
               alert(
-                `Removed department ${this.editedDept.departmentName} successfully!`
+                // `Removed department ${this.editedDept.departmentName} successfully!`
+               `Removed department ${dept.departmentName} successfully!`
               );
               window.location.reload();
             }
@@ -243,9 +244,26 @@ export default {
     },
 
     reactivate(dept){
-      //change status of inactive department to 1
-      dept.isActivated = 1;
       //send back to db the updated status
+
+      // this.editedDept = Object.assign({}, dept);
+
+      confirm("Are you sure you want to reactivate this department?") &&
+        axios
+          .post(`${base_url}/rest/activeDepartment`, dept)
+          .then(response => {
+            if (response.status === 201) {
+              alert(
+                `Reactivate department ${dept.departmentName} successfully!`
+              );
+              window.location.reload();
+            }
+          })
+
+          .catch(error => {
+            // eslint-disable-next-line
+            console.log(error.response);
+          });
     },
 
     
@@ -325,19 +343,7 @@ export default {
           });
       }
     },
-    
-    // clickAddEmployee() {
-    //   // eslint-disable-next-line
-    //   console.log("click add employee");
-    // },
-    // clickRemoveEmployee() {
-    //   axios
-    //     .get(`${base_url}/rest/getListEmployeeOfDepartment`)
-    //     .then(res => {
-    //       // eslint-disable-next-line
-    //       console.log(res);
-    //     });
-    // }
+   
   }
 };
 </script>
