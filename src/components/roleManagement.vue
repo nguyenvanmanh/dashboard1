@@ -27,38 +27,7 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <!--End searchbar-->
 
-          <!-- Implement button and dropdownlist-->
-          <div
-            class="btn-group"
-            id="js-demo-nesting"
-            role="group"
-            aria-label="Button group with nested dropdown"
-          >
-            <div class="btn-group" role="group">
-              <v-button
-                type="button"
-                class="btn btn-secondary dropdown-toggle"
-                data-toggle="dropdown"
-              >Name</v-button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:void(0)">Dropdown link</a>
-                <a class="dropdown-item" href="javascript:void(0)">Dropdown link</a>
-              </div>
-              <v-button
-                type="button"
-                class="btn btn-secondary dropdown-toggle"
-                data-toggle="dropdown"
-                color
-              >Code</v-button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:void(0)">Dropdown link</a>
-                <a class="dropdown-item" href="javascript:void(0)">Dropdown link</a>
-              </div>
-            </div>
-          </div>
-          <v-divider class="mx-4" inset vertical></v-divider>
-
-          <!--End-->
+         
 
           <!--Implement popup dialog form-->
           <v-dialog v-model="dialog" max-width="500px">
@@ -316,4 +285,7 @@ export default {
 button {
   margin-right: 3px;
 }
+
+.theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+background-color: #1E90FF;}
 </style>
