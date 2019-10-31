@@ -86,8 +86,10 @@
               
               <div class="flex-grow-1"></div>
               <!-- Send email for selected campaigns button -->
+              <v-alert  dark type="success" v-model="alerts.sendMail" dismissible>
+                <span >Send success</span>
+              </v-alert>
               <v-btn color="primary" dark @click="sendAll">Send All</v-btn>
-
             </v-toolbar>
           </template>
           <!-- End of New Item popup -->
@@ -95,10 +97,15 @@
           <!-- Action icons  -->
           <template v-slot:item.action="{ item }">
             <v-icon color="orange darken-2" @click="templateDialog(item.campaignId)" left >rounded_corner</v-icon>
-            <v-dialog v-model="dialogs.listCustomer" scrollable persistent max-width="600px">
-              <template v-slot:activator>
-                <v-icon color="green darken-2"  @click="showDialog">supervised_user_circle</v-icon>
-              </template>
+            <v-icon color="green darken-2"  @click="showDialog">supervised_user_circle</v-icon>
+            <v-icon color="teal darken-2" right @click="sendMail(item.campaignId)">email</v-icon>
+          </template>
+          <!-- End of Action Icons -->
+          
+        </v-data-table>
+        <!-- select list customer for sending email -->
+        <v-dialog v-model="dialogs.listCustomer" scrollable persistent max-width="600px">
+            
               <v-card>
                 <v-card-title>
                   <span class="headline">Choose customers for this campaign</span>
@@ -124,13 +131,6 @@
               </v-card>
             </v-dialog> 
             <!-- end of select customer -->
-            
-            <v-icon color="teal darken-2" right >email</v-icon>
-          </template>
-          <!-- End of Action Icons -->
-          
-        </v-data-table>
-        <!-- select list customer for sending email -->
         
 
         <!-- change Template for campaign -->
@@ -162,6 +162,9 @@ const baseUrl = 'http://localhost:8081';
 export default {
   data() {
     return {
+      alerts:{
+        sendMail: false
+      },
       dates: [],
       selectedTemplate: null,
       emailTemplates: {},
@@ -261,14 +264,27 @@ export default {
     showDialog() {
       this.dialogs.listCustomer = true;
     },
+    sendMail(campaignId){
+      this.alerts.sendMail = true;
 
-    sendAll(id){
+      // axios.post(`${baseUrl}/email/sendMail`, {
+      //   customers: this.selectedCustomer,
+      //   campaignId: campaignId,
+      //   sendEmailUserId: 1
+      // }).then(res=>{
+      //   this.alerts.sendMail = true;
+      // });
+    }
+    ,
+    sendAll(){
       this.selected.map( item => {
-        axios.post(`${baseUrl}/sendMail`, {
-          customers: selectedCustomer,
+        axios.post(`${baseUrl}/email/sendMail`, {
+          customers: this.selectedCustomer,
           campaignId: item.campaignId,
           sendEmailUserId: 1
-          
+        }).then(res=>{
+          this.selected = [];
+          this.alerts.sendMail = true;
         });
       });
     },
