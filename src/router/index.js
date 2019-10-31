@@ -44,8 +44,9 @@ export default new Router({
 
                 },
                 {
-                    path: "departments/editEmployee/:status",
+                    path: "departments/editEmployee/:status/:departmentId",
                     props: true,
+                    name: editEmployee,
                     component: editEmployee
                 },
                 {
