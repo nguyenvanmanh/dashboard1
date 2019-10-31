@@ -1,86 +1,174 @@
 <template>
-  <v-layout>
-    <v-flex>
-      <v-data-table :headers="headers" :items="users" sort-by="userId" class="elevation-1" data-app>
-        <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <div class="flex-grow-1"></div>
-            <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark v-on="on">New Item</v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
-
-                <v-card-text>
-                  <v-container>
-                    <v-col>
-                      <v-row cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.firstName" label="First Name"></v-text-field>
-                      </v-row>
-                      <v-row cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
-                      </v-row>
-                      <v-row cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
-                      </v-row>
-                      <v-row cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.username" label="UserName" disabled></v-text-field>
-                      </v-row>
-                      <v-row cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.password" label="Password"></v-text-field>
-                      </v-row>
-                      <v-row cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.dob"
-                          label="DOB"
-                          placeholder=" YYYY-MM-DD"
-                        ></v-text-field>
-                      </v-row>
-
-                      <v-row cols="12" sm="6" md="4" justify="space-around">
-                        <v-radio-group v-model="radioGroup">
-                          <v-radio label="Customer" :value="1"></v-radio>
-                          <v-radio label="Employee" :value="2"></v-radio>
-                          <v-radio label="Manager" :value="3"></v-radio>
-                          <v-radio label="Admin" :value="4"></v-radio>
-                        </v-radio-group>
-                      </v-row>
-                      <v-row align="center">
-                        <v-col class="d-flex" cols="12" sm="6">
-                          <v-select :items="department" label="Department" dense></v-select>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-container>
-                </v-card-text>
-
-                <v-card-actions>
-                  <div class="flex-grow-1"></div>
-                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-          <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-        </template>
-        <template v-slot:no-data>
-           <label>File
-        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-      </label>
-           <v-btn v-on:click="submitFile()">Submit</v-btn>
-        </template>
-      </v-data-table>
-    </v-flex>
-  </v-layout>
+  <v-app id="inspire">
+    <v-layout>
+      <v-flex>
+        <v-data-table
+          :headers="headersTitle"
+          :items="users"
+          :search="search"
+          sort-by="userId"
+          class="elevation-1"
+          data-app
+        >
+          <template v-slot:top>
+            <v-toolbar flat color="white">
+              <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
+              <!-- Implement search bar-->
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <div class="flex-grow-1"></div>
+              <!--End searchbar-->
+              <!--Implement Active and All radio buttons-->
+              <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
+                <v-radio label="Inactive Users" value="0"></v-radio>
+                <v-radio label="Active Users" value="1"></v-radio>
+                <v-radio label="All" value="2"></v-radio>
+              </v-radio-group>
+              <!--End radio buttons-->
+              <!-- User management's Edit Information Table -->
+              <v-dialog v-model="dialog" max-width="500px">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="primary" dark v-on="on">ADD NEW USER</v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-col>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-text-field v-model="editedItem.firstName" label="First Name"></v-text-field>
+                        </v-row>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
+                        </v-row>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                        </v-row>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-text-field v-model="editedItem.username" label="UserName"></v-text-field>
+                        </v-row>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.password"
+                            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                            :type="show1 ? 'text' : 'password'"
+                            name="input-10-1"
+                            label="Password"
+                            counter
+                            @click:append="show1 = !show1"
+                          ></v-text-field>
+                        </v-row>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.verified_password"
+                            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                            :type="show1 ? 'text' : 'password'"
+                            name="input-10-1"
+                            label="Verify your password "
+                            counter
+                            @click:append="show1 = !show1"
+                            required
+                          ></v-text-field>
+                        </v-row>
+                        <v-row cols="12" sm="6" md="4">
+                          <v-dialog
+                            ref="dialog"
+                            v-model="modal"
+                            :return-value.sync="editedItem.dob"
+                            persistent
+                            width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                v-model="editedItem.dob"
+                                label="DOB"
+                                prepend-icon="event"
+                                readonly
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="editedItem.dob" scrollable>
+                              <v-spacer></v-spacer>
+                              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.dialog.save(editedItem.dob)"
+                              >OK</v-btn>
+                            </v-date-picker>
+                          </v-dialog>
+                        </v-row>
+                      </v-col>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <!--End  User management's Edit Information Table -->
+            </v-toolbar>
+          </template>
+          <!--Action Icon-->
+          <template v-slot:item.action="{ item }">
+            <v-icon color="green darken-2" v-if="item.isActivated === 1">radio_button_checked</v-icon>
+            <v-icon
+              color="red lighten-2"
+              v-if="item.isActivated === 0 || null"
+              @click="showDialog"
+            >radio_button_unchecked</v-icon>
+            <v-icon color="purple darken-2" dark @click="showDialog">supervised_user_circle</v-icon>
+            <v-icon color="teal darken-2" @click="editItem(item)">mdi-pencil</v-icon>
+          </template>
+          <!-- End Action Icon-->
+        </v-data-table>
+        <!--Set Department table pop up (Icon is supervised_user_circle ) -->
+        <v-dialog v-model="dialog1" max-width="600px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">User's Department & Role</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container id="dropdown-example">
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <p>Department</p>
+                    <v-overflow-btn class="my-2" label="Department" target="#dropdown-example"></v-overflow-btn>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <p>Role</p>
+                    <v-overflow-btn class="my-2" label="Role" segmented target="#dropdown-example"></v-overflow-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialog1  = false">Close</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog1= false">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!--End Set Department table pop up-->
+      </v-flex>
+    </v-layout>
+  </v-app>
 </template>
 <script>
 import axios from "axios";
@@ -88,9 +176,14 @@ export default {
   data() {
     return {
       dialog: false,
-      radioGroup: 3,
-      department: ["DU1", "DU2", "DU3"],
-      headers: [
+      dialog1: false,
+      modal: false,
+      check_activate: false,
+      check_inactivate: false,
+      show1: false,
+      search: "",
+      radios: "2",
+      headersTitle: [
         {
           text: "UserID",
           align: "left",
@@ -103,8 +196,9 @@ export default {
         { text: "UserName", value: "username" },
         { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
-        { text: "Registed Date", value: "registedDate" },
-        { text: "Activated Date Date", value: "activatedDate" },
+        { text: "Department", value: "departmentCodeAll" },
+        { text: "Registed Date", value: "registeredDate" },
+        { text: "Activated Date", value: "activatedDate" },
         { text: "End Date", value: "endDate" },
         { text: "Seniority", value: "seniority" },
         { text: "Actions", value: "action", sortable: false }
@@ -117,7 +211,9 @@ export default {
         email: "",
         username: "",
         password: "",
-        dob: ""
+        dob: "",
+        departmentCodeAll: "",
+        registeredDate: ""
       },
       defaultItem: {
         firstName: "",
@@ -125,7 +221,9 @@ export default {
         email: "",
         username: "",
         password: "",
-        dob: ""
+        dob: "",
+        departmentCodeAll: "",
+        registeredDate: ""
       }
     };
   },
@@ -134,72 +232,42 @@ export default {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
   },
-
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
+    radios: "changeUsersStatus"
   },
-
   created() {
     this.initialize();
   },
+
   methods: {
-
-     handleFileUpload(){
-      this.file = this.$refs.file.files[0];
-    },
-
-    submitFile(){
- let formData = new FormData();
-  formData.append('file', this.file);
-  axios.post("http://172.30.56.81:8080/email/coverExcel",
-                formData,
-                {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-              }
-            ).then(function(){
-          console.log('SUCCESS!!');
-        })
-        .catch(function(){
-          console.log('FAILURE!!');
-        });
-    },
-
+    // get employee's information from database by using axios
     fetchUsers() {
       axios
-        .get("http://172.30.56.77:8080/rest/user-management", {
+        .get("http://172.30.56.241:8081/rest/users/list", {
           headers: { Authorization: localStorage.getItem("tocken") }
         })
         .then(response => {
           this.users = response.data;
-          // console.log(this.users[0].roleId);
         });
     },
     initialize() {
       this.fetchUsers();
     },
-
+    // Edit Employee's Information
     editItem(item) {
       this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      localStorage.setItem("userId", item.userId);
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      const index = this.users.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        axios
-          .delete("http://172.30.56.77:8080/rest/user-management", {
-            headers: { Authorization: localStorage.getItem("tocken") }
-          })
-          .then(response => {
-            this.users.splice(index, 1);
-          });
+    // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
+    showDialog() {
+      this.dialog1 = true;
     },
-
+    // Close dilog Edited employee's information
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -207,43 +275,80 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-
+    // Save dialog Edited employee's information
     save() {
       if (this.editedIndex > -1) {
-        console.log("edited data");
-        console.log(this.editedItem);
-        axios
-          .post("" + this.editedItem.id, {
-            firstName: this.editedItem.firstName,
-            lastName: this.editedItem.lastName,
-            email: this.editedItem.email,
-            username: this.editedItem.username,
-            password: this.editedItem.password,
-            dob: this.editedItem.dob
-          })
-          .then(response => {
-            console.log(response);
-          });
         Object.assign(this.users[this.editedIndex], this.editedItem);
-      } else {
-        console.log("created data");
-        console.log(this.editedItem);
         axios
-          .post("", {
-            firstName: this.editedItem.firstName,
-            lastName: this.editedItem.lastName,
-            email: this.editedItem.email,
-            username: this.editedItem.username,
-            password: this.editedItem.password,
-            dob: this.editedItem.dob
-          })
+          .post("http://172.30.56.241:8081/rest/users/edit", this.editedItem)
           .then(response => {
-            console.log(response);
+            if (response.status === 200) {
+              alert(`Update user's information successfully !`);
+              window.location.reload();
+            }
+          })
+          .catch(error => {
+            // eslint-disable-next-line
+            console.log(error.response);
           });
-
+      } else {
         this.users.push(this.editedItem);
+        axios
+          .post("http://172.30.56.241:8081/rest/users/add", this.editedItem)
+          .then(response => {
+            if (response.status === 200) {
+              alert(`Add a new user successfully !`);
+              window.location.reload();
+            }
+          });
       }
       this.close();
+    },
+    //Active & Inactive Users Button
+    changeUsersStatus() {
+      //Active vs Inactive Users-> load corresponding data
+      let self = this;
+      //O is inactive dept
+      if (this.radios === "1") {
+        axios
+          .get(`http://172.30.56.241:8081/rest/users/list/1`)
+
+          .then(function(response) {
+            self.users = response.data;
+          })
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      }
+      if (this.radios === "0") {
+        axios
+          .get(`http://172.30.56.241:8081/rest/users/list/0`)
+
+          .then(function(response) {
+            // eslint-disable-next-line
+            self.users = response.data;
+          })
+
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      }
+      if (this.radios === "2") {
+        axios
+          .get(`http://172.30.56.241:8081/rest/users/list`)
+
+          .then(function(response) {
+            // eslint-disable-next-line
+            self.users = response.data;
+          })
+
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      }
     }
   }
 };
