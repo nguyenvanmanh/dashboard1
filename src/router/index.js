@@ -14,7 +14,9 @@ import templateMagement from '../components/TemplateManagement'
 
 Vue.use(Router)
 
+
 export default new Router({
+    
     mode: "history",
     routes: [
         {
@@ -68,11 +70,12 @@ export default new Router({
         {
             path: "/login",
             component: login
+
         },
         {
             path: "/register",
             component: register
-        },
+        },      
 
     ]
 })

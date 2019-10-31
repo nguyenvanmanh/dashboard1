@@ -165,7 +165,7 @@ export default {
       })
         .then(function(response) {
           if (response.status === 200) {
-            localStorage.setItem("tocken", response.data);
+            localStorage.setItem("token", response.data);
             _this.$router.push({
               path: "/"
             });

@@ -739,7 +739,11 @@
                 </ul>
               </li>
               <li>
-                <router-link to="/employeeManagement" title="employeeManagement" data-filter-tags="tables">
+                <router-link
+                  to="/employeeManagement"
+                  title="employeeManagement"
+                  data-filter-tags="tables"
+                >
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Employee Management</span>
                 </router-link>
@@ -830,7 +834,11 @@
               </li>
 
               <li>
-                <router-link to="/templateMagement" title="templateMagement" data-filter-tags="tables">
+                <router-link
+                  to="/templateMagement"
+                  title="templateMagement"
+                  data-filter-tags="tables"
+                >
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Template Management</span>
                 </router-link>
@@ -2441,7 +2449,7 @@
                   <div class="dropdown-divider m-0"></div>
                   <router-link to="/login" title="Redirect to register page">
                     <a class="dropdown-item fw-500 pt-3 pb-3">
-                      <span data-i18n="drpdwn.page-logout">Logout</span>
+                      <span data-i18n="drpdwn.page-logout" @click="logout">Logout</span>
 
                       <span class="float-right fw-n">&commat;codexlantern</span>
                     </a>
@@ -3591,7 +3599,23 @@
 </template>
 <script>
 export default {
-  name: "dashboard"
+  name: "dashboard",
+  created () {
+    if (localStorage.getItem("token")) {
+      this.$router.push({
+        path: "/"
+      });
+    } else {
+      this.$router.push({
+        path: "/login"
+      });
+    }
+  },
+  methods:{
+    logout(){
+      localStorage.removeItem("token");
+    }
+  }
 };
 </script>
 <style>
@@ -3606,6 +3630,4 @@ label.menu-open-button {
 .modal-dialog-right {
   position: absolute !important;
 }
-
-
 </style>

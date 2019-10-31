@@ -127,14 +127,10 @@
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon color="green darken-2" v-if="item.isActivated === 1">radio_button_checked</v-icon>
-            <v-icon
-              color="red lighten-2"
-              v-if="item.isActivated === 0 || null"
-              @click="showDialog"
-            >radio_button_unchecked</v-icon>
-            <v-icon color="purple darken-2" dark @click="showDialog">supervised_user_circle</v-icon>
-            <v-icon color="teal darken-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon v-if="item.isActivated === 1">mdi-lock-open-variant</v-icon>
+            <v-icon v-if="item.isActivated === 0 || null" @click="showDialog">mdi-lock</v-icon>
+            <v-icon @click="showDialog">mdi-account-edit-outline</v-icon>
+            <v-icon @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
         </v-data-table>
@@ -149,11 +145,21 @@
                 <v-row>
                   <v-col cols="12" sm="6">
                     <p>Department</p>
-                    <v-overflow-btn class="my-2" label="Department" target="#dropdown-example"></v-overflow-btn>
+                    <v-overflow-btn
+                      class="my-2"
+                      :items="departmentName"
+                      label="Trung tâm phần mềm 1"
+                      target="#dropdown-example"
+                    ></v-overflow-btn>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <p>Role</p>
-                    <v-overflow-btn class="my-2" label="Role" segmented target="#dropdown-example"></v-overflow-btn>
+                    <v-overflow-btn
+                      class="my-2"
+                      :items="roleName"
+                      label="Developer"
+                      target="#dropdown-example"
+                    ></v-overflow-btn>
                   </v-col>
                 </v-row>
               </v-container>
@@ -183,6 +189,8 @@ export default {
       show1: false,
       search: "",
       radios: "2",
+      departmentName: ['DU1','DU2','DU3','DU4','DU5','DU6','DU7','DU8','DU9','DU10','DU11','DU12'],
+      roleName: ['Admin','Manager','Teamlead','PM','BA','SA','Developer','Tester','Directer'],
       headersTitle: [
         {
           text: "UserID",
@@ -194,12 +202,12 @@ export default {
         { text: "Lastname", value: "lastName" },
         { text: "Email", value: "email" },
         { text: "UserName", value: "username" },
-        { text: "Password", value: "password" },
+        // { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
         { text: "Department", value: "departmentCodeAll" },
         { text: "Registed Date", value: "registeredDate" },
-        { text: "Activated Date", value: "activatedDate" },
-        { text: "End Date", value: "endDate" },
+        // { text: "Activated Date", value: "activatedDate" },
+        // { text: "End Date", value: "endDate" },
         { text: "Seniority", value: "seniority" },
         { text: "Actions", value: "action", sortable: false }
       ],
@@ -247,7 +255,7 @@ export default {
     fetchUsers() {
       axios
         .get("http://172.30.56.241:8081/rest/users/list", {
-          headers: { Authorization: localStorage.getItem("tocken") }
+          headers: { Authorization: localStorage.getItem("token") }
         })
         .then(response => {
           this.users = response.data;
@@ -355,5 +363,8 @@ export default {
 </script>
 
 <style scoped>
+.v-application .primary {
+  background-color: #1e90ff !important;
+}
 </style>
 
