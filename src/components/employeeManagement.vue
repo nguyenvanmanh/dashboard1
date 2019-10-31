@@ -189,8 +189,31 @@ export default {
       show1: false,
       search: "",
       radios: "2",
-      departmentName: ['DU1','DU2','DU3','DU4','DU5','DU6','DU7','DU8','DU9','DU10','DU11','DU12'],
-      roleName: ['Admin','Manager','Teamlead','PM','BA','SA','Developer','Tester','Directer'],
+      departmentName: [
+        "DU1",
+        "DU2",
+        "DU3",
+        "DU4",
+        "DU5",
+        "DU6",
+        "DU7",
+        "DU8",
+        "DU9",
+        "DU10",
+        "DU11",
+        "DU12"
+      ],
+      roleName: [
+        "Admin",
+        "Manager",
+        "Teamlead",
+        "PM",
+        "BA",
+        "SA",
+        "Developer",
+        "Tester",
+        "Directer"
+      ],
       headersTitle: [
         {
           text: "UserID",
@@ -292,7 +315,6 @@ export default {
           .then(response => {
             if (response.status === 200) {
               alert(`Update user's information successfully !`);
-              window.location.reload();
             }
           })
           .catch(error => {
@@ -306,7 +328,6 @@ export default {
           .then(response => {
             if (response.status === 200) {
               alert(`Add a new user successfully !`);
-              window.location.reload();
             }
           });
       }
