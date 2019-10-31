@@ -29,8 +29,8 @@
             <template v-slot:item.index="{ item }">
               <!-- {{dem}} -->
               {{desserts.map(function(x) {
-              return x.customerId;
-              }).indexOf(item.customerId)}}
+              return x.customerEmail;
+              }).indexOf(item.customerEmail)+1}}
             </template>
           </v-data-table>
         </v-card>
