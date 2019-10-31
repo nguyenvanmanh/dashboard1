@@ -127,6 +127,7 @@ export default {
   data() {
     return {
       loading: true,
+      error: false,
       dialog: false,
       seen: true,
       search: "",
@@ -161,7 +162,7 @@ export default {
   mounted() {
     //load all active departments on screen when the app first starts
     let self = this;
-
+    
     axios
       .get(`${base_url}/rest/getListDepartmentActive`)
 
