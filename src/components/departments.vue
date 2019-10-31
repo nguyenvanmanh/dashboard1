@@ -68,7 +68,7 @@
                     </v-col>
                     <v-col cols="12" class="my-2" v-if="computedDialog">
                       <label>Number of Employees: </label>
-                      <span>{{editedDept.numOfEmployees}}</span>
+                      <span> {{editedDept.numberOfEmployees}} </span>
                       <!-- <router-link to="/departments/editEmployee/add/">
                         <v-icon small class="mr-2">mdi-plus</v-icon>
                       </router-link> -->
@@ -93,8 +93,8 @@
               <v-card-actions>
                 <div class="flex-grow-1"></div>
 
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn  class='modal_bottom-buttons' text @click="close">Cancel</v-btn>
+                <v-btn  class='modal_bottom-buttons' text @click="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -354,4 +354,7 @@ button {
 }
 .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
     background-color: 	#1E90FF;}
+.modal_bottom-buttons{
+  color: #1E90FF
+}
 </style>
