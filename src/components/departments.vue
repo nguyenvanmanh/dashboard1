@@ -1,8 +1,6 @@
 
 <template>
-
   <div id="app">
-   
     <v-data-table
       :headers="headers"
       :items="departments"
@@ -62,28 +60,28 @@
                       <label>Department Code</label>
                       <v-text-field required v-model="editedDept.departmentCode"></v-text-field>
                     </v-col>
-                    <v-col cols="12"  v-if="computedDialog">
+                    <v-col cols="12" v-if="computedDialog">
                       <label>Department Status:</label>
-                      <span> {{editedDept.isActivated===0? "Inactive": "Active"}}</span>
+                      <span>{{editedDept.isActivated===0? "Inactive": "Active"}}</span>
                     </v-col>
                     <v-col cols="12" class="my-2" v-if="computedDialog">
-                      <label>Number of Employees: </label>
-                      <span> {{editedDept.numberOfEmployees}} </span>
+                      <label>Number of Employees:</label>
+                      <span>{{editedDept.numberOfEmployees}}</span>
                       <!-- <router-link to="/departments/editEmployee/add/">
                         <v-icon small class="mr-2">mdi-plus</v-icon>
-                      </router-link> -->
-                       <!-- <router-link to="/departments/editEmployee/delete">
+                      </router-link>-->
+                      <!-- <router-link to="/departments/editEmployee/delete">
                         <v-icon small class="mr-2">mdi-minus</v-icon>
-                      </router-link> -->
+                      </router-link>-->
 
-                       <router-link  :to="'/departments/editEmployee/add/'+ editedDept.departmentId">
+                      <router-link :to="'/departments/editEmployee/add/'+ editedDept.departmentId">
                         <v-icon small class="mr-2">mdi-plus</v-icon>
                       </router-link>
-                       <router-link  :to="'/departments/editEmployee/delete/'+ editedDept.departmentId">
+                      <router-link
+                        :to="'/departments/editEmployee/delete/'+ editedDept.departmentId"
+                      >
                         <v-icon small class="mr-2">mdi-minus</v-icon>
                       </router-link>
-                     
-                     
                     </v-col>
                     <v-col cols="12" v-else></v-col>
                   </v-row>
@@ -93,8 +91,8 @@
               <v-card-actions>
                 <div class="flex-grow-1"></div>
 
-                <v-btn  class='modal_bottom-buttons' text @click="close">Cancel</v-btn>
-                <v-btn  class='modal_bottom-buttons' text @click="save">Save</v-btn>
+                <v-btn class="modal_bottom-buttons" text @click="close">Cancel</v-btn>
+                <v-btn class="modal_bottom-buttons" text @click="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -104,10 +102,8 @@
       <!--Implement edit, delete and reactivate buttons for each department-->
       <template v-slot:item.action="{ item }">
         <v-row>
-         
-           <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+          <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
           <v-col v-if="item.isActivated == 1">
-            
             <v-icon class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
           </v-col>
           <v-col v-else>
@@ -116,17 +112,14 @@
         </v-row>
       </template>
       <!--End buttons -->
-    
     </v-data-table>
-   
   </div>
-  
 </template>
 
 <script>
-const base_ip_address = "http://172.30.56.57"
-const base_port = 8081
-const base_url = `${base_ip_address}:${base_port}`
+const base_ip_address = "http://172.30.56.57";
+const base_port = 8081;
+const base_url = `${base_ip_address}:${base_port}`;
 
 const axios = require("axios");
 export default {
@@ -159,7 +152,7 @@ export default {
         { text: "Department Name", value: "departmentName", sortable: true },
         { text: "Department Code", value: "departmentCode", sortable: true },
         { text: "Number of Employees", value: "numberOfEmployees" },
-        
+
         { text: "Action", value: "action", sortable: false }
       ]
     };
@@ -174,13 +167,11 @@ export default {
 
       .then(function(response) {
         self.departments = response.data;
-        
       })
 
       .catch(err => {
         // eslint-disable-next-line
         console.log(err);
-       
       });
   },
 
@@ -231,7 +222,7 @@ export default {
             if (response.status === 201) {
               alert(
                 // `Removed department ${this.editedDept.departmentName} successfully!`
-               `Removed department ${dept.departmentName} successfully!`
+                `Removed department ${dept.departmentName} successfully!`
               );
               window.location.reload();
             }
@@ -243,7 +234,7 @@ export default {
           });
     },
 
-    reactivate(dept){
+    reactivate(dept) {
       //send back to db the updated status
 
       // this.editedDept = Object.assign({}, dept);
@@ -266,7 +257,6 @@ export default {
           });
     },
 
-    
     close() {
       //close dialog
       this.dialog = false;
@@ -280,10 +270,7 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
         axios
-          .post(
-            `${base_url}/rest/updateDepartmentInfomation`,
-            this.editedDept
-          )
+          .post(`${base_url}/rest/updateDepartmentInfomation`, this.editedDept)
           .then(response => {
             if (response.status === 201) {
               alert(
@@ -305,6 +292,11 @@ export default {
               alert("New Department successfully added!");
               window.location.reload();
             }
+          })
+          .catch(error => {
+            // eslint-disable-next-line
+             alert("Duplicated Department name!!! Please Check!!!");
+              window.location.reload();
           });
       }
       this.close();
@@ -342,8 +334,7 @@ export default {
             console.log(err);
           });
       }
-    },
-   
+    }
   }
 };
 </script>
@@ -359,8 +350,9 @@ button {
   margin-right: 3px;
 }
 .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
-    background-color: 	#1E90FF;}
-.modal_bottom-buttons{
-  color: #1E90FF
+  background-color: #1e90ff;
+}
+.modal_bottom-buttons {
+  color: #1e90ff;
 }
 </style>

@@ -24,7 +24,7 @@
           >Add All</v-btn>
           <v-btn color="primary" dark class="mb-2" @click="removeEmployeeFromDept" v-else>Delete All</v-btn>
         </v-toolbar>
-        {{selected}}
+        
       </template>
       <!--Add Employee to Department-->
       <template v-slot:item.action="{ item }" v-if="status==='add'">
