@@ -127,9 +127,15 @@
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon v-if="item.isActivated === 1">mdi-lock-open-variant</v-icon>
-            <v-icon v-if="item.isActivated === 0 || null" @click="showDialog">mdi-lock</v-icon>
-            <v-icon @click="showDialog">mdi-account-edit-outline</v-icon>
+            <v-icon
+              v-if="item.isActivated === 1"
+              @click="reactivate_deactivate(item)"
+            >mdi-lock-open-variant</v-icon>
+            <v-icon
+              v-if="item.isActivated === 0 || null"
+              @click="reactivate_deactivate(item)"
+            >mdi-lock</v-icon>
+            <v-icon @click="showDialog(item)">mdi-account-edit-outline</v-icon>
             <v-icon @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
@@ -142,13 +148,30 @@
             </v-card-title>
             <v-card-text>
               <v-container id="dropdown-example">
-                <v-row>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Department</th>
+                        <th class="text-left">Role</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in desserts" :key="item.name">
+                        <td>{{ item.departmentName }}</td>
+                        <td>{{ item.roleName }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-container>
+              <v-row>
                   <v-col cols="12" sm="6">
                     <p>Department</p>
                     <v-overflow-btn
                       class="my-2"
                       :items="departmentName"
-                      label="Trung tâm phần mềm 1"
+                      label="Choose Department"
                       target="#dropdown-example"
                     ></v-overflow-btn>
                   </v-col>
@@ -157,12 +180,11 @@
                     <v-overflow-btn
                       class="my-2"
                       :items="roleName"
-                      label="Developer"
+                      label="Choose Role"
                       target="#dropdown-example"
                     ></v-overflow-btn>
                   </v-col>
                 </v-row>
-              </v-container>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -255,7 +277,8 @@ export default {
         dob: "",
         departmentCodeAll: "",
         registeredDate: ""
-      }
+      },
+      desserts: []
     };
   },
   computed: {
@@ -295,8 +318,19 @@ export default {
       this.dialog = true;
     },
     // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
-    showDialog() {
+    showDialog(obj) {
       this.dialog1 = true;
+      let arr = [];
+      for (let i = 0; i < obj.listDepartment.length; i++) {
+        arr.push({
+          departmentName: obj.listDepartment[i].departmentName,
+          roleName: ""
+        });
+      }
+      for (let i = 0; i < obj.listRole.length; i++) {
+        arr.push({ departmentName: "", roleName: obj.listRole[i].roleName });
+      }
+      this.desserts = arr;
     },
     // Close dilog Edited employee's information
     close() {
@@ -378,6 +412,26 @@ export default {
             console.log(err);
           });
       }
+    },
+    //Reactivate && deactivate Users
+    reactivate_deactivate(item) {
+      confirm("Are you sure you want to reactivate this user?") &&
+        axios
+          .post(
+            `http://172.30.56.241:8081/rest/users/activate-deactivate-user`,
+            item
+          )
+          .then(response => {
+            if (response.status === 201) {
+              alert(`Reactivate successfully!`);
+              window.location.reload();
+            }
+          })
+
+          .catch(error => {
+            // eslint-disable-next-line
+            console.log(error.response);
+          });
     }
   }
 };
