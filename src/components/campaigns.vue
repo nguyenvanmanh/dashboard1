@@ -254,8 +254,7 @@ export default {
     },
     createCampaign(){
       // get template id for new campaign
-      this.emailTemplates.titles.forEach((element,id) => {
-        if(this.selectedTemplate === element)
+      this.emailTemplates.titles.forEach((element,id) => { 
           this.newCampaign.emailTemplateId = this.emailTemplates.ids[id];
       });
       // get start date and due date
@@ -297,13 +296,19 @@ export default {
     }
     ,
     sendAll(){
-      let mails = this.selected.map( item => {
-        API.sendMail(item.campaignId, this.selectedCustomer);
-      });
-      Promise.all(mails).then(res => {
-        this.alerts.sendMail = true;
-        this.selected = [];
-      });
+      // let mails = this.selected.map( item => {
+      //   API.sendMail(item.campaignId, this.selectedCustomer);
+      // });
+      // Promise.all(mails).then(res => {
+      //   this.alerts.sendMail = true;
+      //   this.selected = [];
+      // });
+      let ids = this.selected.map( (item) => item.campaignId );
+      API.sendMailAll(ids, this.selectedCustomer)
+        .then(res => {
+          this.alerts.sendMail = true;
+          this.selected = [];
+        });
     },
   }
 };

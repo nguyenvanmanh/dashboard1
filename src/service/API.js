@@ -10,3 +10,13 @@ export function sendMail(campaignId,selectedCustomer){
         sendEmailUserId: 1
       });
 }
+export function sendMailAll(campaignIds,selectedCustomer){
+  let payload = campaignIds.map( (item)=> {
+    return {
+      customers: selectedCustomer,
+      campaignId: item,
+      sendEmailUserId: 1
+    }
+  });
+  return axios.post(`${BASEURL}/email/send-campaign`, payload);
+}
