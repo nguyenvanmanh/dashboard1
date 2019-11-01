@@ -4,8 +4,8 @@
       <template v-slot:item.index="{ item }">
         <!-- {{dem}} -->
         {{dataTemplates.map(function(x) {
-        return x.emaiTemplateId;
-        }).indexOf(item.emaiTemplateId)+1}}
+        return x.emailTemplateId;
+        }).indexOf(item.emailTemplateId)+1}}
       </template>
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -129,7 +129,7 @@ export default {
     editItem(item) {
       this.dialog = true;
       this.editedIndex = 0;
-      this.id_template = item.emaiTemplateId;
+      this.id_template = item.emailTemplateId;
       this.title_input = item.title;
       this.body_input = item.body;
     },
