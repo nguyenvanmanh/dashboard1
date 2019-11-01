@@ -302,14 +302,17 @@ export default {
             console.log(error.response);
           });
       } else {
-        this.users.push(this.editedItem);
         axios
           .post( API.BASEURL + "/rest/users/add", this.editedItem)
           .then(response => {
             if (response.status === 200) {
               alert(`Add a new user successfully !`);
-              window.location.reload();
+              this.users = response.data;
             }
+           
+          }).catch(err => {
+              console.log(err);
+              alert('back end  sửa cái này đê');
           });
       }
       this.close();

@@ -96,7 +96,7 @@
 
           <!-- Action icons  -->
           <template v-slot:item.action="{ item }">
-            <v-icon color="orange darken-2" @click="templateDialog(item.campaignId)" left >rounded_corner</v-icon>
+            <v-icon color="orange darken-2" @click="changeTemplateDialog(item.campaignId)" left >rounded_corner</v-icon>
             <v-icon color="green darken-2"  @click="showDialog">supervised_user_circle</v-icon>
             <v-icon color="teal darken-2" right @click="sendMail(item.campaignId)">email</v-icon>
           </template>
@@ -139,7 +139,21 @@
             <v-card-title>
               <span class="headline">Choose template email for this campaign</span>
             </v-card-title>
-            
+            <v-data-table
+              :headers="headers.templates"
+              hide-default-footer
+            >
+            <template v-slot:body>
+              <tr v-for="item in templates" :key="item.emaiTemplateId">
+                <td>
+                  {{item.title}}
+                </td>
+                <td>{{item.body}}</td>
+                <td>{{ "temlateid: " + edits.templates.campaignId}}</td>
+              </tr>
+            </template>
+
+            </v-data-table>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -194,9 +208,18 @@ export default {
           { text:"Duration To", align:"center", value:"endDate" },
           { text:"Description", align:"center", value:"description", sortable:false },
           { text:"Action", align:"center", value:"action", sortable:false },
-        ], 
-      }
+        ],
+        templates: [
+          {text: "Title", value:"title"},
+          {text: "body", value:"body"},
+        ]
+      },
+      edits: {
+        templates: {}
+      },
+      templates: []
     };
+    
   },
   computed: {
     dateFormated(){
@@ -206,8 +229,9 @@ export default {
   created() {
     axios.get(`${baseUrl}/email/get-all-topic`)
       .then(res => {
+        this.templates = res.data;
         this.emailTemplates.titles = res.data.map( item => item.title );
-        this.emailTemplates.ids = res.data.map(item => item.emailTemplateId);
+        this.emailTemplates.ids = res.data.map(item => item.emaiTemplateId);
         } )
       .catch(err =>{ 
         // TODO: log this err
@@ -222,10 +246,10 @@ export default {
           this.customers =  res.data[0].customerList;
           this.customers.map( customer => customer.fullName = customer.firstName + ' ' + customer.lastName );
         });
-        
   },
   methods: {
-    templateDialog(id){
+    changeTemplateDialog(id){
+      this.edits.templates.campaignId = id;
       this.dialogs.changeTemplate = true;
     },
     createCampaign(){
@@ -265,27 +289,20 @@ export default {
       this.dialogs.listCustomer = true;
     },
     sendMail(campaignId){
-      this.alerts.sendMail = true;
-
-      // axios.post(`${baseUrl}/email/sendMail`, {
-      //   customers: this.selectedCustomer,
-      //   campaignId: campaignId,
-      //   sendEmailUserId: 1
-      // }).then(res=>{
-      //   this.alerts.sendMail = true;
-      // });
+      API.sendMail(item.campaignId, this.selectedCustomer)
+          then(res => {
+            if( res.status === 200 )
+              this.alerts.sendMail = true;
+          });
     }
     ,
     sendAll(){
-      this.selected.map( item => {
-        axios.post(`${baseUrl}/email/sendMail`, {
-          customers: this.selectedCustomer,
-          campaignId: item.campaignId,
-          sendEmailUserId: 1
-        }).then(res=>{
-          this.selected = [];
-          this.alerts.sendMail = true;
-        });
+      let mails = this.selected.map( item => {
+        API.sendMail(item.campaignId, this.selectedCustomer);
+      });
+      Promise.all(mails).then(res => {
+        this.alerts.sendMail = true;
+        this.selected = [];
       });
     },
   }
