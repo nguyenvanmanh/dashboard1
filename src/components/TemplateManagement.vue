@@ -79,7 +79,7 @@ export default {
         align: "left",
         value: "index"
       },
-      { text: "Template ID", value: "emaiTemplateId" },
+      { text: "Template ID", value: "emailTemplateId" },
       { text: "Title", value: "title" },
       { text: "Body", value: "body" },
       { text: "Edit", value: "action", sortable: false }
