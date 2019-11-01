@@ -207,7 +207,7 @@ export default {
     axios.get(`${baseUrl}/email/get-all-topic`)
       .then(res => {
         this.emailTemplates.titles = res.data.map( item => item.title );
-        this.emailTemplates.ids = res.data.map(item => item.emaiTemplateId);
+        this.emailTemplates.ids = res.data.map(item => item.emailTemplateId);
         } )
       .catch(err =>{ 
         // TODO: log this err
