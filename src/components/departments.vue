@@ -1,7 +1,8 @@
 
 <template>
-  <v-app id="inspire">
-    <div id="app">
+  <div id="app">
+    <v-app id="inspire">
+     <span class='displayError'> {{error}} </span>
       <v-data-table
         :headers="headers"
         :items="departments"
@@ -38,32 +39,38 @@
                     <v-row>
                       <v-col cols="12" v-if="computedDialog">
                         <label>Department ID</label>
-                        <div>{{editedDept.departmentId}}</div>
+                        <div>{{editedDept.id}}</div>
                       </v-col>
                       <v-col cols="12" v-else></v-col>
                       <v-col cols="12">
                         <label>Department Name</label>
-                        <v-text-field required v-model="editedDept.departmentName"></v-text-field>
+                        <v-text-field required v-model="editedDept.name"></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <label>Department Code</label>
-                        <v-text-field required v-model="editedDept.departmentCode"></v-text-field>
+                        <v-text-field required v-model="editedDept.code"></v-text-field>
                       </v-col>
                       <v-col cols="12" v-if="computedDialog">
                         <label>Department Status:</label>
-                        <span>{{editedDept.isActivated===0? "Inactive": "Active"}}</span>
+                        <!-- <span>{{editedDept.isActivated===0? "Inactive": "Active"}}</span> -->
+                        <span>
+                          <v-radio-group v-model="row" row>
+                            <v-radio label="Active" value="active"></v-radio>
+                            <v-radio label="Inactive" value="inactive"></v-radio>
+                          </v-radio-group>
+                        </span>
                       </v-col>
                       <v-col cols="12" class="my-2" v-if="computedDialog">
                         <label>Number of Employees:</label>
-                        <span>{{editedDept.numberOfEmployees}}</span>
+                        <span>{{editedDept.numberOfEmployee}}</span>
 
                         <router-link
-                          :to="'/departments/editEmployee/add/'+ editedDept.departmentId"
+                          :to="'/departments/editEmployee/add/'+ editedDept.id"
                         >
                           <v-icon small class="mr-2">mdi-plus</v-icon>
                         </router-link>
                         <router-link
-                          :to="'/departments/editEmployee/delete/'+ editedDept.departmentId"
+                          :to="'/departments/editEmployee/delete/'+ editedDept.id"
                         >
                           <v-icon small class="mr-2">mdi-minus</v-icon>
                         </router-link>
@@ -84,7 +91,7 @@
             <div class="flex-grow-1"></div>
             <!--End popup dialog-->
             <!-- Implement dropdown-->
-
+        
             <v-select
               v-model="enabled"
               :items="dropdown_status"
@@ -94,7 +101,8 @@
             ></v-select>
 
             <!--end dropdown-->
-             <v-spacer></v-spacer>
+
+            <v-divider class="mx-4" inset vertical></v-divider>
             <!-- Implement search bar-->
 
             <v-text-field
@@ -104,9 +112,8 @@
               single-line
               hide-details
             ></v-text-field>
-            <v-divider class="mx-4" inset vertical></v-divider>
+
             <!--End searchbar-->
-            
           </v-toolbar>
         </template>
         <!--Implement edit, delete and reactivate buttons for each department-->
@@ -123,8 +130,8 @@
         </template>
         <!--End buttons -->
       </v-data-table>
-    </div>
-  </v-app>
+    </v-app>
+  </div>
 </template>
 
 <script>
@@ -141,16 +148,17 @@ export default {
       error: false,
       dialog: false,
       seen: true,
+      enabled: "",
       search: "",
       radios: "0",
       editedIndex: -1,
       editedDept: {
         name: "",
-        numOfEmployees: 0
+        numberOfEmployee: 0
       },
       defaultDept: {
         name: "",
-        numOfEmployees: 0
+        numberOfEmployee: 0
       },
       departments: [],
       headers: [
@@ -159,19 +167,19 @@ export default {
           text: "#",
           align: "left",
           sortable: false,
-          value: "departmentId"
+          value: "id"
         },
-        { text: "Department Name", value: "departmentName", sortable: true },
-        { text: "Department Code", value: "departmentCode", sortable: true },
-        { text: "Number of Employees", value: "numberOfEmployees" },
+        { text: "Department Name", value: "name", sortable: true },
+        { text: "Department Code", value: "code", sortable: true },
+        { text: "Number of Employees", value: "numberOfEmployee" },
 
         { text: "Action", value: "action", sortable: false }
       ],
       dropdown_status: [
-        { text: 'Active', callback: () => console.log('list') },
-        { text: 'Inactive', callback: () => console.log('favorite') },
-        { text: 'All', callback: () => console.log('favorite') },
-      ],
+        { text: "Active", callback: () => console.log("list") },
+        { text: "Inactive", callback: () => console.log("favorite") },
+        { text: "All", callback: () => console.log("favorite") }
+      ]
     };
   },
 
@@ -180,7 +188,7 @@ export default {
     let self = this;
 
     axios
-      .get(`${base_url}/rest/getListDepartmentActive`)
+      .get(`${base_url}/rest/getAllDepartment`)
 
       .then(function(response) {
         self.departments = response.data;
@@ -189,7 +197,7 @@ export default {
 
       .catch(err => {
         // eslint-disable-next-line
-        console.log(err);
+        this.error = err;
       });
   },
 
@@ -199,7 +207,7 @@ export default {
       return this.editedIndex === -1 ? "New Department" : "Edit Department";
     },
     computedDialog() {
-      //if 'New Department' dialog, then hide id and numOfEmployees
+      //if 'New Department' dialog, then hide id and numberOfEmployee
       //else don't hide
       if (this.editedIndex === -1) {
         return this.seen == false;
@@ -213,7 +221,8 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    radios: "changeDeptStatus"
+    // radios: "changeDeptStatus"
+    enabled: "changeDeptStatus"
   },
 
   methods: {
@@ -239,8 +248,8 @@ export default {
           .then(response => {
             if (response.status === 201) {
               alert(
-                // `Removed department ${this.editedDept.departmentName} successfully!`
-                `Removed department ${dept.departmentName} successfully!`
+                // `Removed department ${this.editedDept.name} successfully!`
+                `Removed department ${dept.name} successfully!`
               );
               this.loading = true;
             }
@@ -263,7 +272,7 @@ export default {
           .then(response => {
             if (response.status === 201) {
               alert(
-                `Reactivate department ${dept.departmentName} successfully!`
+                `Reactivate department ${dept.name} successfully!`
               );
               window.location.reload();
             }
@@ -292,7 +301,7 @@ export default {
           .then(response => {
             if (response.status === 201) {
               alert(
-                `Department ${this.editedDept.departmentName} successfully modified!`
+                `Department ${this.editedDept.name} successfully modified!`
               );
               // window.location.reload();
             }
@@ -325,9 +334,9 @@ export default {
       //Active vs Inactive Department-> load corresponding data
       let self = this;
       //O is inactive dept
-      if (this.radios === "0") {
+      if (this.enabled === "All") {
         axios
-          .get(`${base_url}/rest/getListDepartmentActive`)
+          .get(`${base_url}/rest/getAllDepartment`)
 
           .then(function(response) {
             self.departments = response.data;
@@ -337,21 +346,7 @@ export default {
             // eslint-disable-next-line
             console.log(err);
           });
-      } else {
-        axios
-          .get(`${base_url}/rest/getAllListDepartment`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-
-            self.departments = response.data;
-            // console.log("all department data", self.departments);
-          })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
+      
       }
     }
   }
@@ -373,5 +368,8 @@ button {
 }
 .modal_bottom-buttons {
   color: #1e90ff;
+}
+.displayError{
+  color: red
 }
 </style>
