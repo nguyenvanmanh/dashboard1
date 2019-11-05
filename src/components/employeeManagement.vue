@@ -13,34 +13,11 @@
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
-              <!-- Implement search bar-->
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
               <v-divider class="mx-4" inset vertical></v-divider>
-              <div class="flex-grow-1"></div>
-              <!--End searchbar-->
-              <!--Implement Active and All radio buttons-->
-              <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
-                <v-radio label="Inactive Users" value="0"></v-radio>
-                <v-radio label="Active Users" value="1"></v-radio>
-                <v-radio label="All" value="2"></v-radio>
-              </v-radio-group>
-              <!--End radio buttons-->
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">ADD NEW USER</v-btn>
+                  <v-icon large dark color="blue lighten-2" v-on="on">library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -123,6 +100,46 @@
                 </v-card>
               </v-dialog>
               <!--End  User management's Edit Information Table -->
+              <!-- Implement search bar-->
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <!--End searchbar-->
+              <!--Implement Active and All dropdown buttons-->
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-primary dropdown-toggle bg-trans-gradient"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >Custom</button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" onclick="all">All users</button>
+                  <button class="dropdown-item" type="button" onclick="active">Active users</button>
+                  <button class="dropdown-item" type="button" onclick="inactive">Inactive users</button>
+                </div>
+              </div>
+
+              <!-- <div class="select">
+                <select v-model="radios">
+                  <option value="0">Active users</option>
+                  <option value="1">Inactive users</option>
+                  <option value="2">All users</option>
+                </select>
+              </div>-->
+              <!--End dropdown buttons-->
             </v-toolbar>
           </template>
           <!--Action Icon-->
@@ -166,25 +183,25 @@
                 </v-simple-table>
               </v-container>
               <v-row>
-                  <v-col cols="12" sm="6">
-                    <p>Department</p>
-                    <v-overflow-btn
-                      class="my-2"
-                      :items="departmentName"
-                      label="Choose Department"
-                      target="#dropdown-example"
-                    ></v-overflow-btn>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <p>Role</p>
-                    <v-overflow-btn
-                      class="my-2"
-                      :items="roleName"
-                      label="Choose Role"
-                      target="#dropdown-example"
-                    ></v-overflow-btn>
-                  </v-col>
-                </v-row>
+                <v-col cols="12" sm="6">
+                  <p>Department</p>
+                  <v-overflow-btn
+                    class="my-2"
+                    :items="departmentName"
+                    label="Choose Department"
+                    target="#dropdown-example"
+                  ></v-overflow-btn>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <p>Role</p>
+                  <v-overflow-btn
+                    class="my-2"
+                    :items="roleName"
+                    label="Choose Role"
+                    target="#dropdown-example"
+                  ></v-overflow-btn>
+                </v-col>
+              </v-row>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -289,8 +306,7 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    },
-    radios: "changeUsersStatus"
+    }
   },
   created() {
     this.initialize();
@@ -368,78 +384,73 @@ export default {
       this.close();
     },
     //Active & Inactive Users Button
-    changeUsersStatus() {
-      //Active vs Inactive Users-> load corresponding data
-      let self = this;
-      //O is inactive dept
-      if (this.radios === "1") {
-        axios
-          .get(`http://172.30.56.241:8081/rest/users/list/1`)
+    all() {
+      axios
+        .get(`http://172.30.56.241:8081/rest/users/list/1`)
 
-          .then(function(response) {
-            self.users = response.data;
-          })
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
-      if (this.radios === "0") {
-        axios
-          .get(`http://172.30.56.241:8081/rest/users/list/0`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data;
-          })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
-      if (this.radios === "2") {
-        axios
-          .get(`http://172.30.56.241:8081/rest/users/list`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data;
-          })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
+        .then(function(response) {
+          self.users = response.data;
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err);
+        });
     },
-    //Reactivate && deactivate Users
-    reactivate_deactivate(item) {
-      confirm("Are you sure you want to reactivate this user?") &&
-        axios
-          .post(
-            `http://172.30.56.241:8081/rest/users/activate-deactivate-user`,
-            item
-          )
-          .then(response => {
-            if (response.status === 201) {
-              alert(`Reactivate successfully!`);
-              window.location.reload();
-            }
-          })
+    active() {
+      axios
+        .get(`http://172.30.56.241:8081/rest/users/list/0`)
 
-          .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
-          });
+        .then(function(response) {
+          // eslint-disable-next-line
+          self.users = response.data;
+        })
+
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err);
+        });
+    },
+    inactive() {
+      axios
+        .get(`http://172.30.56.241:8081/rest/users/list`)
+
+        .then(function(response) {
+          // eslint-disable-next-line
+          self.users = response.data;
+        })
+
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err);
+        });
     }
+  },
+  //Reactivate && deactivate Users
+  reactivate_deactivate(item) {
+    confirm("Are you sure you want to reactivate this user?") &&
+      axios
+        .post(
+          `http://172.30.56.241:8081/rest/users/activate-deactivate-user`,
+          item
+        )
+        .then(response => {
+          if (response.status === 201) {
+            alert(`Reactivate successfully!`);
+            window.location.reload();
+          }
+        })
+
+        .catch(error => {
+          // eslint-disable-next-line
+          console.log(error.response);
+        });
   }
 };
 </script>
 
 <style scoped>
 .v-application .primary {
-  background-color: #1e90ff !important;
+  background-color: #686666 !important;
 }
 </style>
 
