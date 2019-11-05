@@ -1,123 +1,134 @@
 
 <template>
-  <div id="app">
-    <v-data-table
+  <v-app id="inspire">
+    <div id="app">
+      <v-data-table
         :headers="headers"
         :items="departments"
         :items-per-page="10"
         :search="search"
         class="elevation-1"
         data-app
-    >
-      <template v-slot:top data-app>
-        <v-toolbar flat color="white">
-          <v-toolbar-title>Department Management</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <div class="flex-grow-1"></div>
-          <!-- Implement search bar-->
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <!--End searchbar-->
+      >
+        <template v-slot:top data-app>
+          <v-toolbar flat color="white">
+            <v-toolbar-title>Department Management</v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
 
-          <!--Implement Active and All radio buttons-->
-          <v-radio-group v-model="radios" row :mandatory="false">
+            <!--Implement Active and All radio buttons-->
+            <!-- <v-radio-group v-model="radios" row :mandatory="false">
             <v-radio label="Active" value="0">Active</v-radio>
             <v-radio label="All" value="1">All</v-radio>
-          </v-radio-group>
-          <!--End radio buttons-->
+            </v-radio-group>-->
+            <!--End radio buttons-->
 
-          <!--Implement popup dialog form-->
-          <v-dialog v-model="dialog" max-width="500px" >
-            <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on">New Department</v-btn>
-            </template>
+            <!--Implement popup dialog form-->
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-icon large dark color="blue lighten-2" v-on="on">library_add</v-icon>
+              </template>
 
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{formTitle}}</span>
-              </v-card-title>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">{{formTitle}}</span>
+                </v-card-title>
 
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" v-if="computedDialog">
-                      <label>Department ID</label>
-                      <div>{{editedDept.departmentId}}</div>
-                    </v-col>
-                    <v-col cols="12" v-else></v-col>
-                    <v-col cols="12">
-                      <label>Department Name</label>
-                      <v-text-field required v-model="editedDept.departmentName"></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <label>Department Code</label>
-                      <v-text-field required v-model="editedDept.departmentCode"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" v-if="computedDialog">
-                      <label>Department Status:</label>
-                      <span>{{editedDept.isActivated===0? "Inactive": "Active"}}</span>
-                    </v-col>
-                    <v-col cols="12" class="my-2" v-if="computedDialog">
-                      <label>Number of Employees:</label>
-                      <span>{{editedDept.numberOfEmployees}}</span>
-                      <!-- <router-link to="/departments/editEmployee/add/">
-                        <v-icon small class="mr-2">mdi-plus</v-icon>
-                      </router-link>-->
-                      <!-- <router-link to="/departments/editEmployee/delete">
-                        <v-icon small class="mr-2">mdi-minus</v-icon>
-                      </router-link>-->
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" v-if="computedDialog">
+                        <label>Department ID</label>
+                        <div>{{editedDept.departmentId}}</div>
+                      </v-col>
+                      <v-col cols="12" v-else></v-col>
+                      <v-col cols="12">
+                        <label>Department Name</label>
+                        <v-text-field required v-model="editedDept.departmentName"></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <label>Department Code</label>
+                        <v-text-field required v-model="editedDept.departmentCode"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" v-if="computedDialog">
+                        <label>Department Status:</label>
+                        <span>{{editedDept.isActivated===0? "Inactive": "Active"}}</span>
+                      </v-col>
+                      <v-col cols="12" class="my-2" v-if="computedDialog">
+                        <label>Number of Employees:</label>
+                        <span>{{editedDept.numberOfEmployees}}</span>
 
-                      <router-link :to="'/departments/editEmployee/add/'+ editedDept.departmentId">
-                        <v-icon small class="mr-2">mdi-plus</v-icon>
-                      </router-link>
-                      <router-link
-                        :to="'/departments/editEmployee/delete/'+ editedDept.departmentId"
-                      >
-                        <v-icon small class="mr-2">mdi-minus</v-icon>
-                      </router-link>
-                    </v-col>
-                    <v-col cols="12" v-else></v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
+                        <router-link
+                          :to="'/departments/editEmployee/add/'+ editedDept.departmentId"
+                        >
+                          <v-icon small class="mr-2">mdi-plus</v-icon>
+                        </router-link>
+                        <router-link
+                          :to="'/departments/editEmployee/delete/'+ editedDept.departmentId"
+                        >
+                          <v-icon small class="mr-2">mdi-minus</v-icon>
+                        </router-link>
+                      </v-col>
+                      <v-col cols="12" v-else></v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
 
-              <v-card-actions>
-                <div class="flex-grow-1"></div>
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
 
-                <v-btn class="modal_bottom-buttons" text @click="close" >Cancel</v-btn>
-                <v-btn class="modal_bottom-buttons" text @click="save" type="submit">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <!--End popup dialog-->
-        </v-toolbar>
-      </template>
-      <!--Implement edit, delete and reactivate buttons for each department-->
-      <template v-slot:item.action="{ item }">
-        <v-row>
-          <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
-          <v-col v-if="item.isActivated == 1">
-            <v-icon class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
-          </v-col>
-          <v-col v-else>
-            <v-icon class="mr-2" @click="reactivate(item)">mdi-cached</v-icon>
-          </v-col>
-        </v-row>
-      </template>
-      <!--End buttons -->
-    </v-data-table>
-  </div>
+                  <v-btn class="modal_bottom-buttons" text @click="close">Cancel</v-btn>
+                  <v-btn class="modal_bottom-buttons" text @click="save" type="submit">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <div class="flex-grow-1"></div>
+            <!--End popup dialog-->
+            <!-- Implement dropdown-->
+
+            <v-select
+              v-model="enabled"
+              :items="dropdown_status"
+              label="Department Status"
+              clearable
+              style="margin-top: 24px"
+            ></v-select>
+
+            <!--end dropdown-->
+             <v-spacer></v-spacer>
+            <!-- Implement search bar-->
+
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search by name, code"
+              single-line
+              hide-details
+            ></v-text-field>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <!--End searchbar-->
+            
+          </v-toolbar>
+        </template>
+        <!--Implement edit, delete and reactivate buttons for each department-->
+        <template v-slot:item.action="{ item }">
+          <v-row>
+            <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+            <v-col v-if="item.isActivated == 1">
+              <v-icon class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
+            </v-col>
+            <v-col v-else>
+              <v-icon class="mr-2" @click="reactivate(item)">mdi-cached</v-icon>
+            </v-col>
+          </v-row>
+        </template>
+        <!--End buttons -->
+      </v-data-table>
+    </div>
+  </v-app>
 </template>
 
 <script>
-import * as API from "../service/API"
+import * as API from "../service/API";
 
 const base_url = API.BASEURL;
 
@@ -155,14 +166,19 @@ export default {
         { text: "Number of Employees", value: "numberOfEmployees" },
 
         { text: "Action", value: "action", sortable: false }
-      ]
+      ],
+      dropdown_status: [
+        { text: 'Active', callback: () => console.log('list') },
+        { text: 'Inactive', callback: () => console.log('favorite') },
+        { text: 'All', callback: () => console.log('favorite') },
+      ],
     };
   },
 
   mounted() {
     //load all active departments on screen when the app first starts
     let self = this;
-    
+
     axios
       .get(`${base_url}/rest/getListDepartmentActive`)
 
@@ -176,8 +192,6 @@ export default {
         console.log(err);
       });
   },
-
-  
 
   computed: {
     formTitle() {
@@ -228,7 +242,7 @@ export default {
                 // `Removed department ${this.editedDept.departmentName} successfully!`
                 `Removed department ${dept.departmentName} successfully!`
               );
-               this.loading = true;
+              this.loading = true;
             }
           })
 
@@ -287,23 +301,21 @@ export default {
             // // eslint-disable-next-line
             // console.log(error.response);
             alert(` ${error.response.data}`);
-             window.location.reload();
+            window.location.reload();
           });
       } else {
-        
         axios
           .post(`${base_url}/rest/insertDepartment`, this.editedDept)
           .then(response => {
             if (response.status === 201) {
               alert("New Department successfully added!");
-              
             }
           })
           .catch(error => {
             // eslint-disable-next-line
-             alert(` ${error.response.data}`);
-             
-              window.location.reload(); //need to fix: update without loading 
+            alert(` ${error.response.data}`);
+
+            window.location.reload(); //need to fix: update without loading
           });
       }
       this.close();
