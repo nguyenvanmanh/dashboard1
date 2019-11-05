@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <v-app id="inspire">
-     <span class='displayError'> {{error}} </span>
+      
       <v-data-table
         :headers="headers"
         :items="departments"
@@ -11,6 +11,7 @@
         class="elevation-1"
         data-app
       >
+     
         <template v-slot:top data-app>
           <v-toolbar flat color="white">
             <v-toolbar-title>Department Management</v-toolbar-title>
@@ -97,7 +98,7 @@
               :items="dropdown_status"
               label="Department Status"
               clearable
-              style="margin-top: 24px"
+              style="margin-top: 24px; width: 100px"
             ></v-select>
 
             <!--end dropdown-->
@@ -186,17 +187,16 @@ export default {
   mounted() {
     //load all active departments on screen when the app first starts
     let self = this;
-
     axios
-      .get(`${base_url}/rest/getAllDepartment`)
+      .get(`${base_url}/rest/getAllListDepartment`)
 
       .then(function(response) {
         self.departments = response.data;
-        this.loading = false;
+        console.log(response.data)
+        // this.loading = false;
       })
 
       .catch(err => {
-        // eslint-disable-next-line
         this.error = err;
       });
   },
