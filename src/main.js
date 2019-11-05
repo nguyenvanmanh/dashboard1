@@ -12,10 +12,10 @@ import VueProgressBar from 'vue-progressbar';
 const options = {
   color: '#584475',
   failedColor: '#584475',
-  thickness: '3px',
+  thickness: '1px',
   transition: {
     speed: '0.3s',
-    termination: 300
+    termination: 1
   },
   location: 'top',
   inverse: false
@@ -24,7 +24,7 @@ Vue.use(VueProgressBar, options);
 
 Vue.use(VeeValidate);
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
 
 export default new Vue({
   router,

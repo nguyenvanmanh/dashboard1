@@ -288,31 +288,44 @@ export default {
     // Save dialog Edited employee's information
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.users[this.editedIndex], this.editedItem);
+        
         axios
-          .post( API.BASEURL+"/rest/users/edit", this.editedItem)
+          .post( API.BASEURL+"/rest/users/edit", this.editedItem,{
+            headers:{
+              Authorization: "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzI5MjQxOTgsInVzZXJuYW1lIjoiaHVvbmd0dHQifQ.-ijqSiJjegcz9r5E6ySFnVeJxJ3UnKJypFwAYz_jTrM"
+            }
+          })
           .then(response => {
+            
             if (response.status === 200) {
-              alert(`Update user's information successfully !`);
-              window.location.reload();
+              alert(response.data);
+              this.users[this.editedIndex] = this.editedItem;
             }
           })
           .catch(error => {
             // eslint-disable-next-line
-            console.log(error.response);
+            alert(error.response.data);
           });
       } else {
         axios
           .post( API.BASEURL + "/rest/users/add", this.editedItem)
           .then(response => {
+            console.log(response)
             if (response.status === 200) {
               alert(`Add a new user successfully !`);
               this.users = response.data;
             }
            
           }).catch(err => {
-              console.log(err);
-              alert('back end  sửa cái này đê');
+            let message;
+            err = err.response
+            if(err.status == 406)
+              message = "Invalid email"
+            else if( err.status === 409)              
+              message = "username or email already taken"
+            else
+              message = "Internal server error!"
+            alert(message)
           });
       }
       this.close();

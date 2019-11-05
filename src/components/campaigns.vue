@@ -12,7 +12,7 @@
           data-app
           show-select
         >
-          <template v-slot:item.stt="{item}">
+          <template v-slot:item.index="{item}">
             <span> {{campaigns.map( (item) => item.campaignId).indexOf(item.campaignId) + 1 }}</span>
           </template>
 
@@ -80,13 +80,12 @@
                     <v-btn color="blue darken-1" text @click="createCampaign">Create</v-btn>
                   </v-card-actions>
                 </v-card>
-
               </v-dialog>
               <!-- End of Dialog button add new campaign -->
               
               <div class="flex-grow-1"></div>
               <!-- Send email for selected campaigns button -->
-              <v-alert  dark type="success" v-model="alerts.sendMail" dismissible>
+              <v-alert transition="scale-transition" dark type="success" v-model="alerts.sendMail" dismissible>
                 <span >Send success</span>
               </v-alert>
               <v-btn color="primary" dark @click="sendAll">Send All</v-btn>
@@ -96,7 +95,13 @@
 
           <!-- Action icons  -->
           <template v-slot:item.action="{ item }">
-            <v-icon color="orange darken-2" @click="changeTemplateDialog(item.campaignId)" left >rounded_corner</v-icon>
+            <v-tooltip bottom>
+              <template slot="activator" slot-scope="{ on }">
+                <v-icon color="orange darken-2" v-on="on" @click="changeTemplateDialog(item.campaignId)" left >rounded_corner</v-icon>
+              </template>
+              <span>text</span>
+            </v-tooltip>
+            
             <v-icon color="green darken-2"  @click="showDialog">supervised_user_circle</v-icon>
             <v-icon color="teal darken-2" right @click="sendMail(item.campaignId)">email</v-icon>
           </template>
@@ -176,6 +181,12 @@ const baseUrl = API.BASEURL;
 export default {
   data() {
     return {
+      itemss: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' }
+      ],
       alerts:{
         sendMail: false
       },
@@ -201,7 +212,7 @@ export default {
           {text: "Email", value:"customerEmail"},
         ],
         campaigns: [
-          { text:"STT", align:"center", value:"stt" },
+          { text:"Index", align:"center", value:"index", sortable: false },
           { text:"Id", align:"center", value:"campaignId" },
           { text:"Campaign Name", align:"center", value:"title" },
           { text:"Duration From", align:"center", value:"startDate" },
@@ -274,16 +285,6 @@ export default {
         });
       
     },
-    // fetchUsers() {
-    //   axios
-    //     .get(`${baseUrl}/user`, {
-    //       headers: { Authorization: localStorage.getItem("tocken") }
-    //     })
-    //     .then(response => {
-    //       this.users = response.data;
-    //     });
-    // },
-    // List customer
     showDialog() {
       this.dialogs.listCustomer = true;
     },
@@ -296,13 +297,6 @@ export default {
     }
     ,
     sendAll(){
-      // let mails = this.selected.map( item => {
-      //   API.sendMail(item.campaignId, this.selectedCustomer);
-      // });
-      // Promise.all(mails).then(res => {
-      //   this.alerts.sendMail = true;
-      //   this.selected = [];
-      // });
       let ids = this.selected.map( (item) => item.campaignId );
       API.sendMailAll(ids, this.selectedCustomer)
         .then(res => {
