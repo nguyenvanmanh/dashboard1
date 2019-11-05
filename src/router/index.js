@@ -27,7 +27,7 @@ export default new Router({
                 {
                     path: "/uploadCustomer",
                     name: "uploadCustomer",
-                    component: sendingEmail  // updload customers
+                    component: sendingEmail  // upload customers
                 },
                 {
                     path: "/campaigns",

@@ -34,7 +34,7 @@
           <!--End radio buttons-->
 
           <!--Implement popup dialog form-->
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="500px" >
             <template v-slot:activator="{ on }">
               <v-btn color="primary" dark class="mb-2" v-on="on">New Department</v-btn>
             </template>
@@ -91,8 +91,8 @@
               <v-card-actions>
                 <div class="flex-grow-1"></div>
 
-                <v-btn class="modal_bottom-buttons" text @click="close">Cancel</v-btn>
-                <v-btn class="modal_bottom-buttons" text @click="save">Save</v-btn>
+                <v-btn class="modal_bottom-buttons" text @click="close" >Cancel</v-btn>
+                <v-btn class="modal_bottom-buttons" text @click="save" type="submit">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -168,6 +168,7 @@ export default {
 
       .then(function(response) {
         self.departments = response.data;
+        this.loading = false;
       })
 
       .catch(err => {
@@ -175,6 +176,8 @@ export default {
         console.log(err);
       });
   },
+
+  
 
   computed: {
     formTitle() {
@@ -225,7 +228,7 @@ export default {
                 // `Removed department ${this.editedDept.departmentName} successfully!`
                 `Removed department ${dept.departmentName} successfully!`
               );
-              window.location.reload();
+               this.loading = true;
             }
           })
 
@@ -277,23 +280,23 @@ export default {
               alert(
                 `Department ${this.editedDept.departmentName} successfully modified!`
               );
-              window.location.reload();
+              // window.location.reload();
             }
           })
           .catch(error => {
             // // eslint-disable-next-line
             // console.log(error.response);
             alert(` ${error.response.data}`);
-            window.location.reload();
+             window.location.reload();
           });
       } else {
-        this.departments.push(this.editedDept);
+        
         axios
           .post(`${base_url}/rest/insertDepartment`, this.editedDept)
           .then(response => {
             if (response.status === 201) {
               alert("New Department successfully added!");
-              window.location.reload();
+              
             }
           })
           .catch(error => {
