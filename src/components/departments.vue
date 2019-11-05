@@ -336,7 +336,7 @@ export default {
       //O is inactive dept
       if (this.enabled === "All") {
         axios
-          .get(`${base_url}/rest/getAllDepartment`)
+          .get(`${base_url}/rest/getListAllDepartment`)
 
           .then(function(response) {
             self.departments = response.data;
@@ -347,6 +347,19 @@ export default {
             console.log(err);
           });
       
+      }
+      if(this.enabled === "Active"){
+         axios
+          .get(`${base_url}/rest/getListDepartmentInActive`)
+
+          .then(function(response) {
+            self.departments = response.data;
+          })
+
+          .catch(err => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
       }
     }
   }

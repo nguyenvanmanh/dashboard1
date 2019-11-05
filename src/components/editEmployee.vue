@@ -48,12 +48,12 @@ import * as API from "../service/API"
 const base_ip_address = "http://172.30.56.57";
 const base_port = 8081;
 const base_url = API.BASEURL;
-// let departmentId = localStorage.getItem("departmentId");
+// let id = localStorage.getItem("id");
 
 import axios from "axios";
 export default {
   name: "editemployee",
-  props: ["status", "departmentId"],
+  props: ["status", "id"],
   data() {
     return {
       testUser: [
@@ -66,8 +66,8 @@ export default {
           userRoleId: 1,
           roleId: 1,
           roleName: "admin",
-          userDepartmentId: 1,
-          departmentId: 6,
+          userid: 1,
+          id: 6,
           departmentName: "dada"
         }
       ],
@@ -104,7 +104,7 @@ export default {
     if (this.$props.status == "add") {
       axios
         .get(
-          `${base_url}/rest/getListEmployeeNotInDepartment/${this.$props.departmentId}`
+          `${base_url}/rest/getListEmployeeNotInDepartment/${this.$props.id}`
         )
         .then(function(response) {
           self.existingUsers = response.data;
@@ -117,7 +117,7 @@ export default {
     if (this.$props.status == "delete") {
       axios
         .get(
-          `${base_url}/rest/getListEmployeeOfDepartment/${this.$props.departmentId}`
+          `${base_url}/rest/getListEmployeeOfDepartment/${this.$props.id}`
         )
         .then(function(response) {
           self.existingUsers = response.data;
@@ -141,13 +141,13 @@ export default {
       }
       let selectedEmployeesToAdd = this.selected.slice();
 
-      //add the new departmentId to the departments array
+      //add the new id to the departments array
       for (let i = 0; i < selectedEmployeesToAdd.length; i++) {
         //loop through each employee object in the selectedEmployees array
         //find the departments array
-        //push the departmentId that the selected employees need to be added to
+        //push the id that the selected employees need to be added to
         selectedEmployeesToAdd[i]["departments"].unshift({
-          departmentId: Number(this.$props.departmentId)
+          id: Number(this.$props.id)
         });
       }
       axios
@@ -170,7 +170,7 @@ export default {
       let selectedEmployeesToRemove = this.selected.slice()
       for (let i = 0; i < selectedEmployeesToRemove.length; i++) {
         selectedEmployeesToRemove[i]["departments"].unshift({
-          departmentId: Number(this.$props.departmentId)
+          id: Number(this.$props.id)
         });
       }
       axios
