@@ -13,34 +13,11 @@
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
-              <!-- Implement search bar-->
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
               <v-divider class="mx-4" inset vertical></v-divider>
-              <div class="flex-grow-1"></div>
-              <!--End searchbar-->
-              <!--Implement Active and All radio buttons-->
-              <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
-                <v-radio label="Inactive Users" value="0"></v-radio>
-                <v-radio label="Active Users" value="1"></v-radio>
-                <v-radio label="All" value="2"></v-radio>
-              </v-radio-group>
-              <!--End radio buttons-->
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">ADD NEW USER</v-btn>
+                  <v-icon large dark color="blue lighten-2" v-on="on">library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -123,12 +100,46 @@
                 </v-card>
               </v-dialog>
               <!--End  User management's Edit Information Table -->
+              <!-- Implement search bar-->
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <!--End searchbar-->
+              <!--Implement Active and All radio buttons-->
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-primary dropdown-toggle bg-trans-gradient"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >View Users</button>
+                <div class="dropdown-menu">
+                  <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
+                    <v-radio class="dropdown-item" label="Inactive" value="0"></v-radio>
+                    <v-radio class="dropdown-item" label="Active" value="1"></v-radio>
+                    <v-radio class="dropdown-item" label="All" value="2"></v-radio>
+                  </v-radio-group>
+                </div>
+              </div>
+              <!--End radio buttons-->
             </v-toolbar>
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon v-if="item.isActivated === 1">mdi-lock-open-variant</v-icon>
-            <v-icon v-if="item.isActivated === 0 || null" @click="showDialog">mdi-lock</v-icon>
+            <v-icon v-if="item.isActivated === 1" @click="showPopupForActive">mdi-lock-open-variant</v-icon>
+            <v-icon v-if="item.isActivated === 0 || null" @click="showPopupForInactive">mdi-lock</v-icon>
             <v-icon @click="showDialog">mdi-account-edit-outline</v-icon>
             <v-icon @click="editItem(item)">mdi-pencil</v-icon>
           </template>
@@ -172,27 +183,80 @@
           </v-card>
         </v-dialog>
         <!--End Set Department table pop up-->
+        <!-- Show dialog for deactivating users -->
+        <v-dialog v-model="dialog2" max-width="400px">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>Deactivating User</v-card-title>
+            <p></p>
+            <v-card-text>Are you sure, you want to deactivate this user ?</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="reactivate_deactivate(item)">I agree</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- /.End deactivating users -->
+        <!-- Show dialog for activating users -->
+        <v-dialog v-model="dialog3" max-width="400px">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>Activate User</v-card-title>
+            <p></p>
+            <v-card-text>Are you sure, you want to activate this user ?</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="reactivate_deactivate(item)">I agree</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- /End activating users -->
       </v-flex>
     </v-layout>
   </v-app>
 </template>
 <script>
 import axios from "axios";
-import * as API from "../service/API"
+import * as API from "../service/API";
 
 export default {
   data() {
     return {
       dialog: false,
       dialog1: false,
+      dialog2: false,
+      dialog3: false,
       modal: false,
       check_activate: false,
       check_inactivate: false,
       show1: false,
       search: "",
       radios: "2",
-      departmentName: ['DU1','DU2','DU3','DU4','DU5','DU6','DU7','DU8','DU9','DU10','DU11','DU12'],
-      roleName: ['Admin','Manager','Teamlead','PM','BA','SA','Developer','Tester','Directer'],
+      departmentName: [
+        "DU1",
+        "DU2",
+        "DU3",
+        "DU4",
+        "DU5",
+        "DU6",
+        "DU7",
+        "DU8",
+        "DU9",
+        "DU10",
+        "DU11",
+        "DU12"
+      ],
+      roleName: [
+        "Admin",
+        "Manager",
+        "Teamlead",
+        "PM",
+        "BA",
+        "SA",
+        "Developer",
+        "Tester",
+        "Directer"
+      ],
       headersTitle: [
         {
           text: "UserID",
@@ -256,7 +320,7 @@ export default {
     // get employee's information from database by using axios
     fetchUsers() {
       axios
-        .get( API.BASEURL + "/rest/users/list", {
+        .get(API.BASEURL + "/rest/users/list", {
           headers: { Authorization: localStorage.getItem("token") }
         })
         .then(response => {
@@ -277,6 +341,14 @@ export default {
     showDialog() {
       this.dialog1 = true;
     },
+    // Show dialog to deactivate users
+    showPopupForInactive() {
+      this.dialog2 = true;
+    },
+    // Show dialog to ctivate users
+    showPopupForActive() {
+      this.dialog3 = true;
+    },
     // Close dilog Edited employee's information
     close() {
       this.dialog = false;
@@ -290,25 +362,19 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem);
         axios
-          .post( API.BASEURL+"/rest/users/edit", this.editedItem)
+          .post(API.BASEURL + "/rest/users/edit", this.editedItem)
           .then(response => {
             if (response.status === 200) {
-              alert(`Update user's information successfully !`);
-              window.location.reload();
+              this.users.$set(this.editedItem);
             }
-          })
-          .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
           });
       } else {
         this.users.push(this.editedItem);
         axios
-          .post( API.BASEURL + "/rest/users/add", this.editedItem)
+          .post(API.BASEURL + "/rest/users/add", this.editedItem)
           .then(response => {
             if (response.status === 200) {
-              alert(`Add a new user successfully !`);
-              window.location.reload();
+              this.users.$set(this.editedItem);
             }
           });
       }
@@ -359,6 +425,16 @@ export default {
             console.log(err);
           });
       }
+    },
+    //Reactivate && deactivate Users
+    reactivate_deactivate(item) {
+      axios
+        .post(API.BASEURL + "/rest/users/activate-deactivate-user", item)
+        .then(response => {
+          if (response.status === 201) {
+            this.users.$set(this.item);
+          }
+        });
     }
   }
 };
