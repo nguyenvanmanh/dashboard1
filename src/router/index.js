@@ -10,7 +10,7 @@ import analytics_dashboard from "../components/IntelAnalytics_Dashboard";
 import marketing_dashboard from "../components/Marketing_Dashboard";
 import roleManagement from "../components/roleManagement";
 import employeeManagement from "../components/employeeManagement";
-import campaigns from "../views/campaign";
+import campaigns from "../components/campaigns";
 import templateMagement from "../components/TemplateManagement";
 
 Vue.use(Router);

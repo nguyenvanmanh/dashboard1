@@ -739,28 +739,28 @@
                 </ul>
               </li>
               <li>
-                  <router-link 
-                  to="/intel_marketing_dashboard" 
-                  title="marketing Dashboard" 
-                  data-filter-tags="application intel marketing dashboard">
-                  
-                    <span
-                      class="nav-link-text"
-                      data-i18n="nav.application_intel_marketing_dashboard"
-                    >Marketing Dashboard</span>
-                  </router-link>
-                </li>
-                <li >
-                  <router-link 
-                  to="/intel_analytics_dashboard" 
-                  title="Analytics Dashboard" 
-                  data-filter-tags="application intel analytics dashboard">
-                    
-                     <span
-                      class="nav-link-text"
-                      data-i18n="nav.application_intel_analytics_dashboard"
-                    >Analytics Dashboard</span>
-                  </router-link>
+                <router-link
+                  to="/intel_marketing_dashboard"
+                  title="marketing Dashboard"
+                  data-filter-tags="application intel marketing dashboard"
+                >
+                  <span
+                    class="nav-link-text"
+                    data-i18n="nav.application_intel_marketing_dashboard"
+                  >Marketing Dashboard</span>
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  to="/intel_analytics_dashboard"
+                  title="Analytics Dashboard"
+                  data-filter-tags="application intel analytics dashboard"
+                >
+                  <span
+                    class="nav-link-text"
+                    data-i18n="nav.application_intel_analytics_dashboard"
+                  >Analytics Dashboard</span>
+                </router-link>
               </li>
               <li>
                 <router-link
@@ -856,7 +856,7 @@
                   <span class="nav-link-text" data-i18n="nav.tables">Upload Customer</span>
                 </router-link>
               </li>
-               <li>
+              <li>
                 <router-link to="/campaigns" title="Campaigns" data-filter-tags="tables">
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Campaigns</span>
@@ -3632,36 +3632,36 @@
   </div>
 </template>
 <script>
-export default {
-  name: "dashboard",
-  created () {
-    if (localStorage.getItem("token")) {
-      this.$router.push({
-        path: "/"
-      });
-    } else {
-      this.$router.push({
-        path: "/login"
-      });
+  export default {
+    name: "dashboard",
+    // created() {
+    //   if (localStorage.getItem("token")) {
+    //     this.$router.push({
+    //       path: "/"
+    //     });
+    //   } else {
+    //     this.$router.push({
+    //       path: "/"
+    //     });
+    //   }
+    // },
+    methods: {
+      logout() {
+        localStorage.removeItem("token");
+      }
     }
-  },
-  methods:{
-    logout(){
-      localStorage.removeItem("token");
-    }
-  }
-};
+  };
 </script>
 <style>
-.menu-open:checked + .menu-open-button {
-  background: #505050 !important;
-}
-.menu-item,
-label.menu-open-button {
-  background: #886ab5 !important;
-  border-radius: 50% !important;
-}
-.modal-dialog-right {
-  position: absolute !important;
-}
+  .menu-open:checked + .menu-open-button {
+    background: #505050 !important;
+  }
+  .menu-item,
+  label.menu-open-button {
+    background: #886ab5 !important;
+    border-radius: 50% !important;
+  }
+  .modal-dialog-right {
+    position: absolute !important;
+  }
 </style>
