@@ -2,7 +2,6 @@
 <template>
   <div id="app">
     <v-app id="inspire">
-      
       <v-data-table
         :headers="headers"
         :items="departments"
@@ -11,7 +10,6 @@
         class="elevation-1"
         data-app
       >
-     
         <template v-slot:top data-app>
           <v-toolbar flat color="white">
             <v-toolbar-title>Department Management</v-toolbar-title>
@@ -65,14 +63,10 @@
                         <label>Number of Employees:</label>
                         <span>{{editedDept.numberOfEmployee}}</span>
 
-                        <router-link
-                          :to="'/departments/editEmployee/add/'+ editedDept.id"
-                        >
+                        <router-link :to="'/departments/editEmployee/add/'+ editedDept.id">
                           <v-icon small class="mr-2">mdi-plus</v-icon>
                         </router-link>
-                        <router-link
-                          :to="'/departments/editEmployee/delete/'+ editedDept.id"
-                        >
+                        <router-link :to="'/departments/editEmployee/delete/'+ editedDept.id">
                           <v-icon small class="mr-2">mdi-minus</v-icon>
                         </router-link>
                       </v-col>
@@ -92,7 +86,7 @@
             <div class="flex-grow-1"></div>
             <!--End popup dialog-->
             <!-- Implement dropdown-->
-        
+
             <v-select
               v-model="enabled"
               :items="dropdown_status"
@@ -122,10 +116,12 @@
           <v-row>
             <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
             <v-col v-if="item.isActivated == 1">
-              <v-icon class="mr-2" @click="deleteDept(item)">mdi-delete</v-icon>
+              <v-tooltip bottom>
+                <v-icon class="mr-2" @click="deactivateDept(item)">mdi-lock-open</v-icon>
+              </v-tooltip>
             </v-col>
             <v-col v-else>
-              <v-icon class="mr-2" @click="reactivate(item)">mdi-cached</v-icon>
+              <v-icon class="mr-2" @click="reactivate(item)">mdi-lock</v-icon>
             </v-col>
           </v-row>
         </template>
@@ -137,10 +133,10 @@
 
 <script>
 import * as API from "../service/API";
-
+import axios from "axios";
 const base_url = API.BASEURL;
+import DepartmentApiService from "../service/department-api-service";
 
-const axios = require("axios");
 export default {
   name: "department",
   data() {
@@ -187,23 +183,15 @@ export default {
   mounted() {
     //load all active departments on screen when the app first starts
     let self = this;
-    axios
-      .get(`${base_url}/rest/getAllListDepartment`)
-
-      .then(function(response) {
-        self.departments = response.data;
-        console.log(response.data)
-        // this.loading = false;
-      })
-
-      .catch(err => {
-        this.error = err;
-      });
+    DepartmentApiService.getAllDepartments().then(
+      resJson => (self.departments = resJson)
+    );
+    // this.loading = false;
   },
 
   computed: {
     formTitle() {
-      //conditionals to render dialog title
+      //render dialog title
       return this.editedIndex === -1 ? "New Department" : "Edit Department";
     },
     computedDialog() {
@@ -239,21 +227,19 @@ export default {
     },
     deleteDept(dept) {
       //get id => click ok=> call API
-
-      // this.editedDept = Object.assign({}, dept);
-
       confirm("Are you sure you want to remove this department?") &&
-        axios
-          .post(`${base_url}/rest/inActiveDepartment`, dept)
-          .then(response => {
-            if (response.status === 201) {
-              alert(
-                // `Removed department ${this.editedDept.name} successfully!`
-                `Removed department ${dept.name} successfully!`
-              );
-              this.loading = true;
-            }
-          })
+        DepartmentApiService.deactivateDepartment(dept)
+          // axios
+          //   .post(`${base_url}/rest/inActiveDepartment`, dept)
+          //   .then(response => {
+          //     if (response.status === 201) {
+          //       alert(
+          //         // `Removed department ${this.editedDept.name} successfully!`
+          //         `Removed department ${dept.name} successfully!`
+          //       );
+          //       this.loading = true;
+          //     }
+          //   })
 
           .catch(error => {
             // eslint-disable-next-line
@@ -271,9 +257,7 @@ export default {
           .post(`${base_url}/rest/activeDepartment`, dept)
           .then(response => {
             if (response.status === 201) {
-              alert(
-                `Reactivate department ${dept.name} successfully!`
-              );
+              alert(`Reactivate department ${dept.name} successfully!`);
               window.location.reload();
             }
           })
@@ -346,10 +330,9 @@ export default {
             // eslint-disable-next-line
             console.log(err);
           });
-      
       }
-      if(this.enabled === "Active"){
-         axios
+      if (this.enabled === "Active") {
+        axios
           .get(`${base_url}/rest/getListDepartmentInActive`)
 
           .then(function(response) {
@@ -382,7 +365,7 @@ button {
 .modal_bottom-buttons {
   color: #1e90ff;
 }
-.displayError{
-  color: red
+.displayError {
+  color: red;
 }
 </style>
