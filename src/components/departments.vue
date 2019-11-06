@@ -112,19 +112,21 @@
           </v-toolbar>
         </template>
         <!--Implement edit, delete and reactivate buttons for each department-->
+
         <template v-slot:item.action="{ item }">
           <v-row>
             <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+
             <v-col v-if="item.isActivated == 1">
-              <v-tooltip bottom>
-                <v-icon class="mr-2" @click="deactivateDept(item)">mdi-lock-open</v-icon>
-              </v-tooltip>
+              <v-icon class="mr-2" @click="deactivateDept(item)">mdi-lock-open</v-icon>
             </v-col>
+
             <v-col v-else>
               <v-icon class="mr-2" @click="reactivate(item)">mdi-lock</v-icon>
             </v-col>
           </v-row>
         </template>
+
         <!--End buttons -->
       </v-data-table>
     </v-app>
