@@ -52,9 +52,9 @@
                       <v-col cols="12">
                         <label>Department Status:</label>
                         <span>
-                          {{editedDept.isActivated}}
-                          <v-radio-group v-model="active">
-                            {{editedDept.isActivated == 1 ? "render active as default": "render inactive as default"}}
+                          <v-radio-group v-model = "picked" >
+                            <!-- {{editedDept.isActivated == 1 ? picked = "1": picked = "0"}} -->
+                            {{radioactive}}
                             <v-radio label="Active" value="1"></v-radio>
                             <v-radio label="Inactive" value="0"></v-radio>
                           </v-radio-group>
@@ -136,8 +136,6 @@
 
 <script>
 import * as API from "../service/API";
-import axios from "axios";
-const base_url = API.BASEURL;
 import DepartmentApiService from "../service/department-api-service";
 
 export default {
@@ -150,7 +148,7 @@ export default {
       seen: true,
       enabled: "",
       search: "",
-      active: "",
+      picked: "",
       editedIndex: -1,
       editedDept: {
         name: "",
@@ -205,6 +203,9 @@ export default {
       } else {
         return this.seen == true;
       }
+    },
+    radioactive(){
+      this.editedDept.isActivated == 1 ? this.picked = "1": this.picked = "0"
     }
   },
 
@@ -212,7 +213,6 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    // radios: "changeDeptStatus"
     enabled: "renderDepts"
   },
 
@@ -273,7 +273,6 @@ export default {
             }
           })
           .catch(error => {
-            // eslint-disable-next-line
             alert(` ${error.response.data}`);
 
             window.location.reload(); //need to fix: update without loading
