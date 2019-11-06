@@ -49,18 +49,20 @@
                         <label>Department Code</label>
                         <v-text-field required v-model="editedDept.code"></v-text-field>
                       </v-col>
-                      <v-col cols="12" >
+                      <v-col cols="12">
                         <label>Department Status:</label>
                         <span>
-                          <v-radio-group v-model="row" row>
-                            <v-radio label="Active" value="active"></v-radio>
-                            <v-radio label="Inactive" value="inactive"></v-radio>
+                          {{editedDept.isActivated}}
+                          <v-radio-group v-model="active">
+                            {{editedDept.isActivated == 1 ? "render active as default": "render inactive as default"}}
+                            <v-radio label="Active" value="1"></v-radio>
+                            <v-radio label="Inactive" value="0"></v-radio>
                           </v-radio-group>
                         </span>
                       </v-col>
                       <v-col cols="12" class="my-2" v-if="computedDialog">
                         <label>Number of Employees:</label>
-                        <span> {{editedDept.numberOfEmployee}} employees </span>
+                        <span>{{editedDept.numberOfEmployee}} employees</span>
                         <div class="add_remove_employee-Icons">
                           <router-link :to="'/departments/editEmployee/add/'+ editedDept.id">
                             <v-icon md class="mr-2">mdi-account-plus</v-icon>
@@ -148,7 +150,7 @@ export default {
       seen: true,
       enabled: "",
       search: "",
-      radios: "0",
+      active: "",
       editedIndex: -1,
       editedDept: {
         name: "",
@@ -211,7 +213,7 @@ export default {
       val || this.close();
     },
     // radios: "changeDeptStatus"
-    enabled: "changeDeptStatus"
+    enabled: "renderDepts"
   },
 
   methods: {
@@ -280,29 +282,38 @@ export default {
       this.close();
     },
 
-    changeDeptStatus() {
+    renderDepts() {
       let self = this;
-      //O is inactive dept
       if (this.enabled === "All") {
-        axios
-          .get(`${base_url}/rest/getListAllDepartment`)
-
-          .then(function(response) {
-            self.departments = response.data;
-          })
-
+        DepartmentApiService.getAllDepartments()
+          .then(resJson => (self.departments = resJson))
           .catch(err => {
-          console.log(err);
+            console.log(err);
           });
+        // axios
+        //   .get(`${base_url}/rest/getListAllDepartment`)
+
+        //   .then(function(response) {
+        //     self.departments = response.data;
+        //   })
       }
       if (this.enabled === "Active") {
-        axios
-          .get(`${base_url}/rest/getListDepartmentInActive`)
+        DepartmentApiService.getActiveDepartments()
+          .then(resJson => (self.departments = resJson))
+          // axios
+          //   .get(`${base_url}/rest/getListDepartmentInActive`)
 
-          .then(function(response) {
-            self.departments = response.data;
-          })
+          //   .then(function(response) {
+          //     self.departments = response.data;
+          //   })
 
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      if (this.enabled === "InActive") {
+        DepartmentApiService.getInactiveDepartments()
+          .then(resJson => (self.departments = resJson))
           .catch(err => {
             console.log(err);
           });
@@ -313,22 +324,22 @@ export default {
 </script>
 
 <style scoped>
-  .status-dropdown {
-    position: relative;
-    top: 4px;
-    margin-right: 10px;
-    padding-top: 7px;
-  }
-  button {
-    margin-right: 3px;
-  }
-  .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
-    background-color: #1e90ff;
-  }
-  .modal_bottom-buttons {
-    color: #1e90ff;
-  }
-  .displayError {
-    color: red;
-  }
+.status-dropdown {
+  position: relative;
+  top: 4px;
+  margin-right: 10px;
+  padding-top: 7px;
+}
+button {
+  margin-right: 3px;
+}
+.theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+  background-color: #1e90ff;
+}
+.modal_bottom-buttons {
+  color: #1e90ff;
+}
+.displayError {
+  color: red;
+}
 </style>

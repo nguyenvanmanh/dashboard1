@@ -9,6 +9,21 @@ const DepartmentApiService = {
             .get(`${API.BASEURL}/rest/getAllListDepartment`)
             .then(response => response.data)
     },
+    getActiveDepartments() {
+        axios
+            .get(`${API.BASEURL}/rest/getListDepartmentActive`)
+
+            .then(response => response.data)
+            
+
+    },
+    getInactiveDepartments(){
+        axios
+        .get(`${API.BASEURL}/rest/getListDepartmentInActive`)
+
+        .then(response => response.data)
+        
+    },
     deactivateDepartment(dept) {
         return axios
             .post(`${API.BASEURL}/rest/inActiveDepartment`, dept)
