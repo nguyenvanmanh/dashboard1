@@ -52,7 +52,7 @@
                       <v-col cols="12">
                         <label>Department Status:</label>
                         <span>
-                          <v-radio-group v-model = "picked" >
+                          <v-radio-group v-model="picked">
                             <!-- {{editedDept.isActivated == 1 ? picked = "1": picked = "0"}} -->
                             {{radioactive}}
                             <v-radio label="Active" value="1"></v-radio>
@@ -154,14 +154,13 @@ export default {
         name: "",
         code: "",
         isActivated: "",
-        numberOfEmployee: 0,
-
+        numberOfEmployee: 0
       },
       defaultDept: {
         name: "",
         code: "",
         isActivated: "",
-        numberOfEmployee: 0,
+        numberOfEmployee: 0
       },
       departments: [],
       headers: [
@@ -209,8 +208,10 @@ export default {
         return this.seen == true;
       }
     },
-    radioactive(){
-      this.editedDept.isActivated == 1 ? this.picked = "1": this.picked = "0"
+    radioactive() {
+      this.editedDept.isActivated == 1
+        ? (this.picked = "1")
+        : (this.picked = "0");
     }
   },
 
@@ -263,23 +264,21 @@ export default {
 
     save() {
       //save dialog after edit/add info
-      
+
       if (this.editedIndex > -1) {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        console.log(this.editedDept)
-        DepartmentApiService.updateDepartment(this.editedDept)
-        .catch(error => {
+        console.log(this.editedDept);
+        DepartmentApiService.updateDepartment(this.editedDept).catch(error => {
           alert(` ${error.response.data}`);
           // window.location.reload();
         });
       } else {
         DepartmentApiService.insertDepartment(this.editedDept)
-        
-          .catch(error => {
-            alert(` ${error.response.data}`);
+        .catch(error => {
+          alert(` ${error.response.data}`);
 
-            window.location.reload(); //need to fix: update without loading
-          });
+          window.location.reload(); //need to fix: update without loading
+        });
       }
       this.close();
     },
@@ -292,22 +291,10 @@ export default {
           .catch(err => {
             console.log(err);
           });
-        // axios
-        //   .get(`${base_url}/rest/getListAllDepartment`)
-
-        //   .then(function(response) {
-        //     self.departments = response.data;
-        //   })
       }
-      if (this.enabled == "Active" ) {
+      if (this.enabled == "Active") {
         DepartmentApiService.getActiveDepartments()
           .then(resJson => (self.departments = resJson))
-          // axios
-          //   .get(`${base_url}/rest/getListDepartmentInActive`)
-
-          //   .then(function(response) {
-          //     self.departments = response.data;
-          //   })
 
           .catch(err => {
             console.log(err);
