@@ -15,13 +15,6 @@
             <v-toolbar-title>Department Management</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
 
-            <!--Implement Active and All radio buttons-->
-            <!-- <v-radio-group v-model="radios" row :mandatory="false">
-            <v-radio label="Active" value="0">Active</v-radio>
-            <v-radio label="All" value="1">All</v-radio>
-            </v-radio-group>-->
-            <!--End radio buttons-->
-
             <!--Implement popup dialog form-->
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
@@ -264,21 +257,26 @@ export default {
 
     save() {
       //save dialog after edit/add info
-
+    
       if (this.editedIndex > -1) {
+        
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        console.log(this.editedDept);
-        DepartmentApiService.updateDepartment(this.editedDept).catch(error => {
-          alert(` ${error.response.data}`);
-          // window.location.reload();
-        });
-      } else {
-        DepartmentApiService.insertDepartment(this.editedDept)
+        // console.log(this.editedDept);
+        DepartmentApiService.updateDepartment(this.editedDept) //doesnt work
+        .then(
+          this.departments.$set(this.editedDept)
+          )
         .catch(error => {
-          alert(` ${error.response.data}`);
+          alert(` ${error.response.data}`); })
+          
+      } else {
+        DepartmentApiService.insertDepartment(this.editedDept) //why doesn't the popup close?
+        .then(
+          this.departments.push(this.editedDept)
+          )
+        .catch(error => {
+          alert(` ${error.response.data}`); })
 
-          window.location.reload(); //need to fix: update without loading
-        });
       }
       this.close();
     },
