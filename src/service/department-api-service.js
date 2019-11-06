@@ -10,7 +10,7 @@ const DepartmentApiService = {
             .then(response => response.data)
     },
     getActiveDepartments() {
-        axios
+        return axios
             .get(`${API.BASEURL}/rest/getListDepartmentActive`)
 
             .then(response => response.data)
@@ -18,7 +18,7 @@ const DepartmentApiService = {
 
     },
     getInactiveDepartments(){
-        axios
+        return axios
         .get(`${API.BASEURL}/rest/getListDepartmentInActive`)
 
         .then(response => response.data)
@@ -47,9 +47,18 @@ const DepartmentApiService = {
             })
 
     },
-    updateDepartment() {
+    insertDepartment(dept){
         return axios
-            .post(`${API.BASEURL}/rest/updateDepartmentInfomation`, editedDept)
+          .post(`${API.BASEURL}/rest/insertDepartment`, dept)
+          .then(response => {
+            if (response.status === 201) {
+              alert("New Department successfully added!");
+            }
+          })
+    },
+    updateDepartment(editedDept) {
+        return axios
+            .post(`${API.BASEURL}/rest/departmentInfoUpdate`, editedDept)
             .then(response => {
                 if (response.status === 201) {
                     alert(

@@ -152,11 +152,16 @@ export default {
       editedIndex: -1,
       editedDept: {
         name: "",
-        numberOfEmployee: 0
+        code: "",
+        isActivated: "",
+        numberOfEmployee: 0,
+
       },
       defaultDept: {
         name: "",
-        numberOfEmployee: 0
+        code: "",
+        isActivated: "",
+        numberOfEmployee: 0,
       },
       departments: [],
       headers: [
@@ -213,7 +218,7 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    enabled: "renderDepts"
+    enabled: "renderListOfDepts"
   },
 
   methods: {
@@ -258,20 +263,18 @@ export default {
 
     save() {
       //save dialog after edit/add info
+      
       if (this.editedIndex > -1) {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        DepartmentApiService.updateDepartment(this.editedDept).catch(error => {
+        console.log(this.editedDept)
+        DepartmentApiService.updateDepartment(this.editedDept)
+        .catch(error => {
           alert(` ${error.response.data}`);
           // window.location.reload();
         });
       } else {
-        axios
-          .post(`${base_url}/rest/insertDepartment`, this.editedDept)
-          .then(response => {
-            if (response.status === 201) {
-              alert("New Department successfully added!");
-            }
-          })
+        DepartmentApiService.insertDepartment(this.editedDept)
+        
           .catch(error => {
             alert(` ${error.response.data}`);
 
@@ -281,9 +284,9 @@ export default {
       this.close();
     },
 
-    renderDepts() {
+    renderListOfDepts() {
       let self = this;
-      if (this.enabled === "All") {
+      if (this.enabled == "All") {
         DepartmentApiService.getAllDepartments()
           .then(resJson => (self.departments = resJson))
           .catch(err => {
@@ -296,7 +299,7 @@ export default {
         //     self.departments = response.data;
         //   })
       }
-      if (this.enabled === "Active") {
+      if (this.enabled == "Active" ) {
         DepartmentApiService.getActiveDepartments()
           .then(resJson => (self.departments = resJson))
           // axios
@@ -310,7 +313,7 @@ export default {
             console.log(err);
           });
       }
-      if (this.enabled === "InActive") {
+      if (this.enabled == "Inactive") {
         DepartmentApiService.getInactiveDepartments()
           .then(resJson => (self.departments = resJson))
           .catch(err => {
