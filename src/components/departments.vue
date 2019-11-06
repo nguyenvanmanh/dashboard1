@@ -111,7 +111,7 @@
             <!--End searchbar-->
           </v-toolbar>
         </template>
-        <!--Implement edit, delete and reactivate buttons for each department-->
+        <!--Implement edit, deactivate and reactivate buttons for each department-->
 
         <template v-slot:item.action="{ item }">
           <v-row>
@@ -122,7 +122,7 @@
             </v-col>
 
             <v-col v-else>
-              <v-icon class="mr-2" @click="reactivate(item)">mdi-lock</v-icon>
+              <v-icon class="mr-2" @click="reactivateDept(item)">mdi-lock</v-icon>
             </v-col>
           </v-row>
         </template>
@@ -183,7 +183,7 @@ export default {
   },
 
   mounted() {
-    //load all active departments on screen when the app first starts
+    //load all departments on screen when the app first starts
     let self = this;
     DepartmentApiService.getAllDepartments().then(
       resJson => (self.departments = resJson)
@@ -227,47 +227,24 @@ export default {
       this.editedDept = Object.assign({}, dept);
       this.dialog = true;
     },
-    deleteDept(dept) {
-      //get id => click ok=> call API
-      confirm("Are you sure you want to remove this department?") &&
-        DepartmentApiService.deactivateDepartment(dept)
-          // axios
-          //   .post(`${base_url}/rest/inActiveDepartment`, dept)
-          //   .then(response => {
-          //     if (response.status === 201) {
-          //       alert(
-          //         // `Removed department ${this.editedDept.name} successfully!`
-          //         `Removed department ${dept.name} successfully!`
-          //       );
-          //       this.loading = true;
-          //     }
-          //   })
-
-          .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
-          });
+    
+    deactivateDept(dept) {
+      confirm("Are you sure you want to deactivate this department?") &&
+        DepartmentApiService.deactivateDepartment(dept).catch(err => {
+          this.error = err;
+          console.log(this.error);
+        });
     },
 
-    reactivate(dept) {
+    reactivateDept(dept) {
       //send back to db the updated status
 
-      // this.editedDept = Object.assign({}, dept);
-
       confirm("Are you sure you want to reactivate this department?") &&
-        axios
-          .post(`${base_url}/rest/activeDepartment`, dept)
-          .then(response => {
-            if (response.status === 201) {
-              alert(`Reactivate department ${dept.name} successfully!`);
-              window.location.reload();
-            }
-          })
-
-          .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
-          });
+        DepartmentApiService.reactivateDepartment(dept)
+        .catch(err => {
+          this.error = err;
+          console.log(this.error);
+        });
     },
 
     close() {
@@ -278,25 +255,15 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
+
     save() {
-      //save dialog after edit
+      //save dialog after edit/add info
       if (this.editedIndex > -1) {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        axios
-          .post(`${base_url}/rest/updateDepartmentInfomation`, this.editedDept)
-          .then(response => {
-            if (response.status === 201) {
-              alert(
-                `Department ${this.editedDept.name} successfully modified!`
-              );
-              // window.location.reload();
-            }
-          })
+        DepartmentApiService.updateDepartment(this.editedDept)
           .catch(error => {
-            // // eslint-disable-next-line
-            // console.log(error.response);
             alert(` ${error.response.data}`);
-            window.location.reload();
+            // window.location.reload();
           });
       } else {
         axios

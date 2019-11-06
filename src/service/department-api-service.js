@@ -21,6 +21,29 @@ const DepartmentApiService = {
                 }
             })
     },
+    reactivateDepartment(dept) {
+        return axios
+            .post(`${API.BASEURL}/rest/activeDepartment`, dept)
+            .then(response => {
+                if (response.status === 201) {
+                    alert(`Reactivate department ${dept.name} successfully!`);
+                    // window.location.reload();
+                }
+            })
+
+    },
+    updateDepartment() {
+        return axios
+            .post(`${API.BASEURL}/rest/updateDepartmentInfomation`, editedDept)
+            .then(response => {
+                if (response.status === 201) {
+                    alert(
+                        `Department ${editedDept.name} successfully modified!`
+                    );
+                    // window.location.reload();
+                }
+            })
+    }
 
 }
 
