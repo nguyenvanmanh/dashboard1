@@ -61,14 +61,15 @@
                       </v-col>
                       <v-col cols="12" class="my-2" v-if="computedDialog">
                         <label>Number of Employees:</label>
-                        <span>{{editedDept.numberOfEmployee}}</span>
-
-                        <router-link :to="'/departments/editEmployee/add/'+ editedDept.id">
-                          <v-icon small class="mr-2">mdi-plus</v-icon>
-                        </router-link>
-                        <router-link :to="'/departments/editEmployee/delete/'+ editedDept.id">
-                          <v-icon small class="mr-2">mdi-minus</v-icon>
-                        </router-link>
+                        <span> {{editedDept.numberOfEmployee}} employees </span>
+                        <div class="add_remove_employee-Icons">
+                          <router-link :to="'/departments/editEmployee/add/'+ editedDept.id">
+                            <v-icon md class="mr-2">mdi-account-plus</v-icon>
+                          </router-link>
+                          <router-link :to="'/departments/editEmployee/delete/'+ editedDept.id">
+                            <v-icon md class="mr-2">mdi-account-remove</v-icon>
+                          </router-link>
+                        </div>
                       </v-col>
                       <v-col cols="12" v-else></v-col>
                     </v-row>
@@ -227,7 +228,7 @@ export default {
       this.editedDept = Object.assign({}, dept);
       this.dialog = true;
     },
-    
+
     deactivateDept(dept) {
       confirm("Are you sure you want to deactivate this department?") &&
         DepartmentApiService.deactivateDepartment(dept).catch(err => {
@@ -240,8 +241,7 @@ export default {
       //send back to db the updated status
 
       confirm("Are you sure you want to reactivate this department?") &&
-        DepartmentApiService.reactivateDepartment(dept)
-        .catch(err => {
+        DepartmentApiService.reactivateDepartment(dept).catch(err => {
           this.error = err;
           console.log(this.error);
         });
@@ -260,11 +260,10 @@ export default {
       //save dialog after edit/add info
       if (this.editedIndex > -1) {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        DepartmentApiService.updateDepartment(this.editedDept)
-          .catch(error => {
-            alert(` ${error.response.data}`);
-            // window.location.reload();
-          });
+        DepartmentApiService.updateDepartment(this.editedDept).catch(error => {
+          alert(` ${error.response.data}`);
+          // window.location.reload();
+        });
       } else {
         axios
           .post(`${base_url}/rest/insertDepartment`, this.editedDept)
