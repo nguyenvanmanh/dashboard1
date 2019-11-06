@@ -49,9 +49,8 @@
                         <label>Department Code</label>
                         <v-text-field required v-model="editedDept.code"></v-text-field>
                       </v-col>
-                      <v-col cols="12" v-if="computedDialog">
+                      <v-col cols="12" >
                         <label>Department Status:</label>
-                        <!-- <span>{{editedDept.isActivated===0? "Inactive": "Active"}}</span> -->
                         <span>
                           <v-radio-group v-model="row" row>
                             <v-radio label="Active" value="active"></v-radio>
@@ -86,8 +85,8 @@
             </v-dialog>
             <div class="flex-grow-1"></div>
             <!--End popup dialog-->
-            <!-- Implement dropdown-->
 
+            <!-- Implement status dropdown-->
             <v-select
               v-model="enabled"
               :items="dropdown_status"
@@ -95,7 +94,6 @@
               clearable
               style="margin-top: 24px; width: 100px"
             ></v-select>
-
             <!--end dropdown-->
 
             <v-divider class="mx-4" inset vertical></v-divider>
@@ -119,7 +117,7 @@
             <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
 
             <v-col v-if="item.isActivated == 1">
-              <v-icon class="mr-2" @click="deactivateDept(item)">mdi-lock-open</v-icon>
+              <v-icon class="mr-2" @click="deactivateDept(item)">mdi-lock-open-variant</v-icon>
             </v-col>
 
             <v-col v-else>
@@ -283,7 +281,6 @@ export default {
     },
 
     changeDeptStatus() {
-      //Active vs Inactive Department-> load corresponding data
       let self = this;
       //O is inactive dept
       if (this.enabled === "All") {
@@ -295,8 +292,7 @@ export default {
           })
 
           .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+          console.log(err);
           });
       }
       if (this.enabled === "Active") {
@@ -308,7 +304,6 @@ export default {
           })
 
           .catch(err => {
-            // eslint-disable-next-line
             console.log(err);
           });
       }
@@ -318,22 +313,22 @@ export default {
 </script>
 
 <style scoped>
-.status-dropdown {
-  position: relative;
-  top: 4px;
-  margin-right: 10px;
-  padding-top: 7px;
-}
-button {
-  margin-right: 3px;
-}
-.theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
-  background-color: #1e90ff;
-}
-.modal_bottom-buttons {
-  color: #1e90ff;
-}
-.displayError {
-  color: red;
-}
+  .status-dropdown {
+    position: relative;
+    top: 4px;
+    margin-right: 10px;
+    padding-top: 7px;
+  }
+  button {
+    margin-right: 3px;
+  }
+  .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background-color: #1e90ff;
+  }
+  .modal_bottom-buttons {
+    color: #1e90ff;
+  }
+  .displayError {
+    color: red;
+  }
 </style>
