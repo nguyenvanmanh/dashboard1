@@ -257,26 +257,21 @@ export default {
 
     save() {
       //save dialog after edit/add info
-    
+
       if (this.editedIndex > -1) {
-        
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        // console.log(this.editedDept);
+        console.log(this.editedDept);
         DepartmentApiService.updateDepartment(this.editedDept) //doesnt work
-        .then(
-          this.departments.$set(this.editedDept)
-          )
-        .catch(error => {
-          alert(` ${error.response.data}`); })
-          
+          .then(this.departments.$set(this.editedDept))
+          .catch(error => {
+            alert(` ${error.response.data}`);
+          });
       } else {
         DepartmentApiService.insertDepartment(this.editedDept) //why doesn't the popup close?
-        .then(
-          this.departments.push(this.editedDept)
-          )
-        .catch(error => {
-          alert(` ${error.response.data}`); })
-
+          .then(this.departments.push(this.editedDept))
+          .catch(error => {
+            alert(` ${error.response.data}`);
+          });
       }
       this.close();
     },

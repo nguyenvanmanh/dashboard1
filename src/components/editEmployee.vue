@@ -1,8 +1,44 @@
 <template>
   <div id="app">
-    <v-dialog>
-      hihi
-    </v-dialog>
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="existingUsers"
+      :items-per-page="10"
+      item-key="userId"
+      show-select
+      class="elevation-1"
+    >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>{{status}} Employee</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="primary"
+            dark
+            class="mb-2"
+            @click="submitEmployeeToDept"
+            v-if="status==='add'"
+          >Add All</v-btn>
+          <v-btn color="primary" dark class="mb-2" @click="removeEmployeeFromDept" v-else>Delete All</v-btn>
+        </v-toolbar>
+        
+      </template>
+      <!--Add Employee to Department-->
+      <template v-slot:item.action="{ item }" v-if="status==='add'">
+        <v-icon @click="submitEmployeeToDept">add</v-icon>
+      </template>
+      <!--Remove Employee from Department -->
+      <template v-slot:item.action="{ item }" v-else>
+        <v-icon @click="removeEmployeeFromDept">delete</v-icon>
+      </template>
+    </v-data-table>
+ <div>
+      <button @click="goBackToDepartments">Go Back</button>
+      <v-spacer></v-spacer>
+    </div>
    
   </div>
 </template>
@@ -13,7 +49,7 @@ import * as API from "../service/API"
 const base_ip_address = "http://172.30.56.57";
 const base_port = 8081;
 const base_url = API.BASEURL;
-// let id = localStorage.getItem("id");
+
 
 import axios from "axios";
 export default {

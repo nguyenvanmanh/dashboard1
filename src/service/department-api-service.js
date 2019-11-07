@@ -58,7 +58,7 @@ const DepartmentApiService = {
     },
     updateDepartment(editedDept) {
         return axios
-            .post(`http://172.30.56.57:8081/rest/departmentInfoUpdate`, editedDept)
+            .post(`${API.BASEURL}/rest/updateDepartmentInfomation`, editedDept)
             .then(response => {
                 if (response.status === 201) {
                     alert(
