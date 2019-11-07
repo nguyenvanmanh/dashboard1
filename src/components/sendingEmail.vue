@@ -13,38 +13,32 @@
         <v-card>
           <v-card-title>
             Upload Customer
-            <!-- Implement search bar-->
-            <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="search"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-            <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
-            <!--End searchbar-->
           </v-card-title>
-          <v-data-table :headers="headers" :items="desserts" class="elevation-1" :search="search">
-            <template v-slot:item.index="{ item }">
-              <!-- {{dem}} -->
-              {{desserts.map(function(x) {
-              return x.customerEmail;
-              }).indexOf(item.customerEmail)+1}}
-            </template>
-          </v-data-table>
+
+          <div class="panel-container show">
+            <div class="panel-content">
+              <!-- datatable start -->
+              <DataTable :data="desserts" :header="dataHeader">
+              </DataTable>
+            </div>
+          </div>
         </v-card>
+         <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action>
       </template>
     </v-flex>
   </v-layout>
+ 
 </template>
 
 <script>
 import axios from "axios";
 const base_ip_address = "http://192.168.32.88";
 const base_port = 8081;
-import * as API from "../service/API"
+import * as API from "../service/API";
 const base_url = API.BASEURL;
+import AlertAction from "./share/Alert";
+import DataTable from "./share/DataTable";
+
 export default {
   data() {
     return {
@@ -53,21 +47,28 @@ export default {
       radioGroup: 3,
       search: "",
       department: ["DU1", "DU2", "DU3"],
-      headers: [
+      dataHeader: [
         {
-          text: "Index",
-          align: "left",
-          value: "index"
+          name: "#",
+          dataFormat: "index",
+          width: "5"
         },
-        { text: "Customer Name", value: "firstName" },
-        { text: "Compapy", value: "company" },
-        { text: "Email", value: "customerEmail" },
-        { text: "Address", value: "address" }
+        { name: "Customer Name", dataFormat: "firstName", width: "" },
+        { name: "Compapy", dataFormat: "company", width: "" },
+        { name: "Email", dataFormat: "email", width: "" },
+        { name: "Address", dataFormat: "address", width: "15" }
       ],
       users: [],
       editedIndex: -1,
-      desserts: []
+      desserts: [],
+      messageAlert:"",
+      typeAlert:"",
+      show: true
     };
+  },
+  components: {
+    DataTable,
+    AlertAction
   },
   computed: {
     formTitle() {
@@ -97,6 +98,10 @@ export default {
         })
         .then(response => {
           this.desserts = response.data;
+          this.messageAlert = "Upload success"
+          this.typeAlert="success",
+          this.show = !this.show
+          console.log(response)
         })
         .catch(error => {
           console.log(error);
@@ -111,7 +116,7 @@ export default {
         .post(`${base_url}/email/cover-excel-to-DB`, formData, {
           headers: {
             "Content-Type": "application/vnd.ms-excel",
-            "Content-Disposition": "attachment; filename='\test.xlsx\'",
+            "Content-Disposition": "attachment; filename='\test.xlsx'"
           }
         })
         .then(function(response) {

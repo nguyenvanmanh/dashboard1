@@ -6,22 +6,16 @@
           <div class="panel-hdr">
             <span>
               <h3>
-                Templates
+                Customers
                 <span class="fw-100">
                   <i>Table</i>
                 </span>
               </h3>
             </span>
-            <v-divider class="mx-4" inset vertical></v-divider>
             <v-dialog v-model="dialog" max-width="800px">
               <!-- <template v-slot:activator="{ on }">
               <v-btn color="primary" dark class="mb-2" v-on="on">New Template</v-btn>
               </template>-->
-              <template v-slot:activator="{ on }">
-                <v-btn small dark color="blue lighten-2" v-on="on">
-                  <v-icon small>library_add</v-icon>
-                </v-btn>
-              </template>
               <v-card>
                 <v-card-title>
                   <span class="headline">{{ formTitle }}</span>
@@ -46,9 +40,13 @@
                       </v-col>
                       <v-col cols="12">
                         <label class="form-label" for="example-password">Body</label>
-                      </v-col>
-                      <v-col cols="12">
-                        <vue-editor label="Body" v-model="body_input"></vue-editor>
+                        <input
+                          type="text"
+                          v-bind:class="[formControl, isInvalid]"
+                          id="simpleinputInvalid"
+                          v-model="title_input"
+                          required
+                        />
                       </v-col>
                     </v-row>
                   </v-container>
@@ -68,6 +66,9 @@
               <DataTable :data="dataTemplates" :header="dataHeader">
                 <template slot="action" slot-scope="dataRow">
                   <td>
+                    <a class="btn btn-sm btn-outline-danger mr-2" title="Delete Record">
+                      <i class="fal fa-times"></i>
+                    </a>
                     <a
                       @click="editItem(dataRow.row)"
                       class="btn btn-sm btn-outline-primary mr-2"
@@ -104,7 +105,6 @@
 <script>
 import axios from "axios";
 import * as API from "../service/API";
-import { VueEditor } from "vue2-editor";
 import AlertAction from "./share/Alert";
 import DataTable from "./share/DataTable";
 import Vue from "vue";
@@ -115,8 +115,11 @@ export default {
   data: () => ({
     dataHeader: [
       { name: "#", width: "5" },
-      { name: "Title", dataFormat: "title", width: "" },
-      { name: "Body", dataFormat: "body", width: "" },
+      { name: "Name ", dataFormat: "firstName", width: "" },
+      { name: "Date of Birth ", dataFormat: "dob", width: "" },
+      { name: "Email", dataFormat: "email", width: "" },
+      { name: "Address", dataFormat: "address", width: "" },
+      { name: "Company", dataFormat: "company", width: "" },
       { name: "Action", dataFormat: "", width: "15" }
     ],
     show: true,
@@ -132,13 +135,13 @@ export default {
     title_input: "",
     body_input: "",
     row_input: "",
+    numberOfElements: "",
     totalPages: 0,
     currentPage: 0, // start = 0
     sizePage: 10
   }),
 
   components: {
-    VueEditor,
     AlertAction,
     DataTable,
     Pagination
@@ -151,7 +154,7 @@ export default {
   },
 
   mounted() {
-    this.fetchAllTemplate();
+    this.fetchAllCustomers();
   },
 
   watch: {
@@ -167,12 +170,12 @@ export default {
   methods: {
     initialize() {},
     clickCallback(targetPage) {
-      this.fetchTemplateByPage(this.sizePage, targetPage - 1);
+      this.fetchCustomerByPage(this.sizePage, targetPage - 1);
     },
 
-    fetchTemplateByPage(size, targetPage) {
+    fetchCustomerByPage(size, targetPage) {
       axios
-        .get(`${base_url}/email/get-all-topic`, {
+        .get(`${base_url}/email/get-all-customer`, {
           params: {
             page: targetPage,
             size: size
@@ -189,9 +192,9 @@ export default {
         });
     },
 
-    fetchAllTemplate() {
+    fetchAllCustomers() {
       axios
-        .get(`${base_url}/email/get-all-topic`)
+        .get(`${base_url}/email/get-all-customer`)
         .then(response => {
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
@@ -202,26 +205,18 @@ export default {
           this.errored = true;
         });
     },
-    
+
     editItem(item) {
       this.dialog = true;
-      this.editedIndex = 0;
-      this.id_template = item.id;
-      this.title_input = item.title;
-      this.body_input = item.body;
+      console.log(item);
+      //   this.editedIndex = 0;
+      //   this.id_template = item.id;
+      //   this.title_input = item.title;
+      //   this.body_input = item.body;
     },
 
     close() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-      this.title_input = "";
-      this.body_input = "";
-      this.titleValidate = "none";
-      this.isInvalid = "";
-      this.id_template = "";
       this.closeAlert();
     },
 
@@ -281,40 +276,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.fixed {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
-.text-center {
-  text-align: center;
-}
-
-ul.pagination_lib {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-ul.pagination_lib li {
-  display: inline;
-}
-
-ul.pagination_lib li a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-ul.pagination_lib li a.active {
-  background-color: #4caf50;
-  color: white;
-}
-
-ul.pagination_lib li a:hover:not(.active) {
-  background-color: #ddd;
-}
-</style>

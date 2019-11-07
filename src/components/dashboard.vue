@@ -869,12 +869,23 @@
 
               <li>
                 <router-link
-                  to="/templateMagement"
-                  title="templateMagement"
+                  to="/templateManagement"
+                  title="templateManagement"
                   data-filter-tags="tables"
                 >
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Template Management</span>
+                </router-link>
+              </li>
+
+              <li>
+                <router-link
+                  to="/customerManagement"
+                  title="customerManagement"
+                  data-filter-tags="tables"
+                >
+                  <i class="fal fa-th-list"></i>
+                  <span class="nav-link-text" data-i18n="nav.tables">Customer Management</span>
                 </router-link>
               </li>
 
