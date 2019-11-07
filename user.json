@@ -1,284 +1,298 @@
 {
   "user": [
     {
-      "userId": 1,
-      "firstName": "Tom",
-      "lastName": "Cruise",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 0
-    },
-    {
-      "userId": 2,
-      "firstName": "Karley",
-      "lastName": "Queen",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 0
+      "userId": 4,
+      "firstName": "1 dep activated 1 dep not",
+      "lastName": "Test",
+      "email": "ntgptit4@gmail.com",
+      "username": "ntgptit4",
+      "password": "123456",
+      "dob": "1994-10-18",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentRole": [
+        {
+          "department": {
+            "id": 4,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 4,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        },
+        {
+          "department": {
+            "id": 4,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 4,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        },
+        {
+          "department": {
+            "id": 4,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 4,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
     },
     {
       "userId": 3,
-      "firstName": "Joker",
-      "lastName": "John",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 3,
-      "isActivated": 1
+      "firstName": "2 dep activated",
+      "lastName": "Test",
+      "email": "ntgptit3@gmail.com",
+      "username": "ntgptit3",
+      "password": "123456",
+      "dob": "1994-10-17",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentRole": [
+        {
+          "department": {
+            "id": 3,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 3,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        },
+        {
+          "department": {
+            "id": 3,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 3,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
     },
     {
-      "userId": 4,
-      "firstName": "Brad",
-      "lastName": "Pitt",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 4,
-      "isActivated": 1
+      "userId": 2,
+      "firstName": "Activated but not in dept",
+      "lastName": "Test",
+      "email": "ntgptit2@gmail.com",
+      "username": "ntgptit2",
+      "password": "123456",
+      "dob": "1994-10-16",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentRole": [
+        {
+          "department": {
+            "id": 2,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 2,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
     },
     {
       "userId": 5,
-      "firstName": "Mac",
-      "lastName": "Gregor",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 0.4,
-      "isActivated": 1
+      "firstName": "Activated but not in dept",
+      "lastName": "Test",
+      "email": "ntgptit5@gmail.com",
+      "username": "ntgptit5",
+      "password": "123456",
+      "dob": "1994-10-19",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentRole": [
+        {
+          "department": {
+            "id": 5,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 5,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
     },
     {
       "userId": 6,
-      "firstName": "Tom",
-      "lastName": "Cruise",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 1
+      "firstName": "Activated but not in dept",
+      "lastName": "Test",
+      "email": "ntgptit6@gmail.com",
+      "username": "ntgptit6",
+      "password": "123456",
+      "dob": "1994-10-20",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentRole": [
+        {
+          "department": {
+            "id": 6,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 6,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
     },
     {
-      "userId": 7,
-      "firstName": "Karley",
-      "lastName": "Queen",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 1
-    },
-    {
-      "userId": 8,
-      "firstName": "Joker",
-      "lastName": "John",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 3,
-      "isActivated": 1
-    },
-    {
-      "userId": 9,
-      "firstName": "Brad",
-      "lastName": "Pitt",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 4,
-      "isActivated": 0
-    },
-    {
-      "userId": 10,
-      "firstName": "Mac",
-      "lastName": "Gregor",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 0.4,
-      "isActivated": 0
-    },
-    {
-      "userId": 11,
-      "firstName": "Tom",
-      "lastName": "Cruise",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 0
-    },
-    {
-      "userId": 12,
-      "firstName": "Karley",
-      "lastName": "Queen",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 0
-    },
-    {
-      "userId": 13,
-      "firstName": "Joker",
-      "lastName": "John",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 3,
-      "isActivated": 0
-    },
-    {
-      "userId": 14,
-      "firstName": "John",
-      "lastName": "Slatt",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 4,
-      "isActivated": 0
-    },
-    {
-      "userId": 15,
-      "firstName": "Mac",
-      "lastName": "Gregor",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 0.4,
-      "isActivated": 0
-    },
-    {
-      "userId": 16,
-      "firstName": "Tom",
-      "lastName": "Cruise",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 0
-    },
-    {
-      "userId": 17,
-      "firstName": "Karley",
-      "lastName": "Queen",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 2,
-      "isActivated": 0
-    },
-    {
-      "userId": 18,
-      "firstName": "Joker",
-      "lastName": "John",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 3,
-      "isActivated": 0
-    },
-    {
-      "userId": 19,
-      "firstName": "Brad",
-      "lastName": "Pitt",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 4,
-      "isActivated": 0
-    },
-    {
-      "userId": 20,
-      "firstName": "Mac",
-      "lastName": "Gregor",
-      "email": "admin@gmail.com",
-      "username": "admin",
-      "password": "admin",
-      "dob": "2019-11-28",
-      "registedDate": "2019-11-28",
-      "activatedDate": "2019-11-28",
-      "endDate": "2020-11-28",
-      "seniority": 0.4,
-      "isActivated": 0
+      "userId": 1,
+      "firstName": "Not activated",
+      "lastName": "Test",
+      "email": "ntgptit1@gmail.com",
+      "username": "ntgptit1",
+      "password": "123456",
+      "dob": "1994-10-15",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0,
+      "isActivated": 0,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentRole": [
+        {
+          "department": {
+            "id": 1,
+            "name": null,
+            "code": null,
+            "numberOfEmployees": 0,
+            "isActivated": 0,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          },
+          "role": {
+            "id": 1,
+            "name": null,
+            "code": null,
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,6 @@
 <template>
   <v-app id="inspire">
+    
     <v-layout>
       <v-flex>
         <v-data-table
@@ -8,6 +9,7 @@
           :search="search"
           sort-by="userId"
           class="elevation-1"
+          hide-default-footer
           data-app
         >
           <template v-slot:top>
@@ -17,7 +19,7 @@
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-icon large dark color="blue lighten-2" v-on="on">library_add</v-icon>
+                  <v-icon large dark color="blue lighten-2" v-on="on" title="Add a new user.">library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -110,7 +112,8 @@
               <v-text-field
                 v-model="search"
                 append-icon="search"
-                label="Search"
+                label="Search by id, username"
+                title="Search by id, username, email."
                 single-line
                 hide-details
               ></v-text-field>
@@ -124,6 +127,7 @@
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  title="View users"
                 >View Users</button>
                 <div class="dropdown-menu">
                   <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
@@ -138,10 +142,18 @@
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon v-if="item.isActivated === 1" @click="showPopupForActive">mdi-lock-open-variant</v-icon>
-            <v-icon v-if="item.isActivated === 0 || null" @click="showPopupForInactive">mdi-lock</v-icon>
-            <v-icon @click="showDialog">mdi-account-edit-outline</v-icon>
-            <v-icon @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon
+              title="Deactivate this user."
+              v-if="item.isActivated === 1"
+              @click="showPopupForActive(item)"
+            >mdi-lock-open-variant</v-icon>
+            <v-icon
+              title="Activate this user."
+              v-if="item.isActivated === 0 || null"
+              @click="showPopupForInactive(item)"
+            >mdi-lock</v-icon>
+            <v-icon title="Set department and role." @click="showDialog">mdi-account-edit-outline</v-icon>
+            <v-icon title="Edit user's information." @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
         </v-data-table>
@@ -192,7 +204,8 @@
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="reactivate_deactivate(item)">I agree</v-btn>
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog2=false">Cancel</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -206,7 +219,8 @@
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="reactivate_deactivate(item)">I agree</v-btn>
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog3=false">Cancel</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -222,6 +236,7 @@ import * as API from "../service/API";
 export default {
   data() {
     return {
+      itemData: {},
       dialog: false,
       dialog1: false,
       dialog2: false,
@@ -271,7 +286,7 @@ export default {
         // { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
         { text: "Department", value: "departmentCodeAll" },
-        { text: "Registed Date", value: "registeredDate" },
+        // { text: "Registed Date", value: "registeredDate" },
         // { text: "Activated Date", value: "activatedDate" },
         // { text: "End Date", value: "endDate" },
         { text: "Seniority", value: "seniority" },
@@ -324,7 +339,7 @@ export default {
           headers: { Authorization: localStorage.getItem("token") }
         })
         .then(response => {
-          this.users = response.data;
+          this.users = response.data.listUser;
         });
     },
     initialize() {
@@ -342,11 +357,13 @@ export default {
       this.dialog1 = true;
     },
     // Show dialog to deactivate users
-    showPopupForInactive() {
+    showPopupForInactive(item) {
       this.dialog2 = true;
+      this.itemData = item;
     },
     // Show dialog to ctivate users
-    showPopupForActive() {
+    showPopupForActive(item) {
+      this.itemData = item;
       this.dialog3 = true;
     },
     // Close dilog Edited employee's information
@@ -365,7 +382,8 @@ export default {
           .post(API.BASEURL + "/rest/users/edit", this.editedItem)
           .then(response => {
             if (response.status === 200) {
-              this.users.$set(this.editedItem);
+              // khong load trang
+              this.users = response.data.listUser;
             }
           });
       } else {
@@ -374,7 +392,8 @@ export default {
           .post(API.BASEURL + "/rest/users/add", this.editedItem)
           .then(response => {
             if (response.status === 200) {
-              this.users.$set(this.editedItem);
+              // khong load trang
+              this.users = response.data.listUser;
             }
           });
       }
@@ -427,14 +446,18 @@ export default {
       }
     },
     //Reactivate && deactivate Users
-    reactivate_deactivate(item) {
+    reactivate_deactivate() {
+      //this.itemData.isActivated=0;
       axios
-        .post(API.BASEURL + "/rest/users/activate-deactivate-user", item)
+        .post(
+          API.BASEURL + "/rest/users/activate-deactivate-user",
+          this.itemData
+        )
         .then(response => {
-          if (response.status === 201) {
-            this.users.$set(this.item);
-          }
+          this.users.$set(item);
         });
+      this.dialog2 = false;
+      this.dialog3 = false;
     }
   }
 };
