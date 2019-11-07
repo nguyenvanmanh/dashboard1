@@ -57,9 +57,17 @@
                         <label>Number of Employees:</label>
                         <span>{{editedDept.numberOfEmployee}} employees</span>
                         <div class="add_remove_employee-Icons">
-                          <router-link :to="'/departments/editEmployee/add/'+ editedDept.id">
+                          <!-- <router-link :to="'/departments/editEmployee/add/'+ editedDept.id">
                             <v-icon md class="mr-2">mdi-account-plus</v-icon>
-                          </router-link>
+                          </router-link>-->
+
+                         
+                            <v-icon md class="mr-2"
+                            @click="employeeDialog = !employeeDialog">
+                            mdi-account-plus
+                            </v-icon>
+                         
+
                           <router-link :to="'/departments/editEmployee/delete/'+ editedDept.id">
                             <v-icon md class="mr-2">mdi-account-remove</v-icon>
                           </router-link>
@@ -78,6 +86,10 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+
+          <!-- Render Edit Employee popup modal -->
+           <EditEmployee :openEmployeeDialog="onAddEmployee"/>
+
             <div class="flex-grow-1"></div>
             <!--End popup dialog-->
 
@@ -92,8 +104,8 @@
             <!--end dropdown-->
 
             <v-divider class="mx-4" inset vertical></v-divider>
-            <!-- Implement search bar-->
 
+            <!-- Implement search bar-->
             <v-text-field
               v-model="search"
               append-icon="search"
@@ -101,7 +113,6 @@
               single-line
               hide-details
             ></v-text-field>
-
             <!--End searchbar-->
           </v-toolbar>
         </template>
@@ -130,12 +141,16 @@
 <script>
 import * as API from "../service/API";
 import DepartmentApiService from "../service/department-api-service";
+import EditEmployee from './editEmployee'
 
 export default {
   name: "department",
+  components: { EditEmployee },
   data() {
     return {
+      employeeDialog: false, // This value is set to the value emitted by the child Employee Dialog
       loading: true,
+      pageSize: 0,
       error: false,
       dialog: false,
       seen: true,
@@ -216,11 +231,10 @@ export default {
   },
 
   methods: {
-    // employeeEditRoute(status) {
-    //   //when clicked on Edit button in each dept
-    //   //status can be either delete - or add + existing employee
-    //   this.$router.push("/departments/editEmployee" + status);
-    // },
+     
+    onAddEmployee (value) {
+      this.employeeDialog = value
+    },
 
     editDept(dept) {
       this.editedIndex = this.departments.indexOf(dept);
@@ -260,9 +274,11 @@ export default {
 
       if (this.editedIndex > -1) {
         Object.assign(this.departments[this.editedIndex], this.editedDept);
-        console.log(this.editedDept);
         DepartmentApiService.updateDepartment(this.editedDept) //doesnt work
-          .then(this.departments.$set(this.editedDept))
+          .then(
+             this.departments.$set(this.editedDept)
+            
+            )
           .catch(error => {
             alert(` ${error.response.data}`);
           });
