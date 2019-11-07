@@ -5,7 +5,8 @@
       <v-data-table
         :headers="headers"
         :items="departments"
-        :items-per-page="10"
+        :hide-default-footer="false"
+        :items-per-page-options="pageOptions"
         :search="search"
         class="elevation-1"
         data-app
@@ -99,8 +100,24 @@
               :items="dropdown_status"
               label="Department Status"
               clearable
-              style="margin-top: 24px; width: 100px"
+              style="margin-top: 24px; width: 60px"
             ></v-select>
+            <!-- <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-primary dropdown-toggle bg-trans-gradient"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >Department Status</button>
+                <div class="dropdown-menu">
+                  <v-select v-model="enabled" row :mandatory="false" style="margin-top: 2%">
+                    <v-select class="dropdown-item" label="Inactive" value="0">Inactive</v-select>
+                    <v-select class="dropdown-item" label="Active" value="1">Active</v-select>
+                    <v-select class="dropdown-item" label="All" value="2">All</v-select>
+                  </v-select>
+                </div>
+              </div> -->
             <!--end dropdown-->
 
             <v-divider class="mx-4" inset vertical></v-divider>
@@ -134,6 +151,12 @@
 
         <!--End buttons -->
       </v-data-table>
+       <div class="text-center">
+    <v-pagination
+      v-model="page"
+      :length="6"
+    ></v-pagination>
+  </div>
     </v-app>
   </div>
 </template>
@@ -150,7 +173,7 @@ export default {
     return {
       employeeDialog: false, // This value is set to the value emitted by the child Employee Dialog
       loading: true,
-      pageSize: 0,
+      pageOptions: [5,10,-1],
       error: false,
       dialog: false,
       seen: true,
@@ -340,4 +363,5 @@ button {
 .displayError {
   color: red;
 }
+
 </style>
