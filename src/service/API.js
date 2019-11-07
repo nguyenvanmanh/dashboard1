@@ -21,3 +21,9 @@ export function sendMailAll(campaignIds, selectedCustomer) {
   });
   return axios.post(`${BASEURL}/email/send-campaign`, payload);
 }
+
+export function getCampaigns(page = 0, size = 10) {
+  return axios.get(
+    `${BASEURL}/email/get-all-campaign-detail?page=${page}&size=${size}`
+  );
+}

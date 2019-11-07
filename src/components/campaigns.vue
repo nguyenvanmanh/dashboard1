@@ -127,7 +127,8 @@
           </template>
           <!-- End of Action Icons -->
         </v-data-table>
-        <data-footer></data-footer>
+        <data-footer :totalElement="totalElements"></data-footer>
+
         <!-- select list customer for sending email -->
         <v-dialog v-model="dialogs.listCustomer" scrollable persistent max-width="600px">
           <v-card>
@@ -145,11 +146,9 @@
             ></v-data-table>
 
             <v-card-actions>
-              <!-- <span>{{ selectedCustomer }}</span> -->
-
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="dialogs.listCustomer = false">Close</v-btn>
-              <v-btn color="blue darken-1" text @click="dialogs.listCustomer = false">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="saveCustomer">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -166,7 +165,6 @@
                 <tr v-for="item in templates" :key="item.emaiTemplateId">
                   <td>{{item.title}}</td>
                   <td>{{item.body}}</td>
-                  <td>{{ "temlateid: " + edits.templates.campaignId}}</td>
                 </tr>
               </template>
             </v-data-table>
@@ -197,6 +195,8 @@
     },
     data() {
       return {
+        selectedCampaignId: null,
+        totalElements: null,
         alerts: {
           sendMail: false
         },
@@ -243,7 +243,9 @@
         edits: {
           templates: {}
         },
-        templates: []
+        templates: [],
+        campaignCustomers: [],
+        allCampaignDetails: []
       };
     },
     computed: {
@@ -255,18 +257,20 @@
       axios
         .get(`${baseUrl}/email/get-all-topic`)
         .then(res => {
-          this.templates = res.data;
-          this.emailTemplates.titles = res.data.map(item => item.title);
-          this.emailTemplates.ids = res.data.map(item => item.emaiTemplateId);
+          this.templates = res.data.content;
+          this.emailTemplates.titles = res.data.content.map(item => item.title);
+          this.emailTemplates.ids = res.data.content.map(item => item.id);
         })
         .catch(err => {
           // TODO: log this err
         });
-      axios.get(`${baseUrl}/email/get-all-campaign-detail`).then(res => {
+      API.getCampaigns(0, 20).then(res => {
         res.data.content.map(item => {
+          this.totalElements = res.data.totalElements;
           item.campaign.startDate = item.campaign.startDate.substring(0, 10);
           item.campaign.endDate = item.campaign.endDate.substring(0, 10);
           this.campaigns.push(item.campaign);
+          this.allCampaignDetails = res.data.content;
         });
 
         this.customers = res.data.content[0].customerList;
@@ -303,9 +307,40 @@
             }
           });
       },
-      chooseCustomer(campaign) {
-        console.log(this.selectedCustomer);
+      saveCustomer() {
+        this.allCampaignDetails.forEach(item => {
+          if (item.campaign.id === this.selectedCampaignId) {
+            item.customerCheck = this.selectedCustomer;
+            return;
+          }
+        });
+        this.dialogs.listCustomer = false;
+      },
+      chooseCustomer(campaignId) {
+        //open dialog
         this.dialogs.listCustomer = true;
+        this.selectedCampaignId = campaignId;
+        // find the selected campaign rows details
+        let selectedCampaign = this.allCampaignDetails.find(item => {
+          if (item.campaign.id === campaignId) return item.customerCheck;
+        });
+        this.selectedCustomer = selectedCampaign.customerCheck;
+        //
+        // let listCustomer = this.campaignCustomers.find(
+        //   item => item.campaignId === campaign
+        // );
+        // if (!listCustomer) {
+        //   this.campaignCustomers.push({
+        //     campaignId: campaign,
+        //     list: this.allCampaignDetails.find(item => {
+        //       if (item.campaign.id === campaign) return item.customerCheck;
+        //     })
+        //   });
+        // } else {
+        // }
+        // this.selectedCustomer = this.campaignCustomers.find(item => {
+        //   if (item.campaignId === campaign) return item.list;
+        // });
       },
       sendMail(campaignId) {
         API.sendMail(item.campaignId, this.selectedCustomer);
