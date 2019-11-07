@@ -79,39 +79,14 @@
                 </template>
               </DataTable>
               <!-- datatable end -->
+              
               <!-- pagination start -->
-              <ul class="pagination" style="float: right">
-                <li v-if="this.currentPage==0" id="pre-page " class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1" @click="getPrevious()">Previous</a>
-                </li>
-                <li v-else id="pre-page " class="page-item">
-                  <a class="page-link" href="#" tabindex="-1" @click="getPrevious()">Previous</a>
-                </li>
-                <template v-for="index in totalPages">
-                  <li
-                    v-if="index == (currentPage+1)"
-                    :key="index"
-                    :id="`page_${index}`"
-                    class="page-item active"
-                  >
-                    <a class="page-link" href="#" tabindex="-1" @click="getPage(index)">{{index}}</a>
-                  </li>
-                  <li v-else :key="index" :id="`page_${index}`" class="page-item">
-                    <a class="page-link" href="#" tabindex="-1" @click="getPage(index)">{{index}}</a>
-                  </li>
-                </template>
-
-                <li
-                  v-if="(this.currentPage+1) ==this.totalPages"
-                  id="next-page"
-                  class="page-item disabled"
-                >
-                  <a class="page-link" href="#" @click="getNext()">Next</a>
-                </li>
-                <li v-else id="next-page" class="page-item">
-                  <a class="page-link" href="#" @click="getNext()">Next</a>
-                </li>
-              </ul>
+              <Pagination
+                :clickHandler="clickCallback"
+                :currentPage="currentPage"
+                :totalPages="totalPages"
+                :sizePage="sizePage"
+              ></Pagination>
               <!-- pagination end -->
 
               <!-- dropdown choose number of element -->
@@ -133,8 +108,7 @@ import { VueEditor } from "vue2-editor";
 import AlertAction from "./share/Alert";
 import DataTable from "./share/DataTable";
 import Vue from "vue";
-import Paginate from "vuejs-paginate";
-Vue.component("paginate", Paginate);
+import Pagination from "./share/Pagination";
 
 const base_url = API.BASEURL;
 export default {
@@ -174,14 +148,15 @@ export default {
     row_input: "",
     numberOfElements: "",
     totalPages: 0,
-    currentPage: 0,
+    currentPage: 0, // start = 0
     sizePage: 10
   }),
 
   components: {
     VueEditor,
     AlertAction,
-    DataTable
+    DataTable,
+    Pagination
   },
 
   computed: {
@@ -206,16 +181,8 @@ export default {
 
   methods: {
     initialize() {},
-    getPage(item) {
-      this.fetchTemplateByPage(this.sizePage, item - 1);
-    },
-
-    getPrevious() {
-      this.getPage(this.currentPage + 1 - 1);
-    },
-
-    getNext() {
-      this.getPage(this.currentPage + 1 + 1);
+    clickCallback(targetPage) {
+      this.fetchTemplateByPage(this.sizePage, targetPage - 1);
     },
 
     fetchTemplateByPage(size, targetPage) {
