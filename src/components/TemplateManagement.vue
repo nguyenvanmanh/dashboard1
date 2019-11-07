@@ -4,9 +4,9 @@
       <div class="col-xl-12">
         <div id="panel-1" class="panel">
           <div class="panel-hdr">
-            <span >
+            <span>
               <h3>
-                Template
+                Templates
                 <span class="fw-100">
                   <i>Table</i>
                 </span>
@@ -65,38 +65,57 @@
           <div class="panel-container show">
             <div class="panel-content">
               <!-- datatable start -->
-              <table
-                id="dt-basic-example"
-                class="table table-bordered table-hover table-striped w-100"
-              >
-                <thead>
-                  <tr>
-                    <th class="text-center" style="width: 5%">#</th>
-                    <th class="text-center">Title</th>
-                    <th class="text-center">Body</th>
-                    <th class="text-center" style="width: 15%">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr  v-for="(template,i) in dataTemplates" :key="i" class="text-center">
-                    <td>{{i+1}}</td>
-                    <td>{{template.title}}</td>
-                    <td >{{template.body}}</td>
-                   
-                    <td>
-                      <a
-                        @click="editItem(template)"
-                        class="btn btn-sm btn-outline-primary mr-2"
-                        title="Edit"
-                      >
-                        <i class="fal fa-edit"></i> Edit
-                      </a>
-                    </td>
-                  </tr>
-        
-                </tbody>
-              </table>
+              <DataTable :data="dataTemplates" :header="dataHeader">
+                <template slot="action" slot-scope="dataRow">
+                  <td>
+                    <a
+                      @click="editItem(dataRow.row)"
+                      class="btn btn-sm btn-outline-primary mr-2"
+                      title="Edit"
+                    >
+                      <i class="fal fa-edit"></i>
+                    </a>
+                  </td>
+                </template>
+              </DataTable>
               <!-- datatable end -->
+              <!-- pagination start -->
+              <ul class="pagination" style="float: right">
+                <li v-if="this.currentPage==0" id="pre-page " class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" @click="getPrevious()">Previous</a>
+                </li>
+                <li v-else id="pre-page " class="page-item">
+                  <a class="page-link" href="#" tabindex="-1" @click="getPrevious()">Previous</a>
+                </li>
+                <template v-for="index in totalPages">
+                  <li
+                    v-if="index == (currentPage+1)"
+                    :key="index"
+                    :id="`page_${index}`"
+                    class="page-item active"
+                  >
+                    <a class="page-link" href="#" tabindex="-1" @click="getPage(index)">{{index}}</a>
+                  </li>
+                  <li v-else :key="index" :id="`page_${index}`" class="page-item">
+                    <a class="page-link" href="#" tabindex="-1" @click="getPage(index)">{{index}}</a>
+                  </li>
+                </template>
+
+                <li
+                  v-if="(this.currentPage+1) ==this.totalPages"
+                  id="next-page"
+                  class="page-item disabled"
+                >
+                  <a class="page-link" href="#" @click="getNext()">Next</a>
+                </li>
+                <li v-else id="next-page" class="page-item">
+                  <a class="page-link" href="#" @click="getNext()">Next</a>
+                </li>
+              </ul>
+              <!-- pagination end -->
+
+              <!-- dropdown choose number of element -->
+              <!-- end dropdown -->
             </div>
           </div>
         </div>
@@ -112,11 +131,20 @@ import axios from "axios";
 import * as API from "../service/API";
 import { VueEditor } from "vue2-editor";
 import AlertAction from "./share/Alert";
+import DataTable from "./share/DataTable";
+import Vue from "vue";
+import Paginate from "vuejs-paginate";
+Vue.component("paginate", Paginate);
 
 const base_url = API.BASEURL;
 export default {
   data: () => ({
-    headerTable :['#',"Title","Body","Action"],
+    dataHeader: [
+      { name: "#", width: "5" },
+      { name: "Title", dataFormat: "title", width: "" },
+      { name: "Body", dataFormat: "body", width: "" },
+      { name: "Action", dataFormat: "", width: "15" }
+    ],
     show: true,
     typeAlert: "",
     messageAlert: "",
@@ -143,14 +171,17 @@ export default {
     id_template: "",
     title_input: "",
     body_input: "",
-    row_input: ""
+    row_input: "",
+    numberOfElements: "",
+    totalPages: 0,
+    currentPage: 0,
+    sizePage: 10
   }),
 
   components: {
     VueEditor,
-
-    // props: ["massage"],
-    AlertAction
+    AlertAction,
+    DataTable
   },
 
   computed: {
@@ -175,13 +206,44 @@ export default {
 
   methods: {
     initialize() {},
+    getPage(item) {
+      this.fetchTemplateByPage(this.sizePage, item - 1);
+    },
+
+    getPrevious() {
+      this.getPage(this.currentPage + 1 - 1);
+    },
+
+    getNext() {
+      this.getPage(this.currentPage + 1 + 1);
+    },
+
+    fetchTemplateByPage(size, targetPage) {
+      axios
+        .get(`${base_url}/email/get-all-topic`, {
+          params: {
+            page: targetPage,
+            size: size
+          }
+        })
+        .then(response => {
+          this.dataTemplates = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.currentPage = response.data.number;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errored = true;
+        });
+    },
 
     fetchAllTemplate() {
       axios
         .get(`${base_url}/email/get-all-topic`)
         .then(response => {
-          this.dataTemplates = response.data;
-          console.log(this.dataTemplates)
+          this.dataTemplates = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.currentPage = response.data.number;
         })
         .catch(error => {
           console.log(error);
@@ -206,7 +268,7 @@ export default {
       this.body_input = "";
       this.titleValidate = "none";
       this.isInvalid = "";
-      this.id_template="";
+      this.id_template = "";
       this.closeAlert();
     },
 
@@ -231,7 +293,7 @@ export default {
           axios
             .post(`${base_url}/email/edit-topic/`, data)
             .then(response => {
-              this.fetchAllTemplate();
+              this.fetchTemplateByPage(this.sizePage, this.currentPage);
               this.typeAlert = "success";
               this.messageAlert = "Edit Success";
               this.show = !this.show;
@@ -255,7 +317,7 @@ export default {
           axios
             .post(`${base_url}/email/add-topic/`, data)
             .then(response => {
-              this.fetchAllTemplate();
+              this.fetchTemplateByPage(this.sizePage, this.currentPage);
               this.typeAlert = "success";
               this.messageAlert = "Add Success";
               this.show = !this.show;
@@ -278,7 +340,34 @@ export default {
   bottom: 0;
   right: 0;
 }
-.text-center{
-  text-align: center
+.text-center {
+  text-align: center;
+}
+
+ul.pagination_lib {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+ul.pagination_lib li {
+  display: inline;
+}
+
+ul.pagination_lib li a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+ul.pagination_lib li a.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+ul.pagination_lib li a:hover:not(.active) {
+  background-color: #ddd;
 }
 </style>
