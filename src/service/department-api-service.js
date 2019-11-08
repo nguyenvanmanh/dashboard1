@@ -29,9 +29,10 @@ const DepartmentApiService = {
             .post(`${API.BASEURL}/rest/inActiveDepartment`, dept)
             .then(response => {
                 if (response.status === 201) {
-                    alert(
-                        `Removed department ${dept.name} successfully!`
-                    );
+                    // alert(
+                    //     `Removed department ${dept.name} successfully!`
+                    // );
+                   
 
                 }
             })

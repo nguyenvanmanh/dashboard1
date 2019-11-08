@@ -5,8 +5,9 @@
       <v-data-table
         :headers="headers"
         :items="departments"
-        :hide-default-footer="false"
-        :items-per-page-options="pageOptions"
+        :hide-default-footer="true"
+        :items-per-page= itemsPerPage
+        
         :search="search"
         class="elevation-1"
         data-app
@@ -19,7 +20,7 @@
             <!--Implement popup dialog form-->
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-icon large dark color="blue lighten-2" v-on="on">library_add</v-icon>
+                <v-icon large dark color="blue lighten-2" v-on="on" title="Add new department">library_add</v-icon>
               </template>
 
               <v-card>
@@ -64,12 +65,14 @@
 
                          
                             <v-icon md class="mr-2"
-                            @click="employeeDialog = !employeeDialog">
+                            @click="employeeDialog = !employeeDialog"
+                            title="Add employee">
                             mdi-account-plus
                             </v-icon>
                          
 
-                          <router-link :to="'/departments/editEmployee/delete/'+ editedDept.id">
+                          <router-link :to="'/departments/editEmployee/delete/'+ editedDept.id"
+                          title="Remove employee">
                             <v-icon md class="mr-2">mdi-account-remove</v-icon>
                           </router-link>
                         </div>
@@ -137,14 +140,14 @@
 
         <template v-slot:item.action="{ item }">
           <v-row>
-            <v-icon class="mr-2" @click="editDept(item)">mdi-pencil</v-icon>
+            <v-icon class="mr-2" @click="editDept(item)" title="Edit Department">mdi-pencil</v-icon>
 
             <v-col v-if="item.isActivated == 1">
-              <v-icon class="mr-2" @click="deactivateDept(item)">mdi-lock-open-variant</v-icon>
+              <v-icon class="mr-2" @click="deactivateDept(item)" title="Active Department">mdi-lock-open-variant</v-icon>
             </v-col>
 
             <v-col v-else>
-              <v-icon class="mr-2" @click="reactivateDept(item)">mdi-lock</v-icon>
+              <v-icon class="mr-2" @click="reactivateDept(item)" title="InactiveDepartment">mdi-lock</v-icon>
             </v-col>
           </v-row>
         </template>
@@ -173,7 +176,7 @@ export default {
     return {
       employeeDialog: false, // This value is set to the value emitted by the child Employee Dialog
       loading: true,
-      pageOptions: [5,10,-1],
+      itemsPerPage: "10",
       error: false,
       dialog: false,
       seen: true,
