@@ -3634,17 +3634,17 @@
 <script>
   export default {
     name: "dashboard",
-    // created() {
-    //   if (localStorage.getItem("token")) {
-    //     this.$router.push({
-    //       path: "/"
-    //     });
-    //   } else {
-    //     this.$router.push({
-    //       path: "/"
-    //     });
-    //   }
-    // },
+    created() {
+      if (localStorage.getItem("token")) {
+        this.$router.push({
+          path: "/"
+        });
+      } else {
+        this.$router.push({
+          path: "/login"
+        });
+      }
+    },
     methods: {
       logout() {
         localStorage.removeItem("token");

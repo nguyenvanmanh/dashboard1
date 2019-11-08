@@ -131,71 +131,74 @@
       </div>
     </div>
   </v-app>
-    <!-- <video poster="./assets/img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
+  <!-- <video poster="./assets/img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
       <source src="./assets/media/video/cc.webm" type="video/webm" />
       <source src="./assets/media/video/cc.mp4" type="video/mp4" />
-    </video> -->
+  </video>-->
 </template>
 
 <script>
-import axios from "axios";
-import * as API from '../service/API'
-export default {
-  name: "login",
-  data() {
-    return {
-      isCheck: false,
-      valid: true,
-      usernameRules: [v => !!v || "Username is required !"],
-      passwordRules: [v => !!v || "Password is required !"],
-      users: { username: "", password: "" },
-      addToAPI: Function
-    };
-  },
-  mounted() {
-    let _this = this;
-    this.addToAPI = () => {
-      let newUser = {
-        username: this.users.username,
-        password: this.users.password
+  import axios from "axios";
+  import * as API from "../service/API";
+  export default {
+    name: "login",
+    data() {
+      return {
+        isCheck: false,
+        valid: true,
+        usernameRules: [v => !!v || "Username is required !"],
+        passwordRules: [v => !!v || "Password is required !"],
+        users: { username: "", password: "" },
+        addToAPI: Function
       };
-      axios({
-        method: "post",
-        url: `${API.BASEURL}/rest/login`,
-        data: newUser
-      })
-        .then(function(response) {
-          if (response.status === 200) {
-            localStorage.setItem("token", response.data);
-            _this.$router.push({
-              path: "/"
-            });
-          }
+    },
+    mounted() {
+      let _this = this;
+      this.addToAPI = () => {
+        let newUser = {
+          username: this.users.username,
+          password: this.users.password
+        };
+        axios({
+          method: "post",
+          url: `${API.BASEURL}/rest/login`,
+          data: newUser
         })
-        .catch(() => {
-          this.isCheck = true;
-        });
-    };
-  }
-};
+          .then(function(response) {
+            if (response.status === 200) {
+              debugger;
+              localStorage.setItem("token", response.data);
+              _this.$router.push({
+                path: "/"
+              });
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            debugger;
+            this.isCheck = true;
+          });
+      };
+    }
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3,
-.h3 {
-  font-size: 1.1875rem !important;
-}
-.btn-group-lg > .btn,
-.btn-lg {
-  font-size: unset;
-}
-.btn-danger {
-  background-color: #fd3995;
-  border-color: #fd3995;
-}
-/* .btn-primary {
-  background-color: #fd3995!important;
-  border-color: unset !important;
-} */
+  h3,
+  .h3 {
+    font-size: 1.1875rem !important;
+  }
+  .btn-group-lg > .btn,
+  .btn-lg {
+    font-size: unset;
+  }
+  .btn-danger {
+    background-color: #fd3995;
+    border-color: #fd3995;
+  }
+  /* .btn-primary {
+          background-color: #fd3995!important;
+          border-color: unset !important;
+        } */
 </style>

@@ -6,41 +6,25 @@
           :headers="headersTitle"
           :items="users"
           :search="search"
-          sort-by="userId"
+          sort-by="id"
           class="elevation-1"
+          hide-default-footer
           data-app
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
-              <!-- Implement search bar-->
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
               <v-divider class="mx-4" inset vertical></v-divider>
-              <div class="flex-grow-1"></div>
-              <!--End searchbar-->
-              <!--Implement Active and All radio buttons-->
-              <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
-                <v-radio label="Inactive Users" value="0"></v-radio>
-                <v-radio label="Active Users" value="1"></v-radio>
-                <v-radio label="All" value="2"></v-radio>
-              </v-radio-group>
-              <!--End radio buttons-->
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">ADD NEW USER</v-btn>
+                  <v-icon
+                    large
+                    dark
+                    color="blue lighten-2"
+                    v-on="on"
+                    title="Add a new user."
+                  >library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -123,14 +107,58 @@
                 </v-card>
               </v-dialog>
               <!--End  User management's Edit Information Table -->
+              <!-- Implement search bar-->
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search by id, username"
+                title="Search by id, username, email."
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <!--End searchbar-->
+              <!--Implement Active and All radio buttons-->
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-primary dropdown-toggle bg-trans-gradient"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  title="View users"
+                >View Users</button>
+                <div class="dropdown-menu">
+                  <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
+                    <v-radio class="dropdown-item" label="Inactive" value="0"></v-radio>
+                    <v-radio class="dropdown-item" label="Active" value="1"></v-radio>
+                    <v-radio class="dropdown-item" label="All" value="2"></v-radio>
+                  </v-radio-group>
+                </div>
+              </div>
+              <!--End radio buttons-->
             </v-toolbar>
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon v-if="item.isActivated === 1">mdi-lock-open-variant</v-icon>
-            <v-icon v-if="item.isActivated === 0 || null" @click="showDialog">mdi-lock</v-icon>
-            <v-icon @click="showDialog">mdi-account-edit-outline</v-icon>
-            <v-icon @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon
+              title="Deactivate this user."
+              v-if="item.isActivated === 1"
+              @click="showPopupForActive(item)"
+            >mdi-lock-open-variant</v-icon>
+            <v-icon
+              title="Activate this user."
+              v-if="item.isActivated === 0 || null"
+              @click="showPopupForInactive(item)"
+            >mdi-lock</v-icon>
+            <v-icon title="Set department and role." @click="showDialog">mdi-account-edit-outline</v-icon>
+            <v-icon title="Edit user's information." @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
         </v-data-table>
@@ -172,217 +200,282 @@
           </v-card>
         </v-dialog>
         <!--End Set Department table pop up-->
+        <!-- Show dialog for deactivating users -->
+        <v-dialog v-model="dialog2" max-width="400px">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>Deactivating User</v-card-title>
+            <p></p>
+            <v-card-text>Are you sure, you want to deactivate this user ?</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog2=false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- /.End deactivating users -->
+        <!-- Show dialog for activating users -->
+        <v-dialog v-model="dialog3" max-width="400px">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>Activate User</v-card-title>
+            <p></p>
+            <v-card-text>Are you sure, you want to activate this user ?</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog3=false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- /End activating users -->
       </v-flex>
     </v-layout>
   </v-app>
 </template>
 <script>
-import axios from "axios";
-import * as API from "../service/API"
-
-export default {
-  data() {
-    return {
-      dialog: false,
-      dialog1: false,
-      modal: false,
-      check_activate: false,
-      check_inactivate: false,
-      show1: false,
-      search: "",
-      radios: "2",
-      departmentName: ['DU1','DU2','DU3','DU4','DU5','DU6','DU7','DU8','DU9','DU10','DU11','DU12'],
-      roleName: ['Admin','Manager','Teamlead','PM','BA','SA','Developer','Tester','Directer'],
-      headersTitle: [
-        {
-          text: "UserID",
-          align: "left",
-          sortable: false,
-          value: "userId"
+  import axios from "axios";
+  import * as API from "../service/API";
+  const token =
+    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzMyMTA0ODcsInVzZXJuYW1lIjoiaHVvbmcxIn0.7pAUipXYaziVmE5F2SG60SS7cTBZNbswSqIa6kkcWCU";
+  export default {
+    data() {
+      return {
+        page: 1,
+        itemData: {},
+        dialog: false,
+        dialog1: false,
+        dialog2: false,
+        dialog3: false,
+        modal: false,
+        check_activate: false,
+        check_inactivate: false,
+        show1: false,
+        search: "",
+        radios: "2",
+        departmentName: [
+          "DU1",
+          "DU2",
+          "DU3",
+          "DU4",
+          "DU5",
+          "DU6",
+          "DU7",
+          "DU8",
+          "DU9",
+          "DU10",
+          "DU11",
+          "DU12"
+        ],
+        roleName: [
+          "Admin",
+          "Manager",
+          "Teamlead",
+          "PM",
+          "BA",
+          "SA",
+          "Developer",
+          "Tester",
+          "Directer"
+        ],
+        headersTitle: [
+          {
+            text: "UserID",
+            align: "left",
+            sortable: false,
+            value: "id"
+          },
+          { text: "Firstname", value: "firstName" },
+          { text: "Lastname", value: "lastName" },
+          { text: "Email", value: "email" },
+          { text: "UserName", value: "username" },
+          // { text: "Password", value: "password" },
+          { text: "Date of Birth", value: "dob" },
+          { text: "Department", value: "departmentCodeAll" },
+          // { text: "Registed Date", value: "registeredDate" },
+          // { text: "Activated Date", value: "activatedDate" },
+          // { text: "End Date", value: "endDate" },
+          { text: "Seniority", value: "seniority" },
+          { text: "Actions", value: "action", sortable: false }
+        ],
+        users: [],
+        editedIndex: -1,
+        editedItem: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          username: "",
+          password: "",
+          dob: "",
+          departmentCodeAll: "",
+          registeredDate: ""
         },
-        { text: "Firstname", value: "firstName" },
-        { text: "Lastname", value: "lastName" },
-        { text: "Email", value: "email" },
-        { text: "UserName", value: "username" },
-        // { text: "Password", value: "password" },
-        { text: "Date of Birth", value: "dob" },
-        { text: "Department", value: "departmentCodeAll" },
-        { text: "Registed Date", value: "registeredDate" },
-        // { text: "Activated Date", value: "activatedDate" },
-        // { text: "End Date", value: "endDate" },
-        { text: "Seniority", value: "seniority" },
-        { text: "Actions", value: "action", sortable: false }
-      ],
-      users: [],
-      editedIndex: -1,
-      editedItem: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        username: "",
-        password: "",
-        dob: "",
-        departmentCodeAll: "",
-        registeredDate: ""
+        defaultItem: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          username: "",
+          password: "",
+          dob: "",
+          departmentCodeAll: "",
+          registeredDate: ""
+        }
+      };
+    },
+    computed: {
+      formTitle() {
+        return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      }
+    },
+    watch: {
+      dialog(val) {
+        val || this.close();
       },
-      defaultItem: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        username: "",
-        password: "",
-        dob: "",
-        departmentCodeAll: "",
-        registeredDate: ""
-      }
-    };
-  },
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
-  },
-  watch: {
-    dialog(val) {
-      val || this.close();
+      radios: "changeUsersStatus"
     },
-    radios: "changeUsersStatus"
-  },
-  created() {
-    this.initialize();
-  },
-
-  methods: {
-    // get employee's information from database by using axios
-    fetchUsers() {
-      axios
-        .get( API.BASEURL + "/rest/users/list", {
-          headers: { Authorization: localStorage.getItem("token") }
-        })
-        .then(response => {
-          this.users = response.data;
+    created() {
+      this.initialize();
+    },
+    methods: {
+      // get employee's information from database by using axios
+      fetchUsers() {
+        axios.get(API.BASEURL + "/rest/users/list").then(response => {
+          this.users = response.data.listUser;
+          console.log(response.data.listUser);
         });
-    },
-    initialize() {
-      this.fetchUsers();
-    },
-    // Edit Employee's Information
-    editItem(item) {
-      this.editedIndex = this.users.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      localStorage.setItem("userId", item.userId);
-      this.dialog = true;
-    },
-    // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
-    showDialog() {
-      this.dialog1 = true;
-    },
-    // Close dilog Edited employee's information
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-    // Save dialog Edited employee's information
-    save() {
-      if (this.editedIndex > -1) {
-        
+      },
+      initialize() {
+        this.fetchUsers();
+      },
+      // Edit Employee's Information
+      editItem(item) {
+        this.editedIndex = this.users.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        localStorage.setItem("id", item.id);
+        this.dialog = true;
+      },
+      // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
+      showDialog() {
+        this.dialog1 = true;
+      },
+      // Show dialog to deactivate users
+      showPopupForInactive(item) {
+        this.dialog2 = true;
+        this.itemData = item;
+      },
+      // Show dialog to ctivate users
+      showPopupForActive(item) {
+        this.itemData = item;
+        this.dialog3 = true;
+      },
+      // Close dilog Edited employee's information
+      close() {
+        this.dialog = false;
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1;
+        }, 300);
+      },
+      // Save dialog Edited employee's information
+      save() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.users[this.editedIndex], this.editedItem);
+          axios
+            .post(
+              API.BASEURL + "/rest/users/edit/" + this.page,
+              this.editedItem,
+              {
+                headers: {
+                  authorization: token
+                }
+              }
+            )
+            .then(response => {
+              if (response.status === 200) {
+                // khong load trang
+                this.users = response.data.listUser;
+              }
+            });
+        } else {
+          this.users.push(this.editedItem);
+          axios
+            .post(API.BASEURL + "/rest/users/add", this.editedItem, {
+              headers: {
+                Authorization: token
+              }
+            })
+            .then(response => {
+              if (response.status === 200) {
+                // khong load trang
+                console.log(response.data);
+                this.users = response.data.listUser;
+              }
+            });
+        }
+        this.close();
+      },
+      //Active & Inactive Users Button
+      changeUsersStatus() {
+        //Active vs Inactive Users-> load corresponding data
+        let self = this;
+        //O is inactive dept
+        if (this.radios === "1") {
+          axios
+            .get(`${API.BASEURL}/rest/users/list/1`)
+            .then(function(response) {
+              self.users = response.data;
+            })
+            .catch(err => {
+              // eslint-disable-next-line
+              console.log(err);
+            });
+        }
+        if (this.radios === "0") {
+          axios
+            .get(`${API.BASEURL}/rest/users/list/0`)
+            .then(function(response) {
+              // eslint-disable-next-line
+              self.users = response.data;
+            })
+            .catch(err => {
+              // eslint-disable-next-line
+              console.log(err);
+            });
+        }
+        if (this.radios === "2") {
+          axios
+            .get(`${API.BASEURL}/rest/users/list`)
+            .then(function(response) {
+              // eslint-disable-next-line
+              self.users = response.data;
+            })
+            .catch(err => {
+              // eslint-disable-next-line
+              console.log(err);
+            });
+        }
+      },
+      //Reactivate && deactivate Users
+      reactivate_deactivate() {
+        //this.itemData.isActivated=0;
         axios
-          .post( API.BASEURL+"/rest/users/edit", this.editedItem,{
-            headers:{
-              Authorization: "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzI5MjQxOTgsInVzZXJuYW1lIjoiaHVvbmd0dHQifQ.-ijqSiJjegcz9r5E6ySFnVeJxJ3UnKJypFwAYz_jTrM"
-            }
-          })
+          .post(
+            API.BASEURL + "/rest/users/activate-deactivate-user",
+            this.itemData
+          )
           .then(response => {
-            
-            if (response.status === 200) {
-              alert(response.data);
-              this.users[this.editedIndex] = this.editedItem;
-            }
-          })
-          .catch(error => {
-            // eslint-disable-next-line
-            alert(error.response.data);
+            this.users.$set(item);
           });
-      } else {
-        axios
-          .post( API.BASEURL + "/rest/users/add", this.editedItem)
-          .then(response => {
-            console.log(response)
-            if (response.status === 200) {
-              alert(`Add a new user successfully !`);
-              this.users = response.data;
-            }
-           
-          }).catch(err => {
-            let message;
-            err = err.response
-            if(err.status == 406)
-              message = "Invalid email"
-            else if( err.status === 409)              
-              message = "username or email already taken"
-            else
-              message = "Internal server error!"
-            alert(message)
-          });
-      }
-      this.close();
-    },
-    //Active & Inactive Users Button
-    changeUsersStatus() {
-      //Active vs Inactive Users-> load corresponding data
-      let self = this;
-      //O is inactive dept
-      if (this.radios === "1") {
-        axios
-          .get(`${API.BASEURL}/rest/users/list/1`)
-
-          .then(function(response) {
-            self.users = response.data;
-          })
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
-      if (this.radios === "0") {
-        axios
-          .get(`${API.BASEURL}/rest/users/list/0`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data;
-          })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
-      if (this.radios === "2") {
-        axios
-          .get(`${API.BASEURL}/rest/users/list`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data;
-          })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
+        this.dialog2 = false;
+        this.dialog3 = false;
       }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.v-application .primary {
-  background-color: #1e90ff !important;
-}
+  .v-application .primary {
+    background-color: #1e90ff !important;
+  }
 </style>
-
