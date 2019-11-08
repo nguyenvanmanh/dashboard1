@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-    
     <v-layout>
       <v-flex>
         <v-data-table
@@ -19,7 +18,13 @@
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-icon large dark color="blue lighten-2" v-on="on" title="Add a new user.">library_add</v-icon>
+                  <v-icon
+                    large
+                    dark
+                    color="blue lighten-2"
+                    v-on="on"
+                    title="Add a new user."
+                  >library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -152,7 +157,10 @@
               v-if="item.isActivated === 0 || null"
               @click="showPopupForInactive(item)"
             >mdi-lock</v-icon>
-            <v-icon title="Set department and role." @click="showDialog">mdi-account-edit-outline</v-icon>
+            <v-icon
+              title="Set department and role."
+              @click="showDialog(item)"
+            >mdi-account-edit-outline</v-icon>
             <v-icon title="Edit user's information." @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
@@ -165,26 +173,48 @@
             </v-card-title>
             <v-card-text>
               <v-container id="dropdown-example">
-                <v-row>
-                  <v-col cols="12" sm="6">
-                    <p>Department</p>
-                    <v-overflow-btn
-                      class="my-2"
-                      :items="departmentName"
-                      label="Trung tâm phần mềm 1"
-                      target="#dropdown-example"
-                    ></v-overflow-btn>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <p>Role</p>
-                    <v-overflow-btn
-                      class="my-2"
-                      :items="roleName"
-                      label="Developer"
-                      target="#dropdown-example"
-                    ></v-overflow-btn>
-                  </v-col>
-                </v-row>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Department</th>
+                        <th class="text-left">Role</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in departmentRole" :key="item.name">
+                        <td>{{ item.departmentName }}</td>
+                        <td>{{ item.roleName }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-container>
+              <v-container id="dropdown-example">
+                <v-simple-table>
+                  <template v-slot:default>
+                    <p>Set department & role for this user : </p>
+                    <v-row>
+                      <v-col cols="12" sm="6">
+                        <v-overflow-btn
+                          class="my-2"
+                          :items="departmentName"
+                          label="Choose Department"
+                          target="#dropdown-example"
+                        ></v-overflow-btn>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        
+                        <v-overflow-btn
+                          class="my-2"
+                          :items="roleName"
+                          label="Choose Role"
+                          target="#dropdown-example"
+                        ></v-overflow-btn>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-simple-table>
               </v-container>
             </v-card-text>
             <v-card-actions>
@@ -236,6 +266,7 @@ import * as API from "../service/API";
 export default {
   data() {
     return {
+      item: {},
       itemData: {},
       dialog: false,
       dialog1: false,
@@ -277,7 +308,7 @@ export default {
           text: "UserID",
           align: "left",
           sortable: false,
-          value: "userId"
+          value: "id"
         },
         { text: "Firstname", value: "firstName" },
         { text: "Lastname", value: "lastName" },
@@ -285,7 +316,7 @@ export default {
         { text: "UserName", value: "username" },
         // { text: "Password", value: "password" },
         { text: "Date of Birth", value: "dob" },
-        { text: "Department", value: "departmentCodeAll" },
+        // { text: "Department", value: "departmentCodeAll" },
         // { text: "Registed Date", value: "registeredDate" },
         // { text: "Activated Date", value: "activatedDate" },
         // { text: "End Date", value: "endDate" },
@@ -313,7 +344,8 @@ export default {
         dob: "",
         departmentCodeAll: "",
         registeredDate: ""
-      }
+      },
+      departmentRole: []
     };
   },
   computed: {
@@ -353,8 +385,19 @@ export default {
       this.dialog = true;
     },
     // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
-    showDialog() {
+    showDialog(item) {
       this.dialog1 = true;
+      let arr = [];
+      let length = item.listDepartmentDTO.length;
+      if (length > 0) {
+        for (let i = 0; i < length; i++) {
+          arr.push({
+            departmentName: item.listDepartmentDTO[i].code,
+            roleName: item.listDepartmentDTO[i].role.code
+          });
+        }
+      }
+      this.departmentRole = arr;
     },
     // Show dialog to deactivate users
     showPopupForInactive(item) {
@@ -409,7 +452,7 @@ export default {
           .get(`${API.BASEURL}/rest/users/list/1`)
 
           .then(function(response) {
-            self.users = response.data;
+            self.users = response.data.listUser;
           })
           .catch(err => {
             // eslint-disable-next-line
@@ -422,12 +465,11 @@ export default {
 
           .then(function(response) {
             // eslint-disable-next-line
-            self.users = response.data;
+            self.users = response.data.listUser;
           })
 
           .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+            console.lo; // eslint-disable-next-lineg(err);
           });
       }
       if (this.radios === "2") {
@@ -436,7 +478,7 @@ export default {
 
           .then(function(response) {
             // eslint-disable-next-line
-            self.users = response.data;
+            self.users = response.data.listUser;
           })
 
           .catch(err => {

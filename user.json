@@ -1,145 +1,7 @@
 {
   "user": [
     {
-      "userId": 4,
-      "firstName": "1 dep activated 1 dep not",
-      "lastName": "Test",
-      "email": "ntgptit4@gmail.com",
-      "username": "ntgptit4",
-      "password": "123456",
-      "dob": "1994-10-18",
-      "registeredDate": "2019-10-24",
-      "activatedDate": null,
-      "seniority": 0,
-      "isActivated": 1,
-      "updatedBy": null,
-      "createTimestamp": null,
-      "updateTimestamp": null,
-      "departmentCodeAll": null,
-      "listDepartmentRole": [
-        {
-          "department": {
-            "id": 4,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 4,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        },
-        {
-          "department": {
-            "id": 4,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 4,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        },
-        {
-          "department": {
-            "id": 4,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 4,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        }
-      ]
-    },
-    {
-      "userId": 3,
-      "firstName": "2 dep activated",
-      "lastName": "Test",
-      "email": "ntgptit3@gmail.com",
-      "username": "ntgptit3",
-      "password": "123456",
-      "dob": "1994-10-17",
-      "registeredDate": "2019-10-24",
-      "activatedDate": null,
-      "seniority": 0,
-      "isActivated": 1,
-      "updatedBy": null,
-      "createTimestamp": null,
-      "updateTimestamp": null,
-      "departmentCodeAll": null,
-      "listDepartmentRole": [
-        {
-          "department": {
-            "id": 3,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 3,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        },
-        {
-          "department": {
-            "id": 3,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 3,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        }
-      ]
-    },
-    {
-      "userId": 2,
+      "id": 2,
       "firstName": "Activated but not in dept",
       "lastName": "Test",
       "email": "ntgptit2@gmail.com",
@@ -148,28 +10,64 @@
       "dob": "1994-10-16",
       "registeredDate": "2019-10-24",
       "activatedDate": null,
-      "seniority": 0,
+      "seniority": 0.1,
       "isActivated": 1,
       "updatedBy": null,
       "createTimestamp": null,
       "updateTimestamp": null,
       "departmentCodeAll": null,
-      "listDepartmentRole": [
+      "listDepartmentDTO": []
+    },
+    {
+      "id": 3,
+      "firstName": "2 dep activated",
+      "lastName": "Test",
+      "email": "ntgptit3@gmail.com",
+      "username": "ntgptit3",
+      "password": "123456",
+      "dob": "1994-10-17",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0.1,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentDTO": [
         {
-          "department": {
-            "id": 2,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
+          "id": 2,
+          "name": "Trung tam phan mem 2",
+          "code": "CMC_DU2",
+          "numberOfEmployees": null,
+          "isActivated": null,
+          "stayOrLeave": 1,
+          "updateBy": null,
+          "createTimestamp": null,
+          "updateTimestamp": null,
+          "role": {
+            "id": 1,
+            "name": "Ky Su Lap Trinh 2",
+            "code": "DEV2",
             "updateBy": null,
             "createTimestamp": null,
             "updateTimestamp": null
-          },
+          }
+        },
+        {
+          "id": 3,
+          "name": "Trung tam phan mem 3",
+          "code": "CMC_DU3",
+          "numberOfEmployees": null,
+          "isActivated": null,
+          "stayOrLeave": 1,
+          "updateBy": null,
+          "createTimestamp": null,
+          "updateTimestamp": null,
           "role": {
             "id": 2,
-            "name": null,
-            "code": null,
+            "name": "Ky Su Lap Trinh 3",
+            "code": "DEV3",
             "updateBy": null,
             "createTimestamp": null,
             "updateTimestamp": null
@@ -178,7 +76,83 @@
       ]
     },
     {
-      "userId": 5,
+      "id": 4,
+      "firstName": "1 dep activated 1 dep not",
+      "lastName": "Test",
+      "email": "ntgptit4@gmail.com",
+      "username": "ntgptit4",
+      "password": "123456",
+      "dob": "1994-10-18",
+      "registeredDate": "2019-10-24",
+      "activatedDate": null,
+      "seniority": 0.1,
+      "isActivated": 1,
+      "updatedBy": null,
+      "createTimestamp": null,
+      "updateTimestamp": null,
+      "departmentCodeAll": null,
+      "listDepartmentDTO": [
+        {
+          "id": 1,
+          "name": "Trung tam phan mem 1",
+          "code": "CMC_DU1",
+          "numberOfEmployees": null,
+          "isActivated": null,
+          "stayOrLeave": 1,
+          "updateBy": null,
+          "createTimestamp": null,
+          "updateTimestamp": null,
+          "role": {
+            "id": 1,
+            "name": "Ky Su Lap Trinh 2",
+            "code": "DEV2",
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        },
+        {
+          "id": 2,
+          "name": "Trung tam phan mem 2",
+          "code": "CMC_DU2",
+          "numberOfEmployees": null,
+          "isActivated": null,
+          "stayOrLeave": 1,
+          "updateBy": null,
+          "createTimestamp": null,
+          "updateTimestamp": null,
+          "role": {
+            "id": 2,
+            "name": "Ky Su Lap Trinh 3",
+            "code": "DEV3",
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        },
+        {
+          "id": 3,
+          "name": "Trung tam phan mem 3",
+          "code": "CMC_DU3",
+          "numberOfEmployees": null,
+          "isActivated": null,
+          "stayOrLeave": 0,
+          "updateBy": null,
+          "createTimestamp": null,
+          "updateTimestamp": null,
+          "role": {
+            "id": 3,
+            "name": "Ky Su Lap Trinh 4",
+            "code": "DEV4",
+            "updateBy": null,
+            "createTimestamp": null,
+            "updateTimestamp": null
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
       "firstName": "Activated but not in dept",
       "lastName": "Test",
       "email": "ntgptit5@gmail.com",
@@ -187,37 +161,16 @@
       "dob": "1994-10-19",
       "registeredDate": "2019-10-24",
       "activatedDate": null,
-      "seniority": 0,
+      "seniority": 0.1,
       "isActivated": 1,
       "updatedBy": null,
       "createTimestamp": null,
       "updateTimestamp": null,
       "departmentCodeAll": null,
-      "listDepartmentRole": [
-        {
-          "department": {
-            "id": 5,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 5,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        }
-      ]
+      "listDepartmentDTO": []
     },
     {
-      "userId": 6,
+      "id": 6,
       "firstName": "Activated but not in dept",
       "lastName": "Test",
       "email": "ntgptit6@gmail.com",
@@ -226,73 +179,13 @@
       "dob": "1994-10-20",
       "registeredDate": "2019-10-24",
       "activatedDate": null,
-      "seniority": 0,
+      "seniority": 0.1,
       "isActivated": 1,
       "updatedBy": null,
       "createTimestamp": null,
       "updateTimestamp": null,
       "departmentCodeAll": null,
-      "listDepartmentRole": [
-        {
-          "department": {
-            "id": 6,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 6,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        }
-      ]
-    },
-    {
-      "userId": 1,
-      "firstName": "Not activated",
-      "lastName": "Test",
-      "email": "ntgptit1@gmail.com",
-      "username": "ntgptit1",
-      "password": "123456",
-      "dob": "1994-10-15",
-      "registeredDate": "2019-10-24",
-      "activatedDate": null,
-      "seniority": 0,
-      "isActivated": 0,
-      "updatedBy": null,
-      "createTimestamp": null,
-      "updateTimestamp": null,
-      "departmentCodeAll": null,
-      "listDepartmentRole": [
-        {
-          "department": {
-            "id": 1,
-            "name": null,
-            "code": null,
-            "numberOfEmployees": 0,
-            "isActivated": 0,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          },
-          "role": {
-            "id": 1,
-            "name": null,
-            "code": null,
-            "updateBy": null,
-            "createTimestamp": null,
-            "updateTimestamp": null
-          }
-        }
-      ]
+      "listDepartmentDTO": []
     }
   ]
 }
