@@ -193,7 +193,7 @@
               <v-container id="dropdown-example">
                 <v-simple-table>
                   <template v-slot:default>
-                    <p>Set department & role for this user : </p>
+                    <p>Set department & role for this user :</p>
                     <v-row>
                       <v-col cols="12" sm="6">
                         <v-overflow-btn
@@ -204,7 +204,6 @@
                         ></v-overflow-btn>
                       </v-col>
                       <v-col cols="12" sm="6">
-                        
                         <v-overflow-btn
                           class="my-2"
                           :items="roleName"
