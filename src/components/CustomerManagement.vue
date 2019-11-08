@@ -25,28 +25,89 @@
                   <v-container>
                     <v-row v-model="row_input">
                       <v-col cols="12">
-                        <label class="form-label" for="simpleinputInvalid">Title</label>
+                        <label class="form-label" for="simpleinputInvalid">First Name</label>
                         <input
                           type="text"
-                          v-bind:class="[formControl, isInvalid]"
+                          v-bind:class="[formControl, firstNameValidate]"
                           id="simpleinputInvalid"
-                          v-model="title_input"
+                          v-model="firstNameInput"
                           required
                         />
                         <div
                           class="invalid-feedback"
-                          :style="{display: titleValidate}"
+                          :style="{display: firstNameValidate}"
                         >Please enter text in here.</div>
                       </v-col>
                       <v-col cols="12">
-                        <label class="form-label" for="example-password">Body</label>
+                        <label class="form-label" for="example-password">Last Name</label>
                         <input
                           type="text"
-                          v-bind:class="[formControl, isInvalid]"
+                          v-bind:class="[formControl, lastNameValidate]"
                           id="simpleinputInvalid"
-                          v-model="title_input"
+                          v-model="lastNameInput"
                           required
                         />
+                        <div
+                          class="invalid-feedback"
+                          :style="{display: lastNameValidate}"
+                        >Please enter text in here.</div>
+                      </v-col>
+                      <v-col cols="12">
+                        <label class="form-label" for="example-password">Date of Birth</label>
+
+                        <v-menu v-model="menu1" :close-on-content-click="false" max-width="290">
+                          <template v-slot:activator="{ on }">
+                            <v-text-field :value="dobInput" clearable readonly v-on="on"></v-text-field>
+                          </template>
+                          <v-date-picker v-model="dobInput" @change="menu1 = false"></v-date-picker>
+                        </v-menu>
+                        <div
+                          class="invalid-feedback"
+                          :style="{display: dobValidate}"
+                        >Please enter text in here.</div>
+                      </v-col>
+                      <v-col cols="12">
+                        <label class="form-label" for="example-password">Email</label>
+                        <input
+                          type="text"
+                          v-bind:class="[formControl, emailValidate]"
+                          id="simpleinputInvalid"
+                          v-model="emailInput"
+                          required
+                        />
+                        <div
+                          class="invalid-feedback"
+                          :style="{display: emailValidate}"
+                        >Please enter text in here.</div>
+                      </v-col>
+
+                      <v-col cols="12">
+                        <label class="form-label" for="example-password">Address</label>
+                        <input
+                          type="text"
+                          v-bind:class="[formControl, addressValidate]"
+                          id="simpleinputInvalid"
+                          v-model="addressInput"
+                          required
+                        />
+                        <div
+                          class="invalid-feedback"
+                          :style="{display: addressValidate}"
+                        >Please enter text in here.</div>
+                      </v-col>
+                      <v-col cols="12">
+                        <label class="form-label" for="example-password">Company</label>
+                        <input
+                          type="text"
+                          v-bind:class="[formControl, companyValidate]"
+                          id="simpleinputInvalid"
+                          v-model="companyInput"
+                          required
+                        />
+                        <div
+                          class="invalid-feedback"
+                          :style="{display: companyValidate}"
+                        >Please enter text in here.</div>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -66,7 +127,11 @@
               <DataTable :data="dataTemplates" :header="dataHeader">
                 <template slot="action" slot-scope="dataRow">
                   <td>
-                    <a class="btn btn-sm btn-outline-danger mr-2" title="Delete Record">
+                    <a
+                      @click="deleteItem(dataRow.row)"
+                      class="btn btn-sm btn-outline-danger mr-2"
+                      title="Delete Record"
+                    >
                       <i class="fal fa-times"></i>
                     </a>
                     <a
@@ -122,6 +187,21 @@ export default {
       { name: "Company", dataFormat: "company", width: "" },
       { name: "Action", dataFormat: "", width: "15" }
     ],
+    firstNameInput: "",
+    lastNameInput: "",
+    dobInput: new Date().toISOString().substr(0, 10),
+    emailInput: "",
+    companyInput: "",
+    addressInput: "",
+    firstNameValidate: "",
+    lastNameValidate: "",
+    dobValidate: "",
+    emailValidate: "",
+    companyValidate: "",
+    addressValidate: "",
+
+    id_customer: "",
+
     show: true,
     typeAlert: "",
     messageAlert: "",
@@ -130,7 +210,7 @@ export default {
     titleValidate: "none",
     dialog: false,
     dataTemplates: [],
-    editedIndex: -1,
+    editedIndex: 0,
     id_template: "",
     title_input: "",
     body_input: "",
@@ -138,7 +218,11 @@ export default {
     numberOfElements: "",
     totalPages: 0,
     currentPage: 0, // start = 0
-    sizePage: 10
+    sizePage: 10,
+
+    date: new Date().toISOString().substr(0, 10),
+    menu1: false,
+    menu2: false
   }),
 
   components: {
@@ -149,7 +233,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Add New Template" : "Edit Template";
+      return this.editedIndex === -1 ? "Add New Customer" : "Edit Customer";
     }
   },
 
@@ -169,6 +253,11 @@ export default {
 
   methods: {
     initialize() {},
+
+    // computedDateFormattedMomentjs() {
+    //   return this.date ? moment(this.date).format("dddd, MMMM Do YYYY") : "";
+    // },
+
     clickCallback(targetPage) {
       this.fetchCustomerByPage(this.sizePage, targetPage - 1);
     },
@@ -206,38 +295,14 @@ export default {
         });
     },
 
-    editItem(item) {
-      this.dialog = true;
-      console.log(item);
-      //   this.editedIndex = 0;
-      //   this.id_template = item.id;
-      //   this.title_input = item.title;
-      //   this.body_input = item.body;
-    },
-
-    close() {
-      this.dialog = false;
-      this.closeAlert();
-    },
-
-    save() {
-      let data = {};
-      if (this.id_template !== "") {
-        if (this.title_input == "") {
-          this.titleValidate = "block";
-          this.isInvalid = "is-invalid";
-        } else {
-          data = {
-            id: this.id_template,
-            title: this.title_input,
-            body: this.body_input
-          };
-          axios
-            .post(`${base_url}/email/edit-topic/`, data)
+    deleteItem(item) {
+      if (confirm("Do you really want to delete?")) {
+         axios
+            .post(`${base_url}/customer/delete-customer?id=${item.id}`, )
             .then(response => {
-              this.fetchTemplateByPage(this.sizePage, this.currentPage);
+              this.fetchCustomerByPage(this.sizePage, this.currentPage);
               this.typeAlert = "success";
-              this.messageAlert = "Edit Success";
+              this.messageAlert = "Delete Success";
               this.show = !this.show;
             })
             .catch(e => {
@@ -245,23 +310,99 @@ export default {
               this.messageAlert = e.toString();
               this.show = !this.show;
             });
-          this.close();
-        }
-      } else {
-        if (this.title_input == "") {
-          this.titleValidate = "block";
-          this.isInvalid = "is-invalid";
+      }
+    },
+
+    editItem(item) {
+      this.dialog = true;
+      this.id_customer = item.id;
+
+      this.firstNameInput = item.firstName;
+      this.lastNameInput = item.lastName;
+      this.dobInput = item.dob;
+      this.emailInput = item.email;
+      this.addressInput = item.address;
+      this.companyInput = item.company;
+    },
+
+    close() {
+      this.dialog = false;
+      this.firstNameInput = "";
+      this.lastNameInput = "";
+      this.dobInput = "";
+      this.emailInput = "";
+      this.addressInput = "";
+      this.companyInput = "";
+      this.firstNameValidate = "";
+      this.lastNameValidate = "";
+      this.dobValidate = "";
+      this.emailValidate = "";
+      this.addressValidate = "";
+      this.companyValidate = "";
+    },
+
+    save() {
+      let data = {};
+      if (this.id_customer !== "") {
+        let checkNull = true;
+        if (this.firstNameInput === "") {
+          this.firstNameValidate = "is-invalid";
+          checkNull = false;
         } else {
+          this.firstNameValidate = "";
+        }
+
+        if (this.lastNameInput === "") {
+          this.lastNameValidate = "is-invalid";
+          checkNull = false;
+        } else {
+          this.lastNameValidate = "";
+        }
+
+        // if (this.dobInput === "") {
+        //   this.dobValidate = "is-invalid";
+        //   checkNull = false;
+        // } else {
+        //   this.dobValidate = "";
+        // }
+
+        if (this.emailInput === "") {
+          this.emailValidate = "is-invalid";
+          checkNull = false;
+        } else {
+          this.emailValidate = "";
+        }
+
+        if (this.addressInput === "") {
+          this.addressValidate = "is-invalid";
+          checkNull = false;
+        } else {
+          this.addressValidate = "";
+        }
+        if (this.companyInput === "") {
+          this.companyValidate = "is-invalid";
+          checkNull = false;
+        } else {
+          this.companyValidate = "";
+        }
+
+        if (checkNull === true) {
           data = {
-            title: this.title_input,
-            body: this.body_input
+            id: this.id_customer,
+            firstName: this.firstNameInput,
+            lastName: this.lastNameInput,
+            dob: this.dobInput,
+            email: this.emailInput,
+            address: this.addressInput,
+            company: this.companyInput
           };
+
           axios
-            .post(`${base_url}/email/add-topic/`, data)
+            .post(`${base_url}/customer/edit-customer`, data)
             .then(response => {
-              this.fetchTemplateByPage(this.sizePage, this.currentPage);
+              this.fetchCustomerByPage(this.sizePage, this.currentPage);
               this.typeAlert = "success";
-              this.messageAlert = "Add Success";
+              this.messageAlert = "Edit Success";
               this.show = !this.show;
             })
             .catch(e => {

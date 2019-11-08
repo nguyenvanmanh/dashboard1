@@ -151,7 +151,7 @@ export default {
   },
 
   mounted() {
-    this.fetchAllTemplate();
+    this.fetchTemplateByPage(this.sizePage, 0);
   },
 
   watch: {
@@ -188,20 +188,6 @@ export default {
           this.errored = true;
         });
     },
-
-    fetchAllTemplate() {
-      axios
-        .get(`${base_url}/email/get-all-topic`)
-        .then(response => {
-          this.dataTemplates = response.data.content;
-          this.totalPages = response.data.totalPages;
-          this.currentPage = response.data.number;
-        })
-        .catch(error => {
-          console.log(error);
-          this.errored = true;
-        });
-    },
     
     editItem(item) {
       this.dialog = true;
@@ -222,7 +208,7 @@ export default {
       this.titleValidate = "none";
       this.isInvalid = "";
       this.id_template = "";
-      this.closeAlert();
+      // this.closeAlert();
     },
 
     save() {

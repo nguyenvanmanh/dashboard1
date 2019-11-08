@@ -23,7 +23,7 @@
     >
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">
-          <i class="fal fa-trash-alt"></i>
+           <i class="fal fa-times"></i>
         </span>
       </button>
       <strong>Oh snap!</strong>
@@ -71,6 +71,7 @@ export default {
 <style scoped>
 .fixed {
   position: fixed;
+  z-index: 10;
   bottom: 0;
   right: 0;
 }
