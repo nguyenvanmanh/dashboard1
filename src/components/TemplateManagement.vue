@@ -64,8 +64,9 @@
           </div>
           <div class="panel-container show">
             <div class="panel-content">
+              <loading  :style="`display:${loadingDisplay}`" ></loading>
               <!-- datatable start -->
-              <DataTable :data="dataTemplates" :header="dataHeader">
+              <DataTable  :style="`display:${tableDisplay}`" :data="dataTemplates" :header="dataHeader">
                 <template slot="action" slot-scope="dataRow">
                   <td>
                     <a
@@ -109,6 +110,7 @@ import AlertAction from "./share/Alert";
 import DataTable from "./share/DataTable";
 import Vue from "vue";
 import Pagination from "./share/Pagination";
+import Loading from "./share/Loading";
 
 const base_url = API.BASEURL;
 export default {
@@ -134,14 +136,17 @@ export default {
     row_input: "",
     totalPages: 0,
     currentPage: 0, // start = 0
-    sizePage: 10
+    sizePage: 10,
+    tableDisplay: "none",
+    loadingDisplay: "block"
   }),
 
   components: {
     VueEditor,
     AlertAction,
     DataTable,
-    Pagination
+    Pagination,
+    Loading
   },
 
   computed: {
@@ -171,6 +176,8 @@ export default {
     },
 
     fetchTemplateByPage(size, targetPage) {
+      this.tableDisplay = "none";
+      this.loadingDisplay = "block";
       axios
         .get(`${base_url}/email/get-all-topic`, {
           params: {
@@ -182,13 +189,15 @@ export default {
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
           this.currentPage = response.data.number;
+          (this.tableDisplay = "block"), (this.loadingDisplay = "none");
         })
         .catch(error => {
           console.log(error);
           this.errored = true;
+          (this.tableDisplay = "block"), (this.loadingDisplay = "none");
         });
     },
-    
+
     editItem(item) {
       this.dialog = true;
       this.editedIndex = 0;
