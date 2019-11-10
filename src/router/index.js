@@ -19,7 +19,7 @@ Vue.use(Router)
 
 export default new Router({
     
-    mode: "history",
+    // mode: "history",
     routes: [
         {
             path: "/",
@@ -70,7 +70,14 @@ export default new Router({
                 {
                     path: "/templateManagement",
                     name: "templateManagement",
-                    component: TemplateManagement
+                    component: TemplateManagement, beforeEnter:(to,from,next)=>{
+                        console.log("template")
+                        if(true){
+                            next()
+                        }else{
+                            next(false)
+                        }
+                    }
                 },
                 {
                     path: "/customerManagement",
