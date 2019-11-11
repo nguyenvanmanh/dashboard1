@@ -89,7 +89,7 @@
               <Pagination
                 :clickHandler="clickCallback"
                 :totalPages="totalPages"
-                :sizePage="sizePage"
+                :sizePage="[10,20,50]"
               ></Pagination>
               <!-- pagination end -->
 
@@ -174,8 +174,8 @@ export default {
 
   methods: {
     initialize() {},
-    clickCallback(targetPage) {
-      this.fetchTemplateByPage(this.sizePage, targetPage - 1);
+    clickCallback(targetPage,sizeOfItem) {
+      this.fetchTemplateByPage(sizeOfItem, targetPage - 1);
     },
 
     fetchTemplateByPage(size, targetPage) {

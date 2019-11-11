@@ -149,9 +149,8 @@
               <!-- pagination start -->
               <Pagination
                 :clickHandler="clickCallback"
-                :currentPage="currentPage"
                 :totalPages="totalPages"
-                :sizePage="sizePage"
+                :sizePage="[10,20,30]"
               ></Pagination>
               <!-- pagination end -->
 
@@ -258,8 +257,8 @@ export default {
     //   return this.date ? moment(this.date).format("dddd, MMMM Do YYYY") : "";
     // },
 
-    clickCallback(targetPage) {
-      this.fetchCustomerByPage(this.sizePage, targetPage - 1);
+    clickCallback(targetPage,numOfItem) {
+      this.fetchCustomerByPage(numOfItem, targetPage - 1);
     },
 
     fetchCustomerByPage(size, targetPage) {
