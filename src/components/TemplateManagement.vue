@@ -64,8 +64,13 @@
           </div>
           <div class="panel-container show">
             <div class="panel-content">
+              <loading :type="'pointing'" :style="`display:${loadingDisplay}`"></loading>
               <!-- datatable start -->
-              <DataTable :data="dataTemplates" :header="dataHeader">
+              <DataTable
+                :style="`display:${tableDisplay}`"
+                :data="dataTemplates"
+                :header="dataHeader"
+              >
                 <template slot="action" slot-scope="dataRow">
                   <td>
                     <a
@@ -79,11 +84,10 @@
                 </template>
               </DataTable>
               <!-- datatable end -->
-              
+
               <!-- pagination start -->
               <Pagination
                 :clickHandler="clickCallback"
-                :currentPage="currentPage"
                 :totalPages="totalPages"
                 :sizePage="sizePage"
               ></Pagination>
@@ -109,7 +113,7 @@ import AlertAction from "./share/Alert";
 import DataTable from "./share/DataTable";
 import Vue from "vue";
 import Pagination from "./share/Pagination";
-
+import Loading from "./share/Loading";
 const base_url = API.BASEURL;
 export default {
   data: () => ({
@@ -122,70 +126,53 @@ export default {
     show: true,
     typeAlert: "",
     messageAlert: "",
-    failAlert: "none",
-    successAlert: "none",
     formControl: "form-control",
     isInvalid: "",
     titleValidate: "none",
     dialog: false,
-    search: "",
-    headers: [
-      {
-        text: "Index",
-        align: "left",
-        value: "index"
-      },
-      // { text: "Template ID", value: "emailTemplateId" },
-      { text: "Title", value: "title" },
-      { text: "Body", value: "body" },
-      { text: "Edit", value: "action", sortable: false }
-    ],
     dataTemplates: [],
     editedIndex: -1,
     id_template: "",
     title_input: "",
     body_input: "",
     row_input: "",
-    numberOfElements: "",
     totalPages: 0,
     currentPage: 0, // start = 0
-    sizePage: 10
+    sizePage: 10,
+    tableDisplay: "none",
+    loadingDisplay: "block"
   }),
-
   components: {
     VueEditor,
     AlertAction,
     DataTable,
-    Pagination
+    Pagination,
+    Loading
   },
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add New Template" : "Edit Template";
     }
   },
-
   mounted() {
-    this.fetchAllTemplate();
+    this.fetchTemplateByPage(this.sizePage, 0);
   },
-
   watch: {
     dialog(val) {
       val || this.close();
     }
   },
-
   created() {
     this.initialize();
   },
-
   methods: {
     initialize() {},
     clickCallback(targetPage) {
       this.fetchTemplateByPage(this.sizePage, targetPage - 1);
     },
-
     fetchTemplateByPage(size, targetPage) {
+      this.tableDisplay = "none";
+      this.loadingDisplay = "block";
       axios
         .get(`${base_url}/email/get-all-topic`, {
           params: {
@@ -196,25 +183,14 @@ export default {
         .then(response => {
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
-          this.currentPage = response.data.number;
+          this.tableDisplay = "";
+          this.loadingDisplay = "none";
         })
         .catch(error => {
           console.log(error);
           this.errored = true;
-        });
-    },
-
-    fetchAllTemplate() {
-      axios
-        .get(`${base_url}/email/get-all-topic`)
-        .then(response => {
-          this.dataTemplates = response.data.content;
-          this.totalPages = response.data.totalPages;
-          this.currentPage = response.data.number;
-        })
-        .catch(error => {
-          console.log(error);
-          this.errored = true;
+          this.tableDisplay = "";
+          this.loadingDisplay = "none";
         });
     },
     editItem(item) {
@@ -224,7 +200,6 @@ export default {
       this.title_input = item.title;
       this.body_input = item.body;
     },
-
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -236,15 +211,8 @@ export default {
       this.titleValidate = "none";
       this.isInvalid = "";
       this.id_template = "";
-      this.closeAlert();
+      // this.closeAlert();
     },
-
-    closeAlert() {
-      setTimeout(function() {
-        this.successAlert = "none";
-      }, 3000);
-    },
-
     save() {
       let data = {};
       if (this.id_template !== "") {
@@ -310,17 +278,14 @@ export default {
 .text-center {
   text-align: center;
 }
-
 ul.pagination_lib {
   display: inline-block;
   padding: 0;
   margin: 0;
 }
-
 ul.pagination_lib li {
   display: inline;
 }
-
 ul.pagination_lib li a {
   color: black;
   float: left;
@@ -328,12 +293,10 @@ ul.pagination_lib li a {
   text-decoration: none;
   transition: background-color 0.3s;
 }
-
 ul.pagination_lib li a.active {
   background-color: #4caf50;
   color: white;
 }
-
 ul.pagination_lib li a:hover:not(.active) {
   background-color: #ddd;
 }
