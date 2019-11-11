@@ -54,12 +54,15 @@ export default {
   methods: {
     getPrevious() {
       this.clickHandler(this.currentPage);
+      this.currentPage = this.currentPage - 1;
     },
     getNext() {
       this.clickHandler(this.currentPage + 2);
+      this.currentPage = this.currentPage + 1;
     },
     getPage(item) {
       this.clickHandler(item);
+      this.currentPage = item - 1;
     }
   },
 

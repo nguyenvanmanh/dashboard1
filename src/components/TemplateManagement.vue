@@ -64,9 +64,13 @@
           </div>
           <div class="panel-container show">
             <div class="panel-content">
-              <loading :type="'pointing'" :style="`display:${loadingDisplay}`" ></loading>
+              <loading :type="'pointing'" :style="`display:${loadingDisplay}`"></loading>
               <!-- datatable start -->
-              <DataTable  :style="`display:${tableDisplay}`" :data="dataTemplates" :header="dataHeader">
+              <DataTable
+                :style="`display:${tableDisplay}`"
+                :data="dataTemplates"
+                :header="dataHeader"
+              >
                 <template slot="action" slot-scope="dataRow">
                   <td>
                     <a
@@ -84,7 +88,6 @@
               <!-- pagination start -->
               <Pagination
                 :clickHandler="clickCallback"
-                :currentPage="currentPage"
                 :totalPages="totalPages"
                 :sizePage="sizePage"
               ></Pagination>
@@ -188,13 +191,14 @@ export default {
         .then(response => {
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
-          this.currentPage = response.data.number;
-          (this.tableDisplay = "block"), (this.loadingDisplay = "none");
+          this.tableDisplay = "";
+          this.loadingDisplay = "none";
         })
         .catch(error => {
           console.log(error);
           this.errored = true;
-          (this.tableDisplay = "block"), (this.loadingDisplay = "none");
+          this.tableDisplay = "";
+          this.loadingDisplay = "none";
         });
     },
 
