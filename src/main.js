@@ -26,10 +26,6 @@ Vue.use(VeeValidate);
 
 Vue.config.productionTip = false;
 
-router.beforeEach((to,from, next)=>{
-  console.log("nhau vo day nhe")
-  next()
-})
 export default new Vue({
   router,
   vuetify,
