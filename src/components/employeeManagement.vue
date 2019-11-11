@@ -256,11 +256,13 @@
         <!-- /End activating users -->
       </v-flex>
     </v-layout>
+    <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action>
   </v-app>
 </template>
 <script>
 import axios from "axios";
 import * as API from "../service/API";
+import AlertAction from "./share/Alert";
 
 export default {
   data() {
@@ -277,6 +279,11 @@ export default {
       show1: false,
       search: "",
       radios: "2",
+      show: true,
+      typeAlert: "",
+      messageAlert: "",
+      failAlert: "none",
+      successAlert: "none",
       departmentName: [
         "DU1",
         "DU2",
@@ -424,8 +431,14 @@ export default {
           .post(API.BASEURL + "/rest/users/edit", this.editedItem)
           .then(response => {
             if (response.status === 200) {
-              // khong load trang
               this.users = response.data.listUser;
+              this.typeAlert = "success";
+              this.messageAlert = "Edit Success";
+              this.show = !this.show;
+            } else {
+              this.typeAlert = "fail";
+              this.messageAlert = e.toString();
+              this.show = !this.show;
             }
           });
       } else {
@@ -434,7 +447,7 @@ export default {
           .post(API.BASEURL + "/rest/users/add", this.editedItem)
           .then(response => {
             if (response.status === 200) {
-              // khong load trang
+              // do not reload the page
               this.users = response.data.listUser;
             }
           });
