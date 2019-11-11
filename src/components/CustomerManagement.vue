@@ -3,124 +3,146 @@
     <div class="row">
       <div class="col-xl-12">
         <div id="panel-1" class="panel">
-          <div class="panel-hdr">
+          <div class="panel-hdr-overide">
             <span>
-              <h3>
+              <h3 style="display:inline">
                 Customers
                 <span class="fw-100">
                   <i>Table</i>
                 </span>
               </h3>
             </span>
-            <v-dialog v-model="dialog" max-width="800px">
-              <!-- <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on">New Template</v-btn>
-              </template>-->
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
-
-                <v-card-text>
-                  <v-container>
-                    <v-row v-model="row_input">
-                      <v-col cols="12">
-                        <label class="form-label" for="simpleinputInvalid">First Name</label>
-                        <input
-                          type="text"
-                          v-bind:class="[formControl, firstNameValidate]"
-                          id="simpleinputInvalid"
-                          v-model="firstNameInput"
-                          required
-                        />
-                        <div
-                          class="invalid-feedback"
-                          :style="{display: firstNameValidate}"
-                        >Please enter text in here.</div>
-                      </v-col>
-                      <v-col cols="12">
-                        <label class="form-label" for="example-password">Last Name</label>
-                        <input
-                          type="text"
-                          v-bind:class="[formControl, lastNameValidate]"
-                          id="simpleinputInvalid"
-                          v-model="lastNameInput"
-                          required
-                        />
-                        <div
-                          class="invalid-feedback"
-                          :style="{display: lastNameValidate}"
-                        >Please enter text in here.</div>
-                      </v-col>
-                      <v-col cols="12">
-                        <label class="form-label" for="example-password">Date of Birth</label>
-
-                        <v-menu v-model="menu1" :close-on-content-click="false" max-width="290">
-                          <template v-slot:activator="{ on }">
-                            <v-text-field :value="dobInput" clearable readonly v-on="on"></v-text-field>
-                          </template>
-                          <v-date-picker v-model="dobInput" @change="menu1 = false"></v-date-picker>
-                        </v-menu>
-                        <div
-                          class="invalid-feedback"
-                          :style="{display: dobValidate}"
-                        >Please enter text in here.</div>
-                      </v-col>
-                      <v-col cols="12">
-                        <label class="form-label" for="example-password">Email</label>
-                        <input
-                          type="text"
-                          v-bind:class="[formControl, emailValidate]"
-                          id="simpleinputInvalid"
-                          v-model="emailInput"
-                          required
-                        />
-                        <div
-                          class="invalid-feedback"
-                          :style="{display: emailValidate}"
-                        >Please enter text in here.</div>
-                      </v-col>
-
-                      <v-col cols="12">
-                        <label class="form-label" for="example-password">Address</label>
-                        <input
-                          type="text"
-                          v-bind:class="[formControl, addressValidate]"
-                          id="simpleinputInvalid"
-                          v-model="addressInput"
-                          required
-                        />
-                        <div
-                          class="invalid-feedback"
-                          :style="{display: addressValidate}"
-                        >Please enter text in here.</div>
-                      </v-col>
-                      <v-col cols="12">
-                        <label class="form-label" for="example-password">Company</label>
-                        <input
-                          type="text"
-                          v-bind:class="[formControl, companyValidate]"
-                          id="simpleinputInvalid"
-                          v-model="companyInput"
-                          required
-                        />
-                        <div
-                          class="invalid-feedback"
-                          :style="{display: companyValidate}"
-                        >Please enter text in here.</div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <div class="search-form">
+              <button
+                class="btn btn-outline-secondary dropdown-toggle waves-effect waves-themed"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >{{nameTypeSearch}}</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" @click="searchBy('name')">Name</a>
+                <a class="dropdown-item" @click="searchBy('email')">Email</a>
+                <a class="dropdown-item" @click="searchBy('company')">Company</a>
+              </div>
+              <input
+                type="text"
+                id="simpleinput"
+                class="input-search"
+                v-model="search_text"
+                placeholder="Enter search key words"
+                @change="someHandler() "
+              />
+            </div>
           </div>
+          <v-dialog v-model="dialog" max-width="800px">
+            <!-- <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark class="mb-2" v-on="on">New Template</v-btn>
+            </template>-->
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row v-model="row_input">
+                    <v-col cols="12">
+                      <label class="form-label" for="simpleinputInvalid">First Name</label>
+                      <input
+                        type="text"
+                        v-bind:class="[formControl, firstNameValidate]"
+                        id="simpleinputInvalid"
+                        v-model="firstNameInput"
+                        required
+                      />
+                      <div
+                        class="invalid-feedback"
+                        :style="{display: firstNameValidate}"
+                      >Please enter text in here.</div>
+                    </v-col>
+                    <v-col cols="12">
+                      <label class="form-label" for="example-password">Last Name</label>
+                      <input
+                        type="text"
+                        v-bind:class="[formControl, lastNameValidate]"
+                        id="simpleinputInvalid"
+                        v-model="lastNameInput"
+                        required
+                      />
+                      <div
+                        class="invalid-feedback"
+                        :style="{display: lastNameValidate}"
+                      >Please enter text in here.</div>
+                    </v-col>
+                    <v-col cols="12">
+                      <label class="form-label" for="example-password">Date of Birth</label>
+
+                      <v-menu v-model="menu1" :close-on-content-click="false" max-width="290">
+                        <template v-slot:activator="{ on }">
+                          <v-text-field :value="dobInput" clearable readonly v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="dobInput" @change="menu1 = false"></v-date-picker>
+                      </v-menu>
+                      <div
+                        class="invalid-feedback"
+                        :style="{display: dobValidate}"
+                      >Please enter text in here.</div>
+                    </v-col>
+                    <v-col cols="12">
+                      <label class="form-label" for="example-password">Email</label>
+                      <input
+                        type="text"
+                        v-bind:class="[formControl, emailValidate]"
+                        id="simpleinputInvalid"
+                        v-model="emailInput"
+                        required
+                      />
+                      <div
+                        class="invalid-feedback"
+                        :style="{display: emailValidate}"
+                      >Please enter text in here.</div>
+                    </v-col>
+
+                    <v-col cols="12">
+                      <label class="form-label" for="example-password">Address</label>
+                      <input
+                        type="text"
+                        v-bind:class="[formControl, addressValidate]"
+                        id="simpleinputInvalid"
+                        v-model="addressInput"
+                        required
+                      />
+                      <div
+                        class="invalid-feedback"
+                        :style="{display: addressValidate}"
+                      >Please enter text in here.</div>
+                    </v-col>
+                    <v-col cols="12">
+                      <label class="form-label" for="example-password">Company</label>
+                      <input
+                        type="text"
+                        v-bind:class="[formControl, companyValidate]"
+                        id="simpleinputInvalid"
+                        v-model="companyInput"
+                        required
+                      />
+                      <div
+                        class="invalid-feedback"
+                        :style="{display: companyValidate}"
+                      >Please enter text in here.</div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <div class="panel-container show">
             <div class="panel-content">
               <!-- datatable start -->
@@ -161,7 +183,6 @@
         </div>
       </div>
     </div>
-
     <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action>
   </v-app>
 </template>
@@ -221,7 +242,10 @@ export default {
 
     date: new Date().toISOString().substr(0, 10),
     menu1: false,
-    menu2: false
+    menu2: false,
+    search_text: "",
+    search_type: "name",
+    nameTypeSearch:"Name"
   }),
 
   components: {
@@ -257,12 +281,15 @@ export default {
     //   return this.date ? moment(this.date).format("dddd, MMMM Do YYYY") : "";
     // },
 
-    clickCallback(targetPage,numOfItem) {
-      this.sizePage = numOfItem
-      this.currentPage= targetPage-1
+    clickCallback(targetPage, numOfItem) {
+      this.sizePage = numOfItem;
+      this.currentPage = targetPage - 1;
       this.fetchCustomerByPage(numOfItem, targetPage - 1);
     },
-
+    someHandler() {
+      // console.log(this.search_text);
+      this.fetchDataBySearch(this.search_type,this.search_text)
+    },
     fetchCustomerByPage(size, targetPage) {
       axios
         .get(`${base_url}/email/get-all-customer`, {
@@ -274,7 +301,6 @@ export default {
         .then(response => {
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
-          this.currentPage = response.data.number;
         })
         .catch(error => {
           console.log(error);
@@ -298,19 +324,19 @@ export default {
 
     deleteItem(item) {
       if (confirm("Do you really want to delete?")) {
-         axios
-            .post(`${base_url}/customer/delete-customer?id=${item.id}`, )
-            .then(response => {
-              this.fetchCustomerByPage(this.sizePage, this.currentPage);
-              this.typeAlert = "success";
-              this.messageAlert = "Delete Success";
-              this.show = !this.show;
-            })
-            .catch(e => {
-              this.typeAlert = "fail";
-              this.messageAlert = e.toString();
-              this.show = !this.show;
-            });
+        axios
+          .post(`${base_url}/customer/delete-customer?id=${item.id}`)
+          .then(response => {
+            this.fetchCustomerByPage(this.sizePage, this.currentPage);
+            this.typeAlert = "success";
+            this.messageAlert = "Delete Success";
+            this.show = !this.show;
+          })
+          .catch(e => {
+            this.typeAlert = "fail";
+            this.messageAlert = e.toString();
+            this.show = !this.show;
+          });
       }
     },
 
@@ -414,7 +440,66 @@ export default {
           this.close();
         }
       }
+    },
+
+    searchBy(type) {
+      this.search_type = type;
+      if(type==="name"){
+        this.nameTypeSearch="Name"
+      }else if(type ==="company"){
+        this.nameTypeSearch = "Company"
+      }else if(type === "email"){
+        this.nameTypeSearch = "Email"
+      }
+      this.fetchDataBySearch(this.search_type, this.search_text);
+    },
+
+    fetchDataBySearch(search_type, search_text) {
+      axios
+        .post(`${base_url}/customer/search-customer`, {
+            [this.search_type]: this.search_text,   
+        })
+        .then(response => {
+          console.log(response.data)
+          this.dataTemplates = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.currentPage = 0;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errored = true;
+        });
     }
   }
 };
 </script>
+<style scoped>
+.input-search {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  margin-left: 15px;
+  width: 350px;
+}
+.search-form {
+  float: right;
+}
+.panel-hdr-overide {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background: #fff;
+  min-height: 3rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 4px 4px 0 0;
+  -webkit-transition: background-color 0.4s ease-out;
+  transition: background-color 0.4s ease-out;
+  padding: 15px;
+}
+</style>
