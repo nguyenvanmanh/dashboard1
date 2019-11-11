@@ -175,6 +175,8 @@ export default {
   methods: {
     initialize() {},
     clickCallback(targetPage,sizeOfItem) {
+      this.sizePage = sizeOfItem
+      this.currentPage= targetPage-1
       this.fetchTemplateByPage(sizeOfItem, targetPage - 1);
     },
 

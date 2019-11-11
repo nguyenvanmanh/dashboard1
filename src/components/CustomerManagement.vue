@@ -258,6 +258,8 @@ export default {
     // },
 
     clickCallback(targetPage,numOfItem) {
+      this.sizePage = numOfItem
+      this.currentPage= targetPage-1
       this.fetchCustomerByPage(numOfItem, targetPage - 1);
     },
 
