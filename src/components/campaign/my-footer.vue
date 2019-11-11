@@ -3,7 +3,7 @@
     <div tyle="margin-right: 5px 20px">
       <span>Rows per page:</span>
     </div>
-    <div style="margin: 5px 20px">
+    <div style="border: 1px solid lightgrey;margin: 5px 20px">
       <select class="rowperpage2" v-model="rowPerPage">
         <option value="10" selecte="selected">10</option>
         <option value="20">20</option>
@@ -31,11 +31,11 @@
           currentPage: this.currentPage,
           rowPerPage: this.rowPerPage
         });
-        // let end = this.rowPerPage * this.currentPage;
+        let end = this.rowPerPage * this.currentPage;
 
-        // if (end >= this.totalElement) this.end = this.totalElement;
-        // else this.end = end;
-        // this.start = (this.currentPage - 1) * this.rowPerPage + 1;
+        if (end >= this.totalElement) this.end = this.totalElement;
+        else this.end = end;
+        this.start = (this.currentPage - 1) * this.rowPerPage + 1;
       }
     },
     mounted() {
@@ -95,6 +95,7 @@
         if (this.currentPage === 1) {
           this.isMinPage = true;
         }
+        this.isMaxPage = false;
       }
     }
   };

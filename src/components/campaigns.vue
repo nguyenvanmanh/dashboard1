@@ -7,10 +7,10 @@
           :items="campaigns"
           item-key="id"
           v-model="selected"
-          class="elevation-1"
-          data-app
           show-select
           hide-default-footer
+          sort-by="index"
+          :items-per-page="rowPerPage"
         >
           <!-- index collum -->
           <template v-slot:item.index="{item}">
@@ -133,7 +133,7 @@
         <!-- <data-table :data="campaigns" :headers="headers.campaigns"></data-table> -->
         <data-footer
           :totalElement="totalElements"
-          :rowPerPage="rowPerPage"
+          :rowPerPageProps="rowPerPage"
           v-on:updateTable="updateCampaign($event)"
         ></data-footer>
 
@@ -263,11 +263,7 @@
             { text: "body", value: "body" }
           ]
         },
-        edits: {
-          templates: {}
-        },
         templates: [],
-        campaignCustomers: [],
         allCampaignDetails: []
       };
     },
@@ -369,7 +365,7 @@
           })
           .catch(err => {
             this.alerts.typeAlert = "fail";
-            this.alerts.messageAlert = "something wrong";
+            this.alerts.messageAlert = err.response.data;
             this.alerts.show = !this.alerts.show;
           });
       },
@@ -414,8 +410,8 @@
             item.campaign.startDate = item.campaign.startDate.substring(0, 10);
             item.campaign.endDate = item.campaign.endDate.substring(0, 10);
             this.campaigns.push(item.campaign);
-            this.allCampaignDetails = res.data.content;
           });
+          this.allCampaignDetails = res.data.content;
         });
       }
     }
