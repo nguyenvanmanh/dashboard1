@@ -48,9 +48,7 @@ export default {
     },
     clickHandler: {}
   },
-
   data: () => ({}),
-
   methods: {
     getPrevious() {
       this.clickHandler(this.currentPage);
@@ -65,7 +63,6 @@ export default {
       this.currentPage = item - 1;
     }
   },
-
   watch: {
     clickHandler: function() {}
   }
