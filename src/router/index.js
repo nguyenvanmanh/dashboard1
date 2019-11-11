@@ -11,7 +11,8 @@ import marketing_dashboard from "../components/Marketing_Dashboard";
 import roleManagement from "../components/roleManagement";
 import employeeManagement from "../components/employeeManagement"
 import campaigns from "../components/campaigns"
-import templateMagement from '../components/TemplateManagement'
+import TemplateManagement from '../components/TemplateManagement'
+import CustomerManagement from '../components/CustomerManagement'
 
 Vue.use(Router)
 
@@ -67,9 +68,14 @@ export default new Router({
                     component: employeeManagement
                 },
                 {
-                    path: "/templateMagement",
-                    name: "templateMagement",
-                    component: templateMagement
+                    path: "/templateManagement",
+                    name: "templateManagement",
+                    component: TemplateManagement
+                },
+                {
+                    path: "/customerManagement",
+                    name: "customerManagement",
+                    component: CustomerManagement
                 },
 
             ]

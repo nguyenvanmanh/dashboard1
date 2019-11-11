@@ -89,7 +89,7 @@
               <Pagination
                 :clickHandler="clickCallback"
                 :totalPages="totalPages"
-                :sizePage="sizePage"
+                :sizePage="[10,20,50]"
               ></Pagination>
               <!-- pagination end -->
 
@@ -114,6 +114,7 @@ import DataTable from "./share/DataTable";
 import Vue from "vue";
 import Pagination from "./share/Pagination";
 import Loading from "./share/Loading";
+
 const base_url = API.BASEURL;
 export default {
   data: () => ({
@@ -142,6 +143,7 @@ export default {
     tableDisplay: "none",
     loadingDisplay: "block"
   }),
+
   components: {
     VueEditor,
     AlertAction,
@@ -149,27 +151,35 @@ export default {
     Pagination,
     Loading
   },
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add New Template" : "Edit Template";
     }
   },
+
   mounted() {
     this.fetchTemplateByPage(this.sizePage, 0);
   },
+
   watch: {
     dialog(val) {
       val || this.close();
     }
   },
+
   created() {
     this.initialize();
   },
+
   methods: {
     initialize() {},
-    clickCallback(targetPage) {
-      this.fetchTemplateByPage(this.sizePage, targetPage - 1);
+    clickCallback(targetPage,sizeOfItem) {
+      this.sizePage = sizeOfItem
+      this.currentPage= targetPage-1
+      this.fetchTemplateByPage(sizeOfItem, targetPage - 1);
     },
+
     fetchTemplateByPage(size, targetPage) {
       this.tableDisplay = "none";
       this.loadingDisplay = "block";
@@ -193,6 +203,7 @@ export default {
           this.loadingDisplay = "none";
         });
     },
+
     editItem(item) {
       this.dialog = true;
       this.editedIndex = 0;
@@ -200,6 +211,7 @@ export default {
       this.title_input = item.title;
       this.body_input = item.body;
     },
+
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -213,6 +225,7 @@ export default {
       this.id_template = "";
       // this.closeAlert();
     },
+
     save() {
       let data = {};
       if (this.id_template !== "") {
@@ -278,14 +291,17 @@ export default {
 .text-center {
   text-align: center;
 }
+
 ul.pagination_lib {
   display: inline-block;
   padding: 0;
   margin: 0;
 }
+
 ul.pagination_lib li {
   display: inline;
 }
+
 ul.pagination_lib li a {
   color: black;
   float: left;
@@ -293,10 +309,12 @@ ul.pagination_lib li a {
   text-decoration: none;
   transition: background-color 0.3s;
 }
+
 ul.pagination_lib li a.active {
   background-color: #4caf50;
   color: white;
 }
+
 ul.pagination_lib li a:hover:not(.active) {
   background-color: #ddd;
 }
