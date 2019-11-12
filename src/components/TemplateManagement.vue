@@ -181,8 +181,6 @@ export default {
     },
 
     fetchTemplateByPage(size, targetPage) {
-      this.tableDisplay = "none";
-      this.loadingDisplay = "block";
       axios
         .get(`${base_url}/email/get-all-topic`, {
           params: {

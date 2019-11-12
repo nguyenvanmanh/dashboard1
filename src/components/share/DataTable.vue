@@ -20,7 +20,9 @@
             <td
               v-if="header.name !== '#' && header.dataFormat !== '' && header.dataFormat !== undefined"
               :key="i"
-            >{{template[header.dataFormat]}}</td>
+            >
+            <div v-html="template[header.dataFormat]"></div>
+            </td>
           </template>
           <slot name="action" :row="template"></slot>
         </tr>
@@ -51,7 +53,8 @@ export default {
     dataTable: [],
     failAlert: "none",
     successAlert: "none",
-    type: ""
+    type: "",
+    testData:"<p>asdfafsdfsf</p>"
   }),
 
   watch: {

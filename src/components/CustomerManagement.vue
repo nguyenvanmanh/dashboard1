@@ -292,7 +292,7 @@ export default {
     },
     fetchCustomerByPage(size, targetPage) {
       axios
-        .get(`${base_url}/email/get-all-customer`, {
+        .get(`${base_url}/customer/get-all-customer`, {
           params: {
             page: targetPage,
             size: size
@@ -310,7 +310,7 @@ export default {
 
     fetchAllCustomers() {
       axios
-        .get(`${base_url}/email/get-all-customer`)
+        .get(`${base_url}/customer/get-all-customer`)
         .then(response => {
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
