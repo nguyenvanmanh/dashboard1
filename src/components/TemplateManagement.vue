@@ -71,7 +71,10 @@
                 :data="dataTemplates"
                 :header="dataHeader"
               >
-                <template slot="action" slot-scope="dataRow">
+                <template slot="#">
+                  <td>#</td>
+                </template>
+                <template slot="Action" slot-scope="dataRow">
                   <td>
                     <a
                       @click="editItem(dataRow.row)"
@@ -119,7 +122,7 @@ const base_url = API.BASEURL;
 export default {
   data: () => ({
     dataHeader: [
-      { name: "#", width: "5" },
+      { name: "#", dataFormat: "", width: "5" },
       { name: "Title", dataFormat: "title", width: "" },
       { name: "Body", dataFormat: "body", width: "" },
       { name: "Action", dataFormat: "", width: "15" }
@@ -174,15 +177,13 @@ export default {
 
   methods: {
     initialize() {},
-    clickCallback(targetPage,sizeOfItem) {
-      this.sizePage = sizeOfItem
-      this.currentPage= targetPage-1
+    clickCallback(targetPage, sizeOfItem) {
+      this.sizePage = sizeOfItem;
+      this.currentPage = targetPage - 1;
       this.fetchTemplateByPage(sizeOfItem, targetPage - 1);
     },
 
     fetchTemplateByPage(size, targetPage) {
-      this.tableDisplay = "none";
-      this.loadingDisplay = "block";
       axios
         .get(`${base_url}/email/get-all-topic`, {
           params: {

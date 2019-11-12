@@ -738,7 +738,7 @@
                   </li>
                 </ul>
               </li>
-              <li>
+              <li v-if="listPage.search('intel_marketing_dashboard') !== -1">
                   <router-link 
                   to="/intel_marketing_dashboard" 
                   title="marketing Dashboard" 
@@ -750,7 +750,7 @@
                     >Marketing Dashboard</span>
                   </router-link>
                 </li>
-                <li >
+                <li v-if="listPage.search('intel_analytics_dashboard') !== -1" >
                   <router-link 
                   to="/intel_analytics_dashboard" 
                   title="Analytics Dashboard" 
@@ -762,7 +762,7 @@
                     >Analytics Dashboard</span>
                   </router-link>
               </li>
-              <li>
+              <li v-if="listPage.search('employeeManagement') !== -1">
                 <router-link
                   to="/employeeManagement"
                   title="employeeManagement"
@@ -850,24 +850,26 @@
                 </ul>
               </li>
 
-              <li>
+              <li v-if="listPage.search('uploadCustomer') !== -1">
                 <router-link to="/uploadCustomer" title="uploadCustomer" data-filter-tags="tables">
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Upload Customer</span>
                 </router-link>
               </li>
-               <li>
+               <li v-if="listPage.search('campaigns') !== -1 ">
                 <router-link to="/campaigns" title="Campaigns" data-filter-tags="tables">
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Campaigns</span>
                 </router-link>
+               </li>
+               <li v-if="listPage.search('roleManagement') !== -1 " >
                 <router-link to="/roleManagement" title="RoleManagement" data-filter-tags="tables">
                   <i class="fal fa-th-list"></i>
                   <span class="nav-link-text" data-i18n="nav.tables">Role Management</span>
                 </router-link>
               </li>
 
-              <li>
+              <li v-if="listPage.search('templateManagement') !== -1">
                 <router-link
                   to="/templateManagement"
                   title="templateManagement"
@@ -878,7 +880,7 @@
                 </router-link>
               </li>
 
-              <li>
+              <li v-if="listPage.search('customerManagement') !== -1">
                 <router-link
                   to="/customerManagement"
                   title="customerManagement"
@@ -889,7 +891,7 @@
                 </router-link>
               </li>
 
-              <li>
+              <li >
                 <ul>
                   <li>
                     <a
@@ -3659,8 +3661,13 @@ export default {
   methods:{
     logout(){
       localStorage.removeItem("token");
+      localStorage.removeItem("listPage");
+      this.listPage="";
     }
-  }
+  },
+  data: () => ({
+    listPage : localStorage.getItem('listPage')
+  })
 };
 </script>
 <style>

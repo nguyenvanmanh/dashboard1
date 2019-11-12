@@ -15,14 +15,15 @@
     <tbody>
       <template v-if="dataTable.length !==0">
         <tr v-for="(template,i) in dataTable" :key="i" class="text-center">
-          <td>{{i+1}}</td>
           <template v-for="(header,i) in dataHeader">
             <td
               v-if="header.name !== '#' && header.dataFormat !== '' && header.dataFormat !== undefined"
               :key="i"
-            >{{template[header.dataFormat]}}</td>
+            >
+              <div v-html="template[header.dataFormat]"></div>
+            </td>
+            <slot v-else :name="header.name" :row="template"></slot>
           </template>
-          <slot name="action" :row="template"></slot>
         </tr>
       </template>
       <template v-else>
