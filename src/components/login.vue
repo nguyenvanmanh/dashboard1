@@ -151,6 +151,7 @@
         users: { username: "", password: "" },
         addToAPI: Function
       };
+<<<<<<< HEAD
     },
     mounted() {
       let _this = this;
@@ -163,6 +164,21 @@
           method: "post",
           url: `${API.BASEURL}/rest/login`,
           data: newUser
+=======
+      axios({
+        method: "post",
+        url: `${API.BASEURL}/rest/login`,
+        data: newUser
+      })
+        .then(function(response) {
+          if (response.status === 200) {
+            localStorage.setItem("token", response.data);
+            localStorage.setItem("listPage", response.data.listPage);
+            _this.$router.push({
+              path: "/"
+            });
+          }
+>>>>>>> develop
         })
           .then(function(response) {
             if (response.status === 200) {

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <data-table></data-table>
+    <data-table ></data-table>
   </div>
 </template>
 
