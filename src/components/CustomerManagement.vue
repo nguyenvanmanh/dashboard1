@@ -147,7 +147,10 @@
             <div class="panel-content">
               <!-- datatable start -->
               <DataTable :data="dataTemplates" :header="dataHeader">
-                <template slot="action" slot-scope="dataRow">
+                <template slot="#">
+                  <td>#</td>
+                </template>
+                <template slot="Action" slot-scope="dataRow">
                   <td>
                     <a
                       @click="deleteItem(dataRow.row)"
@@ -245,7 +248,7 @@ export default {
     menu2: false,
     search_text: "",
     search_type: "name",
-    nameTypeSearch:"Name"
+    nameTypeSearch: "Name"
   }),
 
   components: {
@@ -288,7 +291,7 @@ export default {
     },
     someHandler() {
       // console.log(this.search_text);
-      this.fetchDataBySearch(this.search_type,this.search_text)
+      this.fetchDataBySearch(this.search_type, this.search_text);
     },
     fetchCustomerByPage(size, targetPage) {
       axios
@@ -444,12 +447,12 @@ export default {
 
     searchBy(type) {
       this.search_type = type;
-      if(type==="name"){
-        this.nameTypeSearch="Name"
-      }else if(type ==="company"){
-        this.nameTypeSearch = "Company"
-      }else if(type === "email"){
-        this.nameTypeSearch = "Email"
+      if (type === "name") {
+        this.nameTypeSearch = "Name";
+      } else if (type === "company") {
+        this.nameTypeSearch = "Company";
+      } else if (type === "email") {
+        this.nameTypeSearch = "Email";
       }
       this.fetchDataBySearch(this.search_type, this.search_text);
     },
@@ -457,10 +460,10 @@ export default {
     fetchDataBySearch(search_type, search_text) {
       axios
         .post(`${base_url}/customer/search-customer`, {
-            [this.search_type]: this.search_text,   
+          [this.search_type]: this.search_text
         })
         .then(response => {
-          console.log(response.data)
+          console.log(response.data);
           this.dataTemplates = response.data.content;
           this.totalPages = response.data.totalPages;
           this.currentPage = 0;

@@ -15,16 +15,15 @@
     <tbody>
       <template v-if="dataTable.length !==0">
         <tr v-for="(template,i) in dataTable" :key="i" class="text-center">
-          <td>{{i+1}}</td>
           <template v-for="(header,i) in dataHeader">
             <td
               v-if="header.name !== '#' && header.dataFormat !== '' && header.dataFormat !== undefined"
               :key="i"
             >
-            <div v-html="template[header.dataFormat]"></div>
+              <div v-html="template[header.dataFormat]"></div>
             </td>
+            <slot v-else :name="header.name" :row="template"></slot>
           </template>
-          <slot name="action" :row="template"></slot>
         </tr>
       </template>
       <template v-else>
@@ -53,8 +52,7 @@ export default {
     dataTable: [],
     failAlert: "none",
     successAlert: "none",
-    type: "",
-    testData:"<p>asdfafsdfsf</p>"
+    type: ""
   }),
 
   watch: {
