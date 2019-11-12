@@ -36,47 +36,59 @@
                     <span class="headline">Create New Campaign</span>
                   </v-card-title>
                   <v-card-text>
-                    <v-container>
-                      <v-col>
-                        <v-row cols="12" sm="6" md="4">
-                          <v-text-field v-model="newCampaign.title" label="Campaign Name"></v-text-field>
-                        </v-row>
-                        <v-row cols="12" sm="6" md="4">
-                          <v-text-field v-model="newCampaign.description" label="Description"></v-text-field>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" lg="6">
-                            <v-menu
-                              :close-on-content-click="false"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                            >
-                              <template v-slot:activator="{ on }">
-                                <v-text-field
-                                  v-model="dateFormated"
-                                  label="Duration"
-                                  prepend-icon="event"
-                                  readonly
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker v-model="dates" scrollable range no-title></v-date-picker>
-                            </v-menu>
-                          </v-col>
-                          <v-col cols="6">
-                            <v-select
-                              v-model="selectedTemplate"
-                              :items="emailTemplates.titles"
-                              menu-props="auto"
-                              label="Email Template"
-                              hide-details
-                              single-line
-                            ></v-select>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-container>
+                    <v-form v-model="valid" ref="newCampaignForm">
+                      <v-container>
+                        <v-col>
+                          <v-row cols="12" sm="6" md="4">
+                            <v-text-field
+                              v-model="newCampaign.title"
+                              label="Campaign Name"
+                              :rules="rules.title"
+                            ></v-text-field>
+                          </v-row>
+                          <v-row cols="12" sm="6" md="4">
+                            <v-text-field
+                              v-model="newCampaign.description"
+                              :rules="rules.description"
+                              label="Description"
+                            ></v-text-field>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" lg="6">
+                              <v-menu
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                max-width="290px"
+                              >
+                                <template v-slot:activator="{ on }">
+                                  <v-text-field
+                                    v-model="dateFormated"
+                                    label="Duration"
+                                    prepend-icon="event"
+                                    readonly
+                                    :rules="rules.dates"
+                                    v-on="on"
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="dates" scrollable range no-title></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-select
+                                v-model="selectedTemplate"
+                                :items="emailTemplates.titles"
+                                menu-props="auto"
+                                label="Email Template"
+                                hide-details
+                                single-line
+                                :rules="rules.templates"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                      </v-container>
+                    </v-form>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -85,6 +97,16 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <v-btn
+                small
+                dark
+                color="red"
+                class="mx-1"
+                :disabled="!selected.length ? true: false"
+                @click="deleteCampaign()"
+              >
+                <v-icon small>delete</v-icon>
+              </v-btn>
               <!-- End of Dialog button add new campaign -->
               <alert-action
                 :message="alerts.messageAlert"
@@ -214,6 +236,7 @@
     data() {
       return {
         rowPerPage: 10,
+        valid: null,
         buttons: { selectedCampaignId: null },
         totalElements: null,
         alerts: {
@@ -237,7 +260,14 @@
           listCustomer: false
         },
         rules: {
-          required: value => !!value || "Required."
+          title: [value => !!value || "title can not be empty!"],
+          description: [value => !!value || "description can not be empty!"],
+          dates: [
+            v => !!v || "Choose duration for this campaign",
+            value => value.length > 15 || "Pick an end date"
+          ],
+          templates: [value => !!value || "Choose a template for this campaign!"],
+          email: value => true || "Email must be valid"
         },
         headers: {
           customers: [
@@ -306,6 +336,7 @@
       },
       createCampaign() {
         // get template id for new campaign
+        if (!this.$refs.newCampaignForm.validate()) return;
         this.emailTemplates.titles.forEach((element, id) => {
           this.newCampaign.emailTempaleId = this.emailTemplates.ids[id];
         });
@@ -413,6 +444,15 @@
           });
           this.allCampaignDetails = res.data.content;
         });
+      },
+      deleteCampaign() {
+        let promise = [];
+        this.selected.map(item => {
+          promise.push(API.deleteCampaign(item.id));
+        });
+        Promise.all(promise).then(res =>
+          this.updateCampaign({ rowPerPage: this.rowPerPage, currentPage: 1 })
+        );
       }
     }
   };

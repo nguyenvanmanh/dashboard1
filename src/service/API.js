@@ -1,7 +1,7 @@
 export const HOST = "172.30.56.74";
 export const PORT = "8081";
-// export const BASEURL = `http://localhost:8081`;
-export const BASEURL = `http://192.168.32.88:8081`;
+export const BASEURL = `http://localhost:8081`;
+// export const BASEURL = `http://192.168.56.211:8081`;
 // export const BASEURL = `http://192.168.33.154:8081`;
 
 import axios from "axios";
@@ -35,5 +35,11 @@ export function editCampaignTemplate(id, emailTempaleId) {
   return axios.post(`${BASEURL}/email/edit-email-template-campaign`, {
     id,
     emailTempaleId
+  });
+}
+export function deleteCampaign(id) {
+  return axios.post(`${BASEURL}/email/edit-campaign`, {
+    id,
+    isActivated: 0
   });
 }

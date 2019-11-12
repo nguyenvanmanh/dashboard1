@@ -166,8 +166,7 @@
         })
           .then(function(response) {
             if (response.status === 200) {
-              debugger;
-              localStorage.setItem("token", response.data);
+              localStorage.setItem("token", response.data.token);
               _this.$router.push({
                 path: "/"
               });
@@ -175,7 +174,6 @@
           })
           .catch(err => {
             console.error(err);
-            debugger;
             this.isCheck = true;
           });
       };
@@ -198,7 +196,7 @@
     border-color: #fd3995;
   }
   /* .btn-primary {
-          background-color: #fd3995!important;
-          border-color: unset !important;
-        } */
+            background-color: #fd3995!important;
+            border-color: unset !important;
+          } */
 </style>

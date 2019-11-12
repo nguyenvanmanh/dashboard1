@@ -237,8 +237,6 @@
 <script>
   import axios from "axios";
   import * as API from "../service/API";
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzMyMTA0ODcsInVzZXJuYW1lIjoiaHVvbmcxIn0.7pAUipXYaziVmE5F2SG60SS7cTBZNbswSqIa6kkcWCU";
   export default {
     data() {
       return {
@@ -335,6 +333,8 @@
       radios: "changeUsersStatus"
     },
     created() {
+      //localStorage.removeItem("token");
+      console.log(localStorage.getItem("token"));
       this.initialize();
     },
     methods: {
@@ -342,7 +342,7 @@
       fetchUsers() {
         axios.get(API.BASEURL + "/rest/users/list").then(response => {
           this.users = response.data.listUser;
-          console.log(response.data.listUser);
+          //console.log(response.data.listUser);
         });
       },
       initialize() {
@@ -382,15 +382,7 @@
         if (this.editedIndex > -1) {
           Object.assign(this.users[this.editedIndex], this.editedItem);
           axios
-            .post(
-              API.BASEURL + "/rest/users/edit/" + this.page,
-              this.editedItem,
-              {
-                headers: {
-                  authorization: token
-                }
-              }
-            )
+            .post(API.BASEURL + "/rest/users/edit/" + this.page, this.editedItem)
             .then(response => {
               if (response.status === 200) {
                 // khong load trang
@@ -400,11 +392,7 @@
         } else {
           this.users.push(this.editedItem);
           axios
-            .post(API.BASEURL + "/rest/users/add", this.editedItem, {
-              headers: {
-                Authorization: token
-              }
-            })
+            .post(API.BASEURL + "/rest/users/add", this.editedItem)
             .then(response => {
               if (response.status === 200) {
                 // khong load trang
