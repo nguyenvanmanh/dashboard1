@@ -13,14 +13,15 @@
       </tr>
     </thead>
     <tbody>
-      <template v-if="dataTable.length !==0">
+      <template v-if="dataTable && dataTable.length !==0">
         <tr v-for="(template,i) in dataTable" :key="i" class="text-center">
           <template v-for="(header,i) in dataHeader">
             <td
               v-if="header.name !== '#' && header.dataFormat !== '' && header.dataFormat !== undefined"
               :key="i"
+              style="max-width: 500px word-break: break-all;"
             >
-              <div v-html="template[header.dataFormat]"></div>
+              <div v-html="template[header.dataFormat]" ></div>
             </td>
             <slot v-else :name="header.name" :row="template"></slot>
           </template>
@@ -28,7 +29,7 @@
       </template>
       <template v-else>
         <tr class="text-center">
-          <h4>No data</h4>
+          <td :colspan="dataHeader.length"><h4>No data</h4></td>
         </tr>
       </template>
     </tbody>
@@ -67,10 +68,3 @@
     }
   };
 </script>
-<style scoped>
-  .fixed {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-  }
-</style>
