@@ -13,18 +13,6 @@
       </tr>
     </thead>
     <tbody>
-<<<<<<< HEAD
-      <tr v-for="(template,i) in dataTable" :key="i" class="text-center">
-        <td>{{i+1}}</td>
-        <template v-for="(header,i) in dataHeader">
-          <td
-            v-if="header.name !== '#' && header.dataFormat !== '' && header.dataFormat !== undefined"
-            :key="i"
-          >{{template[header.dataFormat]}}</td>
-        </template>
-        <slot name="action" :row="template"></slot>
-      </tr>
-=======
       <template v-if="dataTable.length !==0">
         <tr v-for="(template,i) in dataTable" :key="i" class="text-center">
           <template v-for="(header,i) in dataHeader">
@@ -43,14 +31,12 @@
           <h4>No data</h4>
         </tr>
       </template>
->>>>>>> develop
     </tbody>
   </table>
   <!-- datatable end -->
 </template>
 
 <script>
-<<<<<<< HEAD
   export default {
     props: {
       data: {
@@ -68,8 +54,13 @@
       successAlert: "none",
       type: ""
     }),
+
     watch: {
       data: function() {
+        this.dataTable = this.data;
+        this.dataHeader = this.header;
+      },
+      dataHeader: function() {
         this.dataTable = this.data;
         this.dataHeader = this.header;
       }
@@ -82,42 +73,4 @@
     bottom: 0;
     right: 0;
   }
-=======
-export default {
-  props: {
-    data: {
-      type: Array
-    },
-    header: {
-      type: Array
-    }
-  },
-  data: () => ({
-    body_td: "",
-    dataHeader: [],
-    dataTable: [],
-    failAlert: "none",
-    successAlert: "none",
-    type: ""
-  }),
-
-  watch: {
-    data: function() {
-      this.dataTable = this.data;
-      this.dataHeader = this.header;
-    },
-    dataHeader: function() {
-      this.dataTable = this.data;
-      this.dataHeader = this.header;
-    }
-  }
-};
-</script>
-<style scoped>
-.fixed {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
->>>>>>> develop
 </style>
