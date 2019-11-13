@@ -32,7 +32,11 @@
           <div class="panel-container show">
             <div class="panel-content">
               <!-- datatable start -->
-              <DataTable :data="desserts" :header="dataHeader"></DataTable>
+              <DataTable :data="desserts" :header="dataHeader">
+                <template slot="#" slot-scope="dataRow">
+                  <td>{{desserts.map(function(x) {return x.id; }).indexOf(dataRow.row.id) +count +1 }}</td>
+                </template>
+              </DataTable>
             </div>
           </div>
         </v-card>
@@ -76,7 +80,8 @@ export default {
       desserts: [],
       messageAlert: "",
       typeAlert: "",
-      show: true
+      show: true,
+      count:0
     };
   },
   components: {

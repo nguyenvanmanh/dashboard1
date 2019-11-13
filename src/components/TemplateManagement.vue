@@ -70,9 +70,9 @@
                 :style="`display:${tableDisplay}`"
                 :data="dataTemplates"
                 :header="dataHeader"
-              >
-                <template slot="#">
-                  <td>#</td>
+              > 
+                <template slot="#" slot-scope="dataRow">
+                  <td>{{dataTemplates.map(function(x) {return x.id; }).indexOf(dataRow.row.id) +count}}</td>
                 </template>
                 <template slot="Action" slot-scope="dataRow">
                   <td>
@@ -144,7 +144,8 @@ export default {
     currentPage: 0, // start = 0
     sizePage: 10,
     tableDisplay: "none",
-    loadingDisplay: "block"
+    loadingDisplay: "block",
+    count: 0
   }),
 
   components: {
@@ -180,6 +181,7 @@ export default {
     clickCallback(targetPage, sizeOfItem) {
       this.sizePage = sizeOfItem;
       this.currentPage = targetPage - 1;
+      this.count = this.sizePage * this.currentPage +1
       this.fetchTemplateByPage(sizeOfItem, targetPage - 1);
     },
 
