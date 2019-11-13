@@ -4,10 +4,19 @@ import * as API from "./API"
 
 
 const DepartmentApiService = {
-    getAllDepartments() {
+    getAllDepartments(pageNo, pageSize) {
+        console.log(pageNo, pageSize)
         return axios
-            .get(`${API.BASEURL}/rest/getAllListDepartment`)
-            .then(response => response.data)
+            .get(`${API.BASEURL}/rest/list-all-department-with/page-no=${pageNo}&page-size=${pageSize}`)
+            .then(response => {
+                Object.keys(response.data).map(function(key) {
+                    response.data[key];
+                    console.log(response.data[key])
+                  });
+                 console.log(Object.keys(response.data))
+             
+               }
+                )
     },
     getActiveDepartments() {
         return axios

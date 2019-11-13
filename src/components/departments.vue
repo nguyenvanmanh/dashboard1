@@ -6,8 +6,6 @@
         :headers="headers"
         :items="departments"
         :hide-default-footer="true"
-        :items-per-page= itemsPerPage
-        
         :search="search"
         class="elevation-1"
         data-app
@@ -155,10 +153,15 @@
         <!--End buttons -->
       </v-data-table>
        <div class="text-center">
-    <v-pagination
-      v-model="page"
-      :length="6"
-    ></v-pagination>
+     <!-- pagination start -->
+              <Pagination
+                :clickHandler="clickCallback"
+                :currentPage="currentPage"
+                :totalPages="totalPages"
+                :sizePage="sizePage"
+              ></Pagination>
+              <!-- pagination end -->
+
   </div>
     </v-app>
   </div>
@@ -168,15 +171,18 @@
 import * as API from "../service/API";
 import DepartmentApiService from "../service/department-api-service";
 import EditEmployee from './editEmployee'
+import Pagination from "./share/Pagination";
 
 export default {
   name: "department",
-  components: { EditEmployee },
+  components: { EditEmployee, Pagination },
   data() {
     return {
       employeeDialog: false, // This value is set to the value emitted by the child Employee Dialog
       loading: true,
-      itemsPerPage: "10",
+      currentPage: 0,
+      sizePage: 10,
+      
       error: false,
       dialog: false,
       seen: true,
@@ -222,7 +228,7 @@ export default {
   mounted() {
     //load all departments on screen when the app first starts
     let self = this;
-    DepartmentApiService.getAllDepartments().then(
+    DepartmentApiService.getAllDepartments(this.currentPage, this.sizePage).then(
       resJson => (self.departments = resJson)
     );
     // this.loading = false;
@@ -257,7 +263,9 @@ export default {
   },
 
   methods: {
-     
+     clickCallback(targetPage){
+       console.log(targetPage)
+     },
     onAddEmployee (value) {
       this.employeeDialog = value
     },
