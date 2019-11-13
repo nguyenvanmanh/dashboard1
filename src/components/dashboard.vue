@@ -3645,36 +3645,41 @@
   </div>
 </template>
 <script>
-  export default {
-    name: "dashboard",
-    created() {
-      if (localStorage.getItem("token")) {
-        this.$router.push({
-          path: "/"
-        });
-      } else {
-        this.$router.push({
-          path: "/login"
-        });
-      }
-    },
-    methods: {
-      logout() {
-        localStorage.removeItem("token");
-      }
+export default {
+  name: "dashboard",
+  // created () {
+  //   if (localStorage.getItem("token")) {
+  //     this.$router.push({
+  //       path: "/"
+  //     });
+  //   } else {
+  //     this.$router.push({
+  //       path: "/login"
+  //     });
+  //   }
+  // },
+  methods:{
+    logout(){
+      localStorage.removeItem("token");
+      localStorage.removeItem("listPage");
+      this.listPage="";
     }
-  };
+  },
+  data: () => ({
+    listPage : localStorage.getItem('listPage')
+  })
+};
 </script>
 <style>
-  .menu-open:checked + .menu-open-button {
-    background: #505050 !important;
-  }
-  .menu-item,
-  label.menu-open-button {
-    background: #886ab5 !important;
-    border-radius: 50% !important;
-  }
-  .modal-dialog-right {
-    position: absolute !important;
-  }
+.menu-open:checked + .menu-open-button {
+  background: #505050 !important;
+}
+.menu-item,
+label.menu-open-button {
+  background: #886ab5 !important;
+  border-radius: 50% !important;
+}
+.modal-dialog-right {
+  position: absolute !important;
+}
 </style>

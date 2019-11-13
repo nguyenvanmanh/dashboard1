@@ -23,11 +23,7 @@
     >
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">
-<<<<<<< HEAD
-          <i class="fal fa-trash-alt"></i>
-=======
-           <i class="fal fa-times"></i>
->>>>>>> develop
+          <i class="fal fa-times"></i>
         </span>
       </button>
       <strong>Oh snap!</strong>
@@ -38,7 +34,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
   import { watch } from "fs";
   export default {
     props: {
@@ -68,59 +63,16 @@
         setTimeout(() => {
           this.successAlert = "none";
           this.failAlert = "none";
-        }, 2000);
+        }, 3000);
       }
     }
   };
 </script>
 <style scoped>
   .fixed {
-    position: absolute;
-    top: 0;
-    left: 600px;
-    z-index: 1;
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    right: 0;
   }
-=======
-import { watch } from "fs";
-export default {
-  props: {
-    show: {
-      type: Boolean
-    },
-    message: {
-      type: String
-    },
-    typeAlert: {
-      type: String
-    }
-  },
-  data: () => ({
-    failAlert: "none",
-    successAlert: "none",
-    type: ""
-  }),
-
-  watch: {
-    show: function() {
-      if (this.typeAlert === "success") {
-        this.successAlert = "block";
-      } else if (this.typeAlert === "fail") {
-        this.failAlert = "block";
-      }
-      setTimeout(() => {
-        this.successAlert = "none";
-        this.failAlert = "none";
-      }, 3000);
-    }
-  }
-};
-</script>
-<style scoped>
-.fixed {
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  right: 0;
-}
->>>>>>> develop
 </style>

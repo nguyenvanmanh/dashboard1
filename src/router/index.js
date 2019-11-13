@@ -141,9 +141,8 @@ export default new Router({
       ]
     },
     {
-      path: "/campaigns",
-      name: "campaigns",
-      component: campaigns
+      path: "/login",
+      component: login
     },
     {
       path: "/register",
