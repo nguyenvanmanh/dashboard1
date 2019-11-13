@@ -536,7 +536,6 @@ export default {
           })
           .catch(err => {
             // eslint-disable-next-line
-            console.log(err);
           });
       }
       if (this.radios === "0") {
@@ -548,9 +547,7 @@ export default {
             self.users = response.data.listUser;
           })
 
-          .catch(err => {
-            console.lo; // eslint-disable-next-lineg(err);
-          });
+          .catch(err => {});
       }
       if (this.radios === "2") {
         axios
@@ -563,7 +560,6 @@ export default {
 
           .catch(err => {
             // eslint-disable-next-line
-            console.log(err);
           });
       }
     },

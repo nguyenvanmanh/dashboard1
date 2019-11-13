@@ -13,8 +13,10 @@
           :items-per-page="rowPerPage"
         >
           <!-- index collum -->
-          <template v-slot:item.index="{item}">
-            <span>{{campaigns.map( (item) => item.id).indexOf(item.id) + 1 }}</span>
+          <template v-slot:item.index="{ item }">
+            <span>{{
+              campaigns.map(item => item.id).indexOf(item.id) + 1
+            }}</span>
           </template>
 
           <!-- New Item popup -->
@@ -25,7 +27,11 @@
               <v-divider class="mx-4" inset vertical></v-divider>
 
               <!-- Dialog button add new campaign -->
-              <v-dialog v-model="dialogs.addCampaign" persistent max-width="600px">
+              <v-dialog
+                v-model="dialogs.addCampaign"
+                persistent
+                max-width="600px"
+              >
                 <template v-slot:activator="{ on }">
                   <v-btn small dark color="blue lighten-1" v-on="on">
                     <v-icon small>library_add</v-icon>
@@ -71,7 +77,12 @@
                                     v-on="on"
                                   ></v-text-field>
                                 </template>
-                                <v-date-picker v-model="dates" scrollable range no-title></v-date-picker>
+                                <v-date-picker
+                                  v-model="dates"
+                                  scrollable
+                                  range
+                                  no-title
+                                ></v-date-picker>
                               </v-menu>
                             </v-col>
                             <v-col cols="6">
@@ -92,8 +103,15 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="dialogs.addCampaign = false">Close</v-btn>
-                    <v-btn color="blue darken-1" text @click="createCampaign">Create</v-btn>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="dialogs.addCampaign = false"
+                      >Close</v-btn
+                    >
+                    <v-btn color="blue darken-1" text @click="createCampaign"
+                      >Create</v-btn
+                    >
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -102,7 +120,7 @@
                 dark
                 color="red"
                 class="mx-1"
-                :disabled="!selected.length ? true: false"
+                :disabled="!selected.length ? true : false"
                 @click="deleteCampaign()"
               >
                 <v-icon small>delete</v-icon>
@@ -120,8 +138,9 @@
                 color="primary"
                 dark
                 @click="sendAll"
-                :disabled="selected.length === 0 ? true: false"
-              >Send All</v-btn>
+                :disabled="selected.length === 0 ? true : false"
+                >Send All</v-btn
+              >
             </v-toolbar>
           </template>
           <!-- End of New Item popup -->
@@ -134,18 +153,20 @@
                 <v-icon
                   color="orange darken-2"
                   @click="changeTemplateDialog(item.id)"
-                >rounded_corner</v-icon>
+                  >rounded_corner</v-icon
+                >
                 <span class="tooltip-text">Change email template</span>
               </div>
               <div class="tooltips">
-                <v-icon
-                  color="green darken-2"
-                  @click="chooseCustomer(item.id)"
-                >supervised_user_circle</v-icon>
+                <v-icon color="green darken-2" @click="chooseCustomer(item.id)"
+                  >supervised_user_circle</v-icon
+                >
                 <span class="tooltip-text">Choose customers</span>
               </div>
               <div class="tooltips">
-                <v-icon color="teal darken-2" @click="sendMailOne(item.id)">email</v-icon>
+                <v-icon color="teal darken-2" @click="sendMailOne(item.id)"
+                  >email</v-icon
+                >
                 <span class="tooltip-text">Send email</span>
               </div>
             </div>
@@ -161,7 +182,12 @@
 
         <!-- select list customer for sending email -->
         <!-- STATUS: DONE -->
-        <v-dialog v-model="dialogs.listCustomer" scrollable persistent max-width="600px">
+        <v-dialog
+          v-model="dialogs.listCustomer"
+          scrollable
+          persistent
+          max-width="600px"
+        >
           <v-card>
             <v-card-title>
               <span class="headline">Choose customers for this campaign</span>
@@ -178,8 +204,15 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialogs.listCustomer = false">Close</v-btn>
-              <v-btn color="blue darken-1" text @click="saveCustomer">Save</v-btn>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="dialogs.listCustomer = false"
+                >Close</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="saveCustomer"
+                >Save</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -192,7 +225,11 @@
             <v-card-title>
               <span class="headline">Choose email template</span>
             </v-card-title>
-            <v-data-table :headers="headers.templates" :items="templates" hide-default-footer>
+            <v-data-table
+              :headers="headers.templates"
+              :items="templates"
+              hide-default-footer
+            >
               <template v-slot:body>
                 <tr
                   v-for="item in templates"
@@ -201,8 +238,8 @@
                   class="template_records"
                   style="border: 1px solid lightgrey"
                 >
-                  <td>{{item.title}}</td>
-                  <td>{{item.body}}</td>
+                  <td>{{ item.title }}</td>
+                  <td v-html="item.body"></td>
                 </tr>
               </template>
               <!-- <template v-slot:body="{items}">
@@ -220,268 +257,268 @@
 </template>
 
 <script>
-  import DataFooter from "./campaign/my-footer";
-  import axios from "axios";
-  import * as API from "../service/API";
-  import DataTable from "./share/DataTable";
-  import AlertAction from "./share/Alert";
-  const baseUrl = API.BASEURL;
+import DataFooter from "./campaign/my-footer";
+import axios from "axios";
+import * as API from "../service/API";
+import DataTable from "./share/DataTable";
+import AlertAction from "./share/Alert";
+const baseUrl = API.BASEURL;
 
-  export default {
-    components: {
-      DataTable,
-      AlertAction,
-      DataFooter
+export default {
+  components: {
+    DataTable,
+    AlertAction,
+    DataFooter
+  },
+  data() {
+    return {
+      rowPerPage: 10,
+      valid: null,
+      buttons: { selectedCampaignId: null },
+      totalElements: null,
+      alerts: {
+        show: false,
+        typeAlert: "",
+        messageAlert: "",
+        failAlert: "none",
+        successAlert: "none"
+      },
+      dates: [],
+      selectedTemplate: null,
+      emailTemplates: {},
+      newCampaign: {},
+      selected: [],
+      customers: [],
+      selectedCustomer: [],
+      campaigns: [],
+      dialogs: {
+        addCampaign: false,
+        changeTemplate: false,
+        listCustomer: false
+      },
+      rules: {
+        title: [value => !!value || "title can not be empty!"],
+        description: [value => !!value || "description can not be empty!"],
+        dates: [
+          v => !!v || "Choose duration for this campaign",
+          value => value.length > 15 || "Pick an end date"
+        ],
+        templates: [value => !!value || "Choose a template for this campaign!"],
+        email: value => true || "Email must be valid"
+      },
+      headers: {
+        customers: [
+          { text: "Name", value: "fullName" },
+          { text: "Email", value: "email" }
+        ],
+        campaigns: [
+          { text: "#", align: "center", value: "index", sortable: false },
+          { text: "Id", align: "center", value: "id" },
+          { text: "Campaign Name", align: "center", value: "title" },
+          {
+            text: "Description",
+            align: "center",
+            value: "description",
+            sortable: false
+          },
+          { text: "Duration From", align: "center", value: "startDate" },
+          { text: "Duration To", align: "center", value: "endDate" },
+          { text: "Action", align: "center", value: "action", sortable: false }
+        ],
+        templates: [
+          { text: "Title", value: "title" },
+          { text: "body", value: "body" }
+        ]
+      },
+      templates: [],
+      allCampaignDetails: []
+    };
+  },
+  computed: {
+    dateFormated() {
+      return this.dates.join("~");
+    }
+  },
+  created() {
+    API.getCampaigns(0, this.rowPerPage).then(res => {
+      res.data.content.map(item => {
+        this.totalElements = res.data.totalElements;
+        item.campaign.startDate = item.campaign.startDate.substring(0, 10);
+        item.campaign.endDate = item.campaign.endDate.substring(0, 10);
+        this.campaigns.push(item.campaign);
+        this.allCampaignDetails = res.data.content;
+      });
+
+      this.customers = res.data.content[0].customerList;
+      this.customers.map(
+        customer =>
+          (customer.fullName = customer.firstName + " " + customer.lastName)
+      );
+    });
+    axios
+      .get(`${baseUrl}/email/get-all-topic`)
+      .then(res => {
+        this.templates = res.data.content;
+        this.emailTemplates.titles = res.data.content.map(item => item.title);
+        this.emailTemplates.ids = res.data.content.map(item => item.id);
+      })
+      .catch(err => {
+        // TODO: log this err
+      });
+  },
+  methods: {
+    changeTemplateDialog(campaignId) {
+      this.buttons.selectedCampaign = campaignId;
+      this.dialogs.changeTemplate = true;
     },
-    data() {
-      return {
-        rowPerPage: 10,
-        valid: null,
-        buttons: { selectedCampaignId: null },
-        totalElements: null,
-        alerts: {
-          show: false,
-          typeAlert: "",
-          messageAlert: "",
-          failAlert: "none",
-          successAlert: "none"
-        },
-        dates: [],
-        selectedTemplate: null,
-        emailTemplates: {},
-        newCampaign: {},
-        selected: [],
-        customers: [],
-        selectedCustomer: [],
-        campaigns: [],
-        dialogs: {
-          addCampaign: false,
-          changeTemplate: false,
-          listCustomer: false
-        },
-        rules: {
-          title: [value => !!value || "title can not be empty!"],
-          description: [value => !!value || "description can not be empty!"],
-          dates: [
-            v => !!v || "Choose duration for this campaign",
-            value => value.length > 15 || "Pick an end date"
-          ],
-          templates: [value => !!value || "Choose a template for this campaign!"],
-          email: value => true || "Email must be valid"
-        },
-        headers: {
-          customers: [
-            { text: "Name", value: "fullName" },
-            { text: "Email", value: "email" }
-          ],
-          campaigns: [
-            { text: "#", align: "center", value: "index", sortable: false },
-            { text: "Id", align: "center", value: "id" },
-            { text: "Campaign Name", align: "center", value: "title" },
-            {
-              text: "Description",
-              align: "center",
-              value: "description",
-              sortable: false
-            },
-            { text: "Duration From", align: "center", value: "startDate" },
-            { text: "Duration To", align: "center", value: "endDate" },
-            { text: "Action", align: "center", value: "action", sortable: false }
-          ],
-          templates: [
-            { text: "Title", value: "title" },
-            { text: "body", value: "body" }
-          ]
-        },
-        templates: [],
-        allCampaignDetails: []
-      };
+    createCampaign() {
+      // get template id for new campaign
+      if (!this.$refs.newCampaignForm.validate()) return;
+      this.emailTemplates.titles.forEach((element, id) => {
+        this.newCampaign.emailTempaleId = this.emailTemplates.ids[id];
+      });
+      // get start date and due date
+      this.dates.sort();
+      this.newCampaign.startDate = this.dates[0];
+      this.newCampaign.endDate = this.dates[1];
+      axios
+        .post(`${baseUrl}/email/add-campaign`, this.newCampaign)
+        .then(res => {
+          this.alerts.typeAlert = "success";
+          this.alerts.messageAlert = `added ${this.newCampaign.title} campaign`;
+          this.alerts.show = !this.alerts.show;
+          this.campaigns = [];
+          this.dates = [];
+          this.newCampaign = {};
+          res.data.map(item => {
+            item.campaign.startDate = item.campaign.startDate.substring(0, 10);
+            item.campaign.endDate = item.campaign.endDate.substring(0, 10);
+            this.campaigns.push(item.campaign);
+            this.allCampaignDetails = res.data.content;
+          });
+          this.dialogs.addCampaign = false;
+        });
     },
-    computed: {
-      dateFormated() {
-        return this.dates.join("~");
-      }
+    saveCustomer() {
+      this.allCampaignDetails.forEach(item => {
+        if (item.campaign.id === this.buttons.selectedCampaignId) {
+          item.customerCheck = this.selectedCustomer;
+          return;
+        }
+      });
+      this.dialogs.listCustomer = false;
     },
-    created() {
-      API.getCampaigns(0, this.rowPerPage).then(res => {
+    chooseCustomer(campaignId) {
+      //open dialog
+      this.dialogs.listCustomer = true;
+      this.buttons.selectedCampaignId = campaignId;
+      // find the selected campaign rows details
+      let selectedCampaign = this.allCampaignDetails.find(item => {
+        if (item.campaign.id === campaignId) return item.customerCheck;
+      });
+      this.selectedCustomer = selectedCampaign.customerCheck;
+    },
+
+    sendMailOne(campaignId) {
+      let selectedItem = this.allCampaignDetails.find(
+        item => item.campaign.id === campaignId
+      );
+      API.sendMail(campaignId, selectedItem.customerCheck)
+        .then(res => {
+          if (res.status === 200) {
+            this.alerts.typeAlert = "success";
+            this.alerts.messageAlert = "Sent email for campaign " + campaignId;
+            this.alerts.show = !this.alerts.show;
+          }
+        })
+        .catch(err => {
+          this.alerts.typeAlert = "fail";
+          this.alerts.messageAlert = err.response.data;
+          this.alerts.show = !this.alerts.show;
+        });
+    },
+    showAlert(template) {
+      API.editCampaignTemplate(this.buttons.selectedCampaign, template.id)
+        .then(res => {
+          //TODO: alert for user
+          this.alerts.typeAlert = "success";
+          this.alerts.messageAlert =
+            "Updated template for campaign " + this.buttons.selectedCampaign;
+          this.alerts.show = !this.alerts.show;
+        })
+        .catch(err => {
+          this.alerts.typeAlert = "fail";
+          this.alerts.messageAlert = "something wrong";
+          this.alerts.show = !this.alerts.show;
+        });
+      this.dialogs.changeTemplate = false;
+    },
+    sendAll() {
+      if (this.selected.length === 0) return;
+      let ids = this.selected.map(item => item.campaignId);
+      API.sendMailAll(ids, this.selectedCustomer)
+        .then(res => {
+          this.alerts.typeAlert = "success";
+          this.alerts.messageAlert = "Sent mails the selected campaigns";
+          this.alerts.show = !this.alerts.show;
+          this.selected = [];
+        })
+        .catch(err => {
+          this.alerts.typeAlert = "fail";
+          this.alerts.messageAlert = "something wrong";
+          this.alerts.show = !this.alerts.show;
+        });
+    },
+    updateCampaign(page) {
+      this.rowPerPage = parseInt(page.rowPerPage);
+      API.getCampaigns(page.currentPage - 1, page.rowPerPage).then(res => {
+        this.campaigns = [];
         res.data.content.map(item => {
           this.totalElements = res.data.totalElements;
           item.campaign.startDate = item.campaign.startDate.substring(0, 10);
           item.campaign.endDate = item.campaign.endDate.substring(0, 10);
           this.campaigns.push(item.campaign);
-          this.allCampaignDetails = res.data.content;
         });
-
-        this.customers = res.data.content[0].customerList;
-        this.customers.map(
-          customer =>
-            (customer.fullName = customer.firstName + " " + customer.lastName)
-        );
+        this.allCampaignDetails = res.data.content;
       });
-      axios
-        .get(`${baseUrl}/email/get-all-topic`)
-        .then(res => {
-          this.templates = res.data.content;
-          this.emailTemplates.titles = res.data.content.map(item => item.title);
-          this.emailTemplates.ids = res.data.content.map(item => item.id);
-        })
-        .catch(err => {
-          // TODO: log this err
-        });
     },
-    methods: {
-      changeTemplateDialog(campaignId) {
-        this.buttons.selectedCampaign = campaignId;
-        this.dialogs.changeTemplate = true;
-      },
-      createCampaign() {
-        // get template id for new campaign
-        if (!this.$refs.newCampaignForm.validate()) return;
-        this.emailTemplates.titles.forEach((element, id) => {
-          this.newCampaign.emailTempaleId = this.emailTemplates.ids[id];
-        });
-        // get start date and due date
-        this.dates.sort();
-        this.newCampaign.startDate = this.dates[0];
-        this.newCampaign.endDate = this.dates[1];
-        axios
-          .post(`${baseUrl}/email/add-campaign`, this.newCampaign)
-          .then(res => {
-            this.alerts.typeAlert = "success";
-            this.alerts.messageAlert = `added ${this.newCampaign.title} campaign`;
-            this.alerts.show = !this.alerts.show;
-            this.campaigns = [];
-            this.dates = [];
-            this.newCampaign = {};
-            res.data.map(item => {
-              item.campaign.startDate = item.campaign.startDate.substring(0, 10);
-              item.campaign.endDate = item.campaign.endDate.substring(0, 10);
-              this.campaigns.push(item.campaign);
-              this.allCampaignDetails = res.data.content;
-            });
-            this.dialogs.addCampaign = false;
-          });
-      },
-      saveCustomer() {
-        this.allCampaignDetails.forEach(item => {
-          if (item.campaign.id === this.buttons.selectedCampaignId) {
-            item.customerCheck = this.selectedCustomer;
-            return;
-          }
-        });
-        this.dialogs.listCustomer = false;
-      },
-      chooseCustomer(campaignId) {
-        //open dialog
-        this.dialogs.listCustomer = true;
-        this.buttons.selectedCampaignId = campaignId;
-        // find the selected campaign rows details
-        let selectedCampaign = this.allCampaignDetails.find(item => {
-          if (item.campaign.id === campaignId) return item.customerCheck;
-        });
-        this.selectedCustomer = selectedCampaign.customerCheck;
-      },
-
-      sendMailOne(campaignId) {
-        let selectedItem = this.allCampaignDetails.find(
-          item => item.campaign.id === campaignId
-        );
-        API.sendMail(campaignId, selectedItem.customerCheck)
-          .then(res => {
-            if (res.status === 200) {
-              this.alerts.typeAlert = "success";
-              this.alerts.messageAlert = "Sent email for campaign " + campaignId;
-              this.alerts.show = !this.alerts.show;
-            }
-          })
-          .catch(err => {
-            this.alerts.typeAlert = "fail";
-            this.alerts.messageAlert = err.response.data;
-            this.alerts.show = !this.alerts.show;
-          });
-      },
-      showAlert(template) {
-        API.editCampaignTemplate(this.buttons.selectedCampaign, template.id)
-          .then(res => {
-            //TODO: alert for user
-            this.alerts.typeAlert = "success";
-            this.alerts.messageAlert =
-              "Updated template for campaign " + this.buttons.selectedCampaign;
-            this.alerts.show = !this.alerts.show;
-          })
-          .catch(err => {
-            this.alerts.typeAlert = "fail";
-            this.alerts.messageAlert = "something wrong";
-            this.alerts.show = !this.alerts.show;
-          });
-        this.dialogs.changeTemplate = false;
-      },
-      sendAll() {
-        if (this.selected.length === 0) return;
-        let ids = this.selected.map(item => item.campaignId);
-        API.sendMailAll(ids, this.selectedCustomer)
-          .then(res => {
-            this.alerts.typeAlert = "success";
-            this.alerts.messageAlert = "Sent mails the selected campaigns";
-            this.alerts.show = !this.alerts.show;
-            this.selected = [];
-          })
-          .catch(err => {
-            this.alerts.typeAlert = "fail";
-            this.alerts.messageAlert = "something wrong";
-            this.alerts.show = !this.alerts.show;
-          });
-      },
-      updateCampaign(page) {
-        this.rowPerPage = parseInt(page.rowPerPage);
-        API.getCampaigns(page.currentPage - 1, page.rowPerPage).then(res => {
-          this.campaigns = [];
-          res.data.content.map(item => {
-            this.totalElements = res.data.totalElements;
-            item.campaign.startDate = item.campaign.startDate.substring(0, 10);
-            item.campaign.endDate = item.campaign.endDate.substring(0, 10);
-            this.campaigns.push(item.campaign);
-          });
-          this.allCampaignDetails = res.data.content;
-        });
-      },
-      deleteCampaign() {
-        let promise = [];
-        this.selected.map(item => {
-          promise.push(API.deleteCampaign(item.id));
-        });
-        Promise.all(promise).then(res =>
-          this.updateCampaign({ rowPerPage: this.rowPerPage, currentPage: 1 })
-        );
-      }
+    deleteCampaign() {
+      let promise = [];
+      this.selected.map(item => {
+        promise.push(API.deleteCampaign(item.id));
+      });
+      Promise.all(promise).then(res =>
+        this.updateCampaign({ rowPerPage: this.rowPerPage, currentPage: 1 })
+      );
     }
-  };
+  }
+};
 </script>
 <style scoped>
-  .tooltips {
-    position: relative;
-  }
-  .tooltip-text {
-    width: 100px;
-    position: absolute;
-    top: 25px;
-    left: -40px;
-    visibility: hidden;
-    background-color: gray;
-    color: #fff;
-    text-align: center;
-    padding: 0;
-    border-radius: 10px;
-    z-index: 2;
-  }
-  .tooltips:hover .tooltip-text {
-    visibility: visible;
-  }
+.tooltips {
+  position: relative;
+}
+.tooltip-text {
+  width: 100px;
+  position: absolute;
+  top: 25px;
+  left: -40px;
+  visibility: hidden;
+  background-color: gray;
+  color: #fff;
+  text-align: center;
+  padding: 0;
+  border-radius: 10px;
+  z-index: 2;
+}
+.tooltips:hover .tooltip-text {
+  visibility: visible;
+}
 
-  .rowperpage2 {
-    width: 50px !important;
-  }
-  .template_records:hover {
-    background-color: #ccbfdf;
-  }
+.rowperpage2 {
+  width: 50px !important;
+}
+.template_records:hover {
+  background-color: #ccbfdf;
+}
 </style>

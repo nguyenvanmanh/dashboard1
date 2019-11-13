@@ -43,3 +43,10 @@ export function deleteCampaign(id) {
     isActivated: 0
   });
 }
+
+export function getRoles() {
+  return axios.get(`${BASEURL}/rest/getAllListRole`);
+}
+export function getListPages() {
+  return axios.get(`${BASEURL}/rest/getAllListPages`);
+}
