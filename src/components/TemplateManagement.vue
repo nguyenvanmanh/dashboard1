@@ -123,8 +123,8 @@ export default {
   data: () => ({
     dataHeader: [
       { name: "#", dataFormat: "", width: "5" },
-      { name: "Title", dataFormat: "title", width: "" },
-      { name: "Body", dataFormat: "body", width: "" },
+      { name: "Title", dataFormat: "title", width: "30" ,toolTip: true },
+      { name: "Body", dataFormat: "body", width: "", toolTip: false },
       { name: "Action", dataFormat: "", width: "15" }
     ],
     show: true,
