@@ -146,9 +146,9 @@
           <div class="panel-container show">
             <div class="panel-content">
               <!-- datatable start -->
-              <DataTable :data="dataTemplates" :header="dataHeader">
-                <template slot="#">
-                  <td>#</td>
+              <DataTable :data="dataCustomer" :header="dataHeader">
+                <template slot="#" slot-scope="dataRow">
+                  <td>{{dataCustomer.map(function(x) {return x.id; }).indexOf(dataRow.row.id) +count}}</td>
                 </template>
                 <template slot="Action" slot-scope="dataRow">
                   <td>
@@ -232,7 +232,7 @@ export default {
     isInvalid: "",
     titleValidate: "none",
     dialog: false,
-    dataTemplates: [],
+    dataCustomer: [],
     editedIndex: 0,
     id_template: "",
     title_input: "",
@@ -248,7 +248,8 @@ export default {
     menu2: false,
     search_text: "",
     search_type: "name",
-    nameTypeSearch: "Name"
+    nameTypeSearch: "Name",
+    count: 0
   }),
 
   components: {
@@ -287,6 +288,7 @@ export default {
     clickCallback(targetPage, numOfItem) {
       this.sizePage = numOfItem;
       this.currentPage = targetPage - 1;
+      this.count = this.sizePage * this.currentPage + 1;
       this.fetchCustomerByPage(numOfItem, targetPage - 1);
     },
     someHandler() {
@@ -302,7 +304,7 @@ export default {
           }
         })
         .then(response => {
-          this.dataTemplates = response.data.content;
+          this.dataCustomer = response.data.content;
           this.totalPages = response.data.totalPages;
         })
         .catch(error => {
@@ -315,7 +317,7 @@ export default {
       axios
         .get(`${base_url}/customer/get-all-customer`)
         .then(response => {
-          this.dataTemplates = response.data.content;
+          this.dataCustomer = response.data.content;
           this.totalPages = response.data.totalPages;
           this.currentPage = response.data.number;
         })
@@ -464,7 +466,7 @@ export default {
         })
         .then(response => {
           console.log(response.data);
-          this.dataTemplates = response.data.content;
+          this.dataCustomer = response.data.content;
           this.totalPages = response.data.totalPages;
           this.currentPage = 0;
         })
