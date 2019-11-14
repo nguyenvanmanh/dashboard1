@@ -18,25 +18,19 @@
               </v-col>
               <v-text-field label="code" v-model="role.code"></v-text-field>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <div>{{ selected }}</div>
-            </v-row>
+            </v-row>-->
             <!-- <v-row style="height: 40px" v-for="page in pages" :key="page">
               <v-col cols="2"></v-col>
               <v-checkbox></v-checkbox>
               <span class="pages">{{ page }}</span>
-            </v-row> -->
+            </v-row>-->
             <v-layout>
               <ul>
                 <li v-for="(page, index) in pages" :key="index">
                   <div>
-                    <v-checkbox
-                      :key="index"
-                      v-model="selected"
-                      :value="page"
-                      :label="page"
-                    >
-                    </v-checkbox>
+                    <v-checkbox :key="index" v-model="selected" :value="page" :label="page"></v-checkbox>
                   </div>
                 </li>
               </ul>
@@ -45,14 +39,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialogs.setRole = false"
-            right
-            >Close</v-btn
-          >
-          <v-btn color="blue darken-1" text right>Save</v-btn>
+          <v-btn color="blue darken-1" text @click="dialogs.setRole = false" right>Close</v-btn>
+          <v-btn color="blue darken-1" text right @click="editRole">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -60,9 +48,7 @@
       <div class="col-xl-12">
         <div id="panel-1" class="panel">
           <div class="panel-hdr">
-            <span class="heading">
-              Role Management
-            </span>
+            <span class="heading">Role Management</span>
             <v-divider class="mx-4" inset vertical></v-divider>
           </div>
           <div class="panel-container show">
@@ -70,7 +56,7 @@
               <!-- <loading
                 :type="'pointing'"
                 :style="`display:${loadingDisplay}`"
-              ></loading> -->
+              ></loading>-->
               <!-- datatable start -->
               <DataTable :data="data" :header="headers">
                 <template slot="#">
@@ -82,17 +68,15 @@
                       dark
                       flat
                       color="grey darken-2"
-                      @click="editRole(dataRow.row)"
-                      >edit</v-icon
-                    >
+                      @click="openEditRoleDialog(dataRow.row)"
+                    >edit</v-icon>
                     <v-icon
                       dark
                       flat
                       class="mx-3"
                       color="grey darken-2"
                       @click="dialogs.setRole = true"
-                      >delete</v-icon
-                    >
+                    >delete</v-icon>
                   </td>
                 </template>
               </DataTable>
@@ -103,7 +87,7 @@
                 :clickHandler="clickCallback"
                 :totalPages="totalPages"
                 :sizePage="[10, 20, 50]"
-              ></Pagination> -->
+              ></Pagination>-->
               <!-- pagination end -->
 
               <!-- dropdown choose number of element -->
@@ -118,69 +102,93 @@
       :message="messageAlert"
       :typeAlert="typeAlert"
       :show="show"
-    ></alert-action> -->
+    ></alert-action>-->
   </v-app>
 </template>
 
 <script>
-import * as API from "../service/API";
-import DataTable from "./share/DataTable";
-export default {
-  components: {
-    DataTable
-  },
-  mounted() {
-    API.getRoles().then(res => {
-      this.data = res.data;
-    });
-    API.getListPages().then(
-      res => (this.pages = res.data.map(item => item.url))
-    );
-  },
-  methods: {
-    editRole(role) {
-      this.dialogs.setRole = true;
-      this.role.name = role.name;
-      this.role.code = role.code;
-    }
-  },
-  data() {
-    return {
-      pages: [],
-      selected: [],
-      dialogs: {
-        setRole: false
+  import * as API from "../service/API";
+  import DataTable from "./share/DataTable";
+  export default {
+    components: {
+      DataTable
+    },
+    mounted() {
+      API.getRoles().then(res => {
+        this.data = res.data;
+        this.rolePermissions = [];
+        res.data.map(item => {
+          // console.log("map");
+          API.getPagesRoleId(item.id).then(res2 => {
+            this.rolePermissions.push({
+              id: item.id,
+              listPages: res2.data
+            });
+          });
+        });
+      });
+      API.getListPages().then(
+        res => (this.pages = res.data.map(item => item.url))
+      );
+    },
+    methods: {
+      openEditRoleDialog(role) {
+        this.dialogs.setRole = true;
+        this.role.name = role.name;
+        this.role.code = role.code;
+        this.role.id = role.id;
+        let selectedItem = this.rolePermissions.find(item => {
+          if (item.id === role.id) {
+            return item;
+          }
+        });
+        this.selected = selectedItem.listPages;
+        // console.log(this.selected);
       },
-      role: {},
-      headers: [
-        { name: "#", dataFormat: "", width: "5" },
-        { name: "id", dataFormat: "id", width: "5" },
-        { name: "Name", dataFormat: "name", width: "" },
-        { name: "Code", dataFormat: "code", width: "" },
-        { name: "Action", dataFormat: "", width: "15" }
-      ],
-      data: []
-    };
-  },
-  computed: {}
-};
+      editRole() {
+        // TODO: API call to edit role
+
+        this.dialogs.setRole = false;
+      }
+    },
+    data() {
+      return {
+        rolePermissions: [],
+        pages: [],
+        selected: [],
+        dialogs: {
+          setRole: false
+        },
+        role: {},
+        headers: [
+          { name: "#", dataFormat: "", width: "5" },
+          { name: "id", dataFormat: "id", width: "5" },
+          { name: "Name", dataFormat: "name", width: "" },
+          { name: "Code", dataFormat: "code", width: "" },
+          { name: "Action", dataFormat: "", width: "15" }
+        ],
+        data: []
+      };
+    },
+    computed: {}
+  };
 </script>
 
 <style scoped>
-.flexs {
-  height: 30px;
-  align-self: auto;
-}
-.pages {
-  color: black;
-  align-self: center;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-}
-ul li {
-  list-style: none;
-  padding: 0;
-  color: black;
-}
+  .flexs {
+    height: 30px;
+    align-self: auto;
+  }
+  .pages {
+    color: black;
+    align-self: center;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+  }
+  ul li {
+    list-style: none;
+    padding: 0;
+    color: black;
+  }
 </style>
