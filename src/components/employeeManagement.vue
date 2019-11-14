@@ -24,8 +24,7 @@
                     color="blue lighten-2"
                     v-on="on"
                     title="Add a new user."
-                    >library_add</v-icon
-                  >
+                  >library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -35,28 +34,16 @@
                     <v-container>
                       <v-col>
                         <v-row cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.firstName"
-                            label="First Name"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.firstName" label="First Name"></v-text-field>
                         </v-row>
                         <v-row cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.lastName"
-                            label="Last Name"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
                         </v-row>
                         <v-row cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.email"
-                            label="Email"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
                         </v-row>
                         <v-row cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.username"
-                            label="UserName"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.username" label="UserName"></v-text-field>
                         </v-row>
                         <v-row cols="12" sm="6" md="4">
                           <v-text-field
@@ -104,15 +91,12 @@
                             </template>
                             <v-date-picker v-model="editedItem.dob" scrollable>
                               <v-spacer></v-spacer>
-                              <v-btn text color="primary" @click="modal = false"
-                                >Cancel</v-btn
-                              >
+                              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
                               <v-btn
                                 text
                                 color="primary"
                                 @click="$refs.dialog.save(editedItem.dob)"
-                                >OK</v-btn
-                              >
+                              >OK</v-btn>
                             </v-date-picker>
                           </v-dialog>
                         </v-row>
@@ -121,9 +105,7 @@
                   </v-card-text>
                   <v-card-actions>
                     <div class="flex-grow-1"></div>
-                    <v-btn color="blue darken-1" text @click="close"
-                      >Cancel</v-btn
-                    >
+                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                     <v-btn color="blue darken-1" text @click="save">Save</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -155,31 +137,12 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                   title="View users"
-                >
-                  View Users
-                </button>
+                >View Users</button>
                 <div class="dropdown-menu">
-                  <v-radio-group
-                    v-model="radios"
-                    row
-                    :mandatory="false"
-                    style="margin-top: 2%"
-                  >
-                    <v-radio
-                      class="dropdown-item"
-                      label="Inactive"
-                      value="0"
-                    ></v-radio>
-                    <v-radio
-                      class="dropdown-item"
-                      label="Active"
-                      value="1"
-                    ></v-radio>
-                    <v-radio
-                      class="dropdown-item"
-                      label="All"
-                      value="2"
-                    ></v-radio>
+                  <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
+                    <v-radio class="dropdown-item" label="Inactive" value="0"></v-radio>
+                    <v-radio class="dropdown-item" label="Active" value="1"></v-radio>
+                    <v-radio class="dropdown-item" label="All" value="2"></v-radio>
                   </v-radio-group>
                 </div>
               </div>
@@ -192,68 +155,85 @@
               title="Deactivate this user."
               v-if="item.isActivated === 1"
               @click="showPopupForActive(item)"
-              >mdi-lock-open-variant</v-icon
-            >
+            >mdi-lock-open-variant</v-icon>
             <v-icon
               title="Activate this user."
               v-if="item.isActivated === 0 || null"
               @click="showPopupForInactive(item)"
-              >mdi-lock</v-icon
-            >
-            <v-icon title="Set department and role." @click="showDialog(item)"
-              >mdi-account-edit-outline</v-icon
-            >
-            <v-icon title="Edit user's information." @click="editItem(item)"
-              >mdi-pencil</v-icon
-            >
+            >mdi-lock</v-icon>
+            <v-icon
+              title="Set department and role."
+              @click="showDialog(item)"
+            >mdi-account-edit-outline</v-icon>
+            <v-icon title="Edit user's information." @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
         </v-data-table>
         <!--Set Department table pop up (Icon is supervised_user_circle ) -->
-        <v-dialog v-model="dialog1" max-width="600px">
+        <v-dialog v-model="dialog1" max-width="900px">
           <v-card>
             <v-card-title>
-              <span class="headline">User's Department & Role</span>
+              <span class="headline">User's Department & Role of <strong>{{userNameRow}}</strong></span>
             </v-card-title>
             <v-card-text>
               <v-container id="dropdown-example">
-                <v-simple-table>
-                  <template v-slot:default>
-                    <thead>
-                      <tr>
-                        <th class="text-left">Department</th>
-                        <th class="text-left">Role</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in departmentRole" :key="item.name">
-                        <td>{{ item.departmentName }}</td>
-                        <td>{{ item.roleName }}</td>
-                      </tr>
-                    </tbody>
+                <!-- datatable start -->
+                <v-data-table
+                  :headers="dataHeader"
+                  :items="dataDptRol"
+                  hide-default-footer
+                  class="elevation-1"
+                >
+                  <template v-slot:item.action="{ item }">
+                    <a
+                      @click="deleteItem(item)"
+                      class="btn btn-sm btn-outline-danger mr-2"
+                      title="Delete Record"
+                      style="text-align: center"
+                    >
+                      <i class="fal fa-times"></i>
+                    </a>
                   </template>
-                </v-simple-table>
+                </v-data-table>
               </v-container>
               <v-container id="dropdown-example">
                 <v-simple-table>
                   <template v-slot:default>
                     <p>Set department & role for this user :</p>
                     <v-row>
-                      <v-col cols="12" sm="6">
-                        <v-overflow-btn
-                          class="my-2"
-                          :items="departmentName"
-                          label="Choose Department"
-                          target="#dropdown-example"
-                        ></v-overflow-btn>
+                      <v-col cols="12" sm="5">
+                        <v-select
+                          v-model="selectDep"
+                          :items="listAllDepFilter"
+                          item-text="departmentName"
+                          item-value="departmentId"
+                          label="Select Department"
+                          persistent-hint
+                          return-object
+                          single-line
+                          @change="depChoice = changeDepSel(selectDep.departmentName,selectDep.departmentId)"
+                        ></v-select>
                       </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-overflow-btn
-                          class="my-2"
-                          :items="roleName"
-                          label="Choose Role"
-                          target="#dropdown-example"
-                        ></v-overflow-btn>
+                      <v-col cols="12" sm="5">
+                        <v-select
+                          v-model="selectRol"
+                          :items="listAllRole"
+                          item-text="roleName"
+                          item-value="roleId"
+                          label="Select Role"
+                          persistent-hint
+                          return-object
+                          single-line
+                          @change="rolChoice = changeRoleSel(selectRol.roleName,selectRol.roleId)"
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="12" sm="2">
+                        <button
+                          style="margin-top:10px"
+                          type="button"
+                          class="btn btn-success"
+                          @click="addDptRol()"
+                        >Add</button>
                       </v-col>
                     </v-row>
                   </template>
@@ -262,12 +242,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog1 = false"
-                >Close</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="dialog1 = false"
-                >Save</v-btn
-              >
+              <v-btn color="blue darken-1" text @click="dialog1 = false">Close</v-btn>
+              <v-btn color="blue darken-1" text @click="saveChoiceRole()">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -275,22 +251,14 @@
         <!-- Show dialog for deactivating users -->
         <v-dialog v-model="dialog2" max-width="400px">
           <v-card>
-            <v-card-title class="headline grey lighten-2" primary-title
-              >Deactivating User</v-card-title
-            >
+            <v-card-title class="headline grey lighten-2" primary-title>Deactivating User</v-card-title>
             <p></p>
-            <v-card-text
-              >Are you sure, you want to deactivate this user ?</v-card-text
-            >
+            <v-card-text>Are you sure, you want to deactivate this user ?</v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="reactivate_deactivate"
-                >I agree</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="dialog2 = false"
-                >Cancel</v-btn
-              >
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog2 = false">Cancel</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -298,39 +266,28 @@
         <!-- Show dialog for activating users -->
         <v-dialog v-model="dialog3" max-width="400px">
           <v-card>
-            <v-card-title class="headline grey lighten-2" primary-title
-              >Activate User</v-card-title
-            >
+            <v-card-title class="headline grey lighten-2" primary-title>Activate User</v-card-title>
             <p></p>
-            <v-card-text
-              >Are you sure, you want to activate this user ?</v-card-text
-            >
+            <v-card-text>Are you sure, you want to activate this user ?</v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="reactivate_deactivate"
-                >I agree</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="dialog3 = false"
-                >Cancel</v-btn
-              >
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog3 = false">Cancel</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <!-- /End activating users -->
       </v-flex>
     </v-layout>
-    <alert-action
-      :message="messageAlert"
-      :typeAlert="typeAlert"
-      :show="show"
-    ></alert-action>
+    <!-- <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action> -->
   </v-app>
 </template>
 <script>
 import axios from "axios";
 import * as API from "../service/API";
 import AlertAction from "./share/Alert";
+import DataTable from "./share/DataTable";
 
 export default {
   data() {
@@ -352,31 +309,7 @@ export default {
       messageAlert: "",
       failAlert: "none",
       successAlert: "none",
-      departmentName: [
-        "DU1",
-        "DU2",
-        "DU3",
-        "DU4",
-        "DU5",
-        "DU6",
-        "DU7",
-        "DU8",
-        "DU9",
-        "DU10",
-        "DU11",
-        "DU12"
-      ],
-      roleName: [
-        "Admin",
-        "Manager",
-        "Teamlead",
-        "PM",
-        "BA",
-        "SA",
-        "Developer",
-        "Tester",
-        "Directer"
-      ],
+      dataDptRol: [],
       headersTitle: [
         {
           text: "UserID",
@@ -396,6 +329,14 @@ export default {
         // { text: "End Date", value: "endDate" },
         { text: "Seniority", value: "seniority" },
         { text: "Actions", value: "action", sortable: false }
+      ],
+      dataHeader: [
+        {
+          text: "Department",
+          value: "department"
+        },
+        { text: "Role", value: "role" },
+        { text: "Actions", value: "action" }
       ],
       users: [],
       editedIndex: -1,
@@ -419,9 +360,22 @@ export default {
         departmentCodeAll: "",
         registeredDate: ""
       },
-      departmentRole: []
+      listDepartmentRole: [],
+      listAllRole: [],
+      listAllDep: [],
+      selectDep: [],
+      selectRol: [],
+      depChoice: "",
+      rolChoice: "",
+      oldListDepRole: [],
+      userId: "",
+      listAllDepFilter: [],
+      userNameRow:"",
     };
   },
+
+  mounted: {},
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -437,6 +391,15 @@ export default {
     this.initialize();
   },
 
+  mounted() {
+    this.fetchAllDepartment();
+    this.fetchAllRole();
+  },
+
+  components: {
+    DataTable
+    // AlertAction
+  },
   methods: {
     // get employee's information from database by using axios
     fetchUsers() {
@@ -460,19 +423,44 @@ export default {
     },
     // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
     showDialog(item) {
+      this.userId = item.id;
+      this.userNameRow = item.username
+      // get list data of department
+      let listDataDptRol = item.listDepartmentDTO
+        .filter(item => {
+          return item.stayOrLeave === 1;
+        })
+        .map((dpm, index) => {
+          let dupDep = {
+            departmentId: dpm.id,
+            departmentName: dpm.name
+          };
+          return {
+            department: dpm.name,
+            role: dpm.roleDTO.name,
+            departmentId: dpm.id,
+            roleId: dpm.roleDTO.id
+          };
+        });
       this.dialog1 = true;
-      let arr = [];
-      let length = item.listDepartmentDTO.length;
-      if (length > 0) {
-        for (let i = 0; i < length; i++) {
-          arr.push({
-            departmentName: item.listDepartmentDTO[i].code,
-            roleName: item.listDepartmentDTO[i].role.code
-          });
-        }
-      }
-      this.departmentRole = arr;
+      this.dataDptRol = listDataDptRol;
+
+      //get list ID of Department duplicate
+      let listDepIdDup = listDataDptRol.map(item => {
+        return item.departmentId;
+      });
+
+      // get all list department not duplication
+      this.listAllDepFilter = this.listAllDep
+        .filter(dep => {
+          return listDepIdDup.indexOf(dep.departmentId) == -1;
+        })
+        .map(dep => {
+          return dep;
+        });
+      this.oldListDepRole = Object.assign([], listDataDptRol);
     },
+
     // Show dialog to deactivate users
     showPopupForInactive(item) {
       this.dialog2 = true;
@@ -486,6 +474,11 @@ export default {
     // Close dilog Edited employee's information
     close() {
       this.dialog = false;
+      this.listAllDepFilter = [];
+      this.selectDep = [];
+      this.selectRol = [];
+      this.depChoice = "";
+      this.oldListDepRole = [];
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
@@ -580,6 +573,107 @@ export default {
         });
       this.dialog2 = false;
       this.dialog3 = false;
+    },
+
+    addDptRol() {
+      if (this.depChoice !== "" && this.rolChoice !== "") {
+        this.dataDptRol.push({
+          department: this.depChoice.departmentName,
+          departmentId: this.depChoice.departmentID,
+          roleId: this.rolChoice.roleId,
+          role: this.rolChoice.roleName
+        });
+
+        let idxDpm;
+        this.listAllDepFilter.map((item, index) => {
+          if (item.departmentId === this.depChoice.departmentID) {
+            idxDpm = index;
+          }
+        });
+        this.listAllDepFilter.splice(idxDpm, 1);
+        this.depChoice = "";
+      }
+    },
+
+    changeDepSel(depName, depID) {
+      return {
+        departmentID: depID,
+        departmentName: depName
+      };
+    },
+
+    changeRoleSel(rolName, rolId) {
+      return {
+        roleName: rolName,
+        roleId: rolId
+      };
+    },
+
+    fetchAllDepartment() {
+      axios
+        .get(`${API.BASEURL}/rest/getAllListDepartment`)
+        .then(response => {
+          this.listAllDep = response.data.map((item, index) => {
+            return {
+              departmentName: item.name,
+              departmentId: item.id
+            };
+          });
+        })
+        .catch(err => {});
+    },
+
+    fetchAllRole() {
+      axios
+        .get(`${API.BASEURL}/rest/getAllListRole`)
+        .then(response => {
+          this.listAllRole = response.data.map(item => {
+            return {
+              roleName: item.name,
+              roleId: item.id
+            };
+          });
+        })
+        .catch(err => {});
+    },
+
+    saveChoiceRole() {
+      let oldlist = this.oldListDepRole.map((item, index) => {
+        return {
+          departmentId: item.departmentId,
+          roleId: item.roleId
+        };
+      });
+      let newList = this.dataDptRol.map((item, index) => {
+        return {
+          departmentId: item.departmentId,
+          roleId: item.roleId
+        };
+      });
+
+      let data = {
+        userId: this.userId,
+        oldList: oldlist,
+        newList: newList
+      };
+      axios
+        .post(`${API.BASEURL}/rest/update-department-role`, data, {
+          headers: { Authorization: localStorage.getItem("token") }
+        })
+        .then(response => {
+          this.changeUsersStatus();
+        })
+        .catch(err => {});
+
+      this.dialog1 = false;
+    },
+    deleteItem(item) {
+      let index = this.dataDptRol.indexOf(item);
+      this.dataDptRol.splice(index, 1);
+      this.listAllDepFilter.push({
+        departmentName: item.department,
+        departmentId: item.departmentId
+      });
     }
   }
 };
