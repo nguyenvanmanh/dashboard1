@@ -21,10 +21,10 @@
               :key="i"
               style="max-width: 400px ; word-break: break-all;"
             >
-              <template v-if="template[header.dataFormat].length <70">
+              <template v-if="template[header.dataFormat] && template[header.dataFormat].length <70">
                 <div v-html="template[header.dataFormat]"></div>
               </template>
-              <template v-else>
+              <template v-else-if="template[header.dataFormat]">
                 <div
                   v-if="header.toolTip"
                   v-html="template[header.dataFormat].slice(0, 70)+'...'"
