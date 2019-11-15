@@ -630,6 +630,7 @@
       },
 
       fetAllListUser(page) {
+        let self = this;
         axios
           .get(
             `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
@@ -639,6 +640,7 @@
           .then(function(response) {
             // eslint-disable-next-line
             self.users = response.data.listUser;
+            // this.users = response.data.listUser;
           })
           .catch(err => {
             // eslint-disable-next-line
