@@ -23,7 +23,8 @@
   export default {
     props: {
       totalElement: Number,
-      rowPerPageProps: Number
+      rowPerPageProps: Number,
+      curPage: Function
     },
     watch: {
       rowPerPage() {
@@ -73,11 +74,14 @@
           this.isMaxPage = true;
         }
         this.isMinPage = false;
+        this.curPage(this.currentPage);
       },
       back() {
         if (this.currentPage === 1) {
           this.isMinPage = true;
           this.isMaxPage = false;
+          this.curPage(this.currentPage);
+
           return;
         }
         this.currentPage--;
@@ -96,6 +100,7 @@
           this.isMinPage = true;
         }
         this.isMaxPage = false;
+        this.curPage(this.currentPage);
       }
     }
   };

@@ -26,30 +26,35 @@
               <v-checkbox></v-checkbox>
               <span class="pages">{{ page }}</span>
             </v-row>-->
-            <v-layout>
-              <ul>
-                <li v-for="(page, index) in pages" :key="index">
-                  <div>
-                    <v-checkbox :key="index" v-model="selected" :value="page" :label="page"></v-checkbox>
-                  </div>
-                </li>
-              </ul>
-            </v-layout>
+
+            <ul>
+              <li v-for="(page, index) in pages" :key="index">
+                <div>
+                  <v-checkbox :key="index" v-model="selected" :value="page" :label="page"></v-checkbox>
+                </div>
+              </li>
+            </ul>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialogs.setRole = false" right>Close</v-btn>
-          <v-btn color="blue darken-1" text right @click="editRole">Save</v-btn>
+          <v-btn color="blue darken-1" text right @click="SaveDialog">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- add role dialog -->
+
+    <!-- end of add role dialog -->
     <div class="row">
       <div class="col-xl-12">
         <div id="panel-1" class="panel">
           <div class="panel-hdr">
             <span class="heading">Role Management</span>
             <v-divider class="mx-4" inset vertical></v-divider>
+            <v-btn small dark color="blue lighten-1" @click="openAddRoleDialog">
+              <v-icon small>library_add</v-icon>
+            </v-btn>
           </div>
           <div class="panel-container show">
             <div class="panel-content">
@@ -132,7 +137,13 @@
       );
     },
     methods: {
+      openAddRoleDialog() {
+        this.dialogs.mode = "create";
+        this.role = {};
+        this.selected = [];
+      },
       openEditRoleDialog(role) {
+        this.dialogs.mode = "edit";
         this.dialogs.setRole = true;
         this.role.name = role.name;
         this.role.code = role.code;
@@ -145,10 +156,14 @@
         this.selected = selectedItem.listPages;
         // console.log(this.selected);
       },
-      editRole() {
-        // TODO: API call to edit role
-
+      SaveDialog() {
+        if (this.dialogs.mode === "edit") {
+          // TODO: API call to edit role
+        } else if (this.dialogs.mode === "create") {
+          // TODO: API call to add role
+        }
         this.dialogs.setRole = false;
+        this.dialogs.mode = null;
       }
     },
     data() {
@@ -157,7 +172,9 @@
         pages: [],
         selected: [],
         dialogs: {
-          setRole: false
+          setRole: false,
+          addRole: false,
+          mode: null
         },
         role: {},
         headers: [
@@ -189,6 +206,21 @@
   ul li {
     list-style: none;
     padding: 0;
+    color: black;
+  }
+  .v-input--selection-controls,
+  .v-input--selection-controls__ripple,
+  .v-input__control div.v-input__slot {
+    padding: 0;
+    margin: 0 !important;
+  }
+  .v-messages .theme--light {
+    visibility: hidden;
+  }
+  .v-input__control {
+    height: 320px !important;
+  }
+  .v-label {
     color: black;
   }
 </style>
