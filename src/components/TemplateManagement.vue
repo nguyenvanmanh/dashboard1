@@ -31,7 +31,9 @@
                   <v-container>
                     <v-row v-model="row_input">
                       <v-col cols="12">
-                        <label class="form-label" for="simpleinputInvalid">Title</label>
+                        <label class="form-label" for="simpleinputInvalid"
+                          >Title</label
+                        >
                         <input
                           type="text"
                           v-bind:class="[formControl, isInvalid]"
@@ -41,14 +43,21 @@
                         />
                         <div
                           class="invalid-feedback"
-                          :style="{display: titleValidate}"
-                        >Please enter text in here.</div>
+                          :style="{ display: titleValidate }"
+                        >
+                          Please enter text in here.
+                        </div>
                       </v-col>
                       <v-col cols="12">
-                        <label class="form-label" for="example-password">Body</label>
+                        <label class="form-label" for="example-password"
+                          >Body</label
+                        >
                       </v-col>
                       <v-col cols="12">
-                        <vue-editor label="Body" v-model="body_input"></vue-editor>
+                        <vue-editor
+                          label="Body"
+                          v-model="body_input"
+                        ></vue-editor>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -56,7 +65,9 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                  <v-btn color="blue darken-1" text @click="close"
+                    >Cancel</v-btn
+                  >
                   <v-btn color="blue darken-1" text @click="save">Save</v-btn>
                 </v-card-actions>
               </v-card>
@@ -64,15 +75,26 @@
           </div>
           <div class="panel-container show">
             <div class="panel-content">
-              <loading :type="'pointing'" :style="`display:${loadingDisplay}`"></loading>
+              <loading
+                :type="'pointing'"
+                :style="`display:${loadingDisplay}`"
+              ></loading>
               <!-- datatable start -->
               <DataTable
                 :style="`display:${tableDisplay}`"
                 :data="dataTemplates"
                 :header="dataHeader"
-              > 
+              >
                 <template slot="#" slot-scope="dataRow">
-                  <td>{{dataTemplates.map(function(x) {return x.id; }).indexOf(dataRow.row.id) +count}}</td>
+                  <td>
+                    {{
+                      dataTemplates
+                        .map(function(x) {
+                          return x.id;
+                        })
+                        .indexOf(dataRow.row.id) + count
+                    }}
+                  </td>
                 </template>
                 <template slot="Action" slot-scope="dataRow">
                   <td>
@@ -92,7 +114,7 @@
               <Pagination
                 :clickHandler="clickCallback"
                 :totalPages="totalPages"
-                :sizePage="[10,20,50]"
+                :sizePage="[10, 20, 50]"
               ></Pagination>
               <!-- pagination end -->
 
@@ -104,7 +126,11 @@
       </div>
     </div>
 
-    <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action>
+    <alert-action
+      :message="messageAlert"
+      :typeAlert="typeAlert"
+      :show="show"
+    ></alert-action>
   </v-app>
 </template>
 
@@ -123,7 +149,7 @@ export default {
   data: () => ({
     dataHeader: [
       { name: "#", dataFormat: "", width: "5" },
-      { name: "Title", dataFormat: "title", width: "30" ,toolTip: true },
+      { name: "Title", dataFormat: "title", width: "30", toolTip: true },
       { name: "Body", dataFormat: "body", width: "", toolTip: false },
       { name: "Action", dataFormat: "", width: "15" }
     ],
@@ -181,7 +207,7 @@ export default {
     clickCallback(targetPage, sizeOfItem) {
       this.sizePage = sizeOfItem;
       this.currentPage = targetPage - 1;
-      this.count = this.sizePage * this.currentPage +1
+      this.count = this.sizePage * this.currentPage + 1;
       this.fetchTemplateByPage(sizeOfItem, targetPage - 1);
     },
 

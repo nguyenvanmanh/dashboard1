@@ -1,36 +1,54 @@
 <template>
   <!-- datatable start -->
 
-  <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+  <table
+    id="dt-basic-example"
+    class="table table-bordered table-hover table-striped w-100"
+  >
     <thead>
       <tr>
         <th
-          v-for="(header,i) in dataHeader"
+          v-for="(header, i) in dataHeader"
           :key="i"
           class="text-center"
           :style="`width:${header.width}%`"
-        >{{header.name}}</th>
+        >
+          {{ header.name }}
+        </th>
       </tr>
     </thead>
     <tbody>
-      <template v-if="dataTable && dataTable.length !==0">
-        <tr v-for="(template,i) in dataTable" :key="i" class="text-center">
-          <template v-for="(header,i) in dataHeader">
+      <template v-if="dataTable && dataTable.length !== 0">
+        <tr v-for="(template, i) in dataTable" :key="i" class="text-center">
+          <template v-for="(header, i) in dataHeader">
             <td
-              v-if="header.name !== '#' && header.dataFormat !== '' && header.dataFormat !== undefined"
+              v-if="
+                header.name !== '#' &&
+                  header.dataFormat !== '' &&
+                  header.dataFormat !== undefined
+              "
               :key="i"
               style="max-width: 400px ; word-break: break-all;"
             >
-              <template v-if="template[header.dataFormat] && template[header.dataFormat].length <70">
+              <template
+                v-if="
+                  template[header.dataFormat] &&
+                    template[header.dataFormat].length < 70
+                "
+              >
                 <div v-html="template[header.dataFormat]"></div>
               </template>
               <template v-else-if="template[header.dataFormat]">
                 <div
                   v-if="header.toolTip"
-                  v-html="template[header.dataFormat].slice(0, 70)+'...'"
+                  v-html="template[header.dataFormat].slice(0, 70) + '...'"
                   :data-tooltip="template[header.dataFormat]"
                 ></div>
-                <div v-else v-html="template[header.dataFormat].slice(0, 70)+'...'"></div>
+                <div
+                  v-else-if="typeof template[header.dataFormat] == 'string'"
+                  v-html="template[header.dataFormat].slice(0, 70) + '...'"
+                ></div>
+                <div v-else v-html="template[header.dataFormat]"></div>
               </template>
             </td>
             <slot v-else :name="header.name" :row="template"></slot>
@@ -148,5 +166,5 @@ export default {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
-}
-</style>>
+}</style
+>>

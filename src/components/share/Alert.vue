@@ -23,7 +23,7 @@
     >
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">
-           <i class="fal fa-times"></i>
+          <i class="fal fa-times"></i>
         </span>
       </button>
       <strong>Oh snap!</strong>
@@ -34,45 +34,45 @@
 </template>
 
 <script>
-import { watch } from "fs";
-export default {
-  props: {
-    show: {
-      type: Boolean
-    },
-    message: {
-      type: String
-    },
-    typeAlert: {
-      type: String
-    }
-  },
-  data: () => ({
-    failAlert: "none",
-    successAlert: "none",
-    type: ""
-  }),
-
-  watch: {
-    show: function() {
-      if (this.typeAlert === "success") {
-        this.successAlert = "block";
-      } else if (this.typeAlert === "fail") {
-        this.failAlert = "block";
+  import { watch } from "fs";
+  export default {
+    props: {
+      show: {
+        type: Boolean
+      },
+      message: {
+        type: String
+      },
+      typeAlert: {
+        type: String
       }
-      setTimeout(() => {
-        this.successAlert = "none";
-        this.failAlert = "none";
-      }, 3000);
+    },
+    data: () => ({
+      failAlert: "none",
+      successAlert: "none",
+      type: ""
+    }),
+
+    watch: {
+      show: function() {
+        if (this.typeAlert === "success") {
+          this.successAlert = "block";
+        } else if (this.typeAlert === "fail") {
+          this.failAlert = "block";
+        }
+        setTimeout(() => {
+          this.successAlert = "none";
+          this.failAlert = "none";
+        }, 3000);
+      }
     }
-  }
-};
+  };
 </script>
 <style scoped>
-.fixed {
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  right: 0;
-}
+  .fixed {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    right: 0;
+  }
 </style>

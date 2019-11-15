@@ -34,7 +34,12 @@
                     The simplest UI toolkit for developers &amp; programmers
                     <small
                       class="h3 fw-300 mt-3 mb-5 text-white opacity-60"
-                    >Presenting you with the next level of innovative UX design and engineering. The most modular toolkit available with over 600+ layout permutations. Experience the simplicity of SmartAdmin, everywhere you go!</small>
+                    >
+                      Presenting you with the next level of innovative UX
+                      design and engineering. The most modular toolkit available
+                      with over 600+ layout permutations. Experience the
+                      simplicity of SmartAdmin, everywhere you go!
+                    </small>
                   </h2>
                   <a href="#" class="fs-lg fw-500 text-white opacity-70">Learn more &gt;&gt;</a>
                   <div
@@ -131,72 +136,72 @@
       </div>
     </div>
   </v-app>
-    <!-- <video poster="./assets/img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
+  <!-- <video poster="./assets/img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
       <source src="./assets/media/video/cc.webm" type="video/webm" />
       <source src="./assets/media/video/cc.mp4" type="video/mp4" />
-    </video> -->
+  </video>-->
 </template>
 
 <script>
-import axios from "axios";
-import * as API from '../service/API'
-export default {
-  name: "login",
-  data() {
-    return {
-      isCheck: false,
-      valid: true,
-      usernameRules: [v => !!v || "Username is required !"],
-      passwordRules: [v => !!v || "Password is required !"],
-      users: { username: "", password: "" },
-      addToAPI: Function
-    };
-  },
-  mounted() {
-    let _this = this;
-    this.addToAPI = () => {
-      let newUser = {
-        username: this.users.username,
-        password: this.users.password
+  import axios from "axios";
+  import * as API from "../service/API";
+  export default {
+    name: "login",
+    data() {
+      return {
+        isCheck: false,
+        valid: true,
+        usernameRules: [v => !!v || "Username is required !"],
+        passwordRules: [v => !!v || "Password is required !"],
+        users: { username: "", password: "" },
+        addToAPI: Function
       };
-      axios({
-        method: "post",
-        url: `${API.BASEURL}/rest/login`,
-        data: newUser
-      })
-        .then(function(response) {
-          if (response.status === 200) {
-            localStorage.setItem("token", response.data);
-            localStorage.setItem("listPage", response.data.listPage);
-            _this.$router.push({
-              path: "/"
-            });
-          }
+    },
+    mounted() {
+      let _this = this;
+      this.addToAPI = () => {
+        let newUser = {
+          username: this.users.username,
+          password: this.users.password
+        };
+        axios({
+          method: "post",
+          url: `${API.BASEURL}/rest/login`,
+          data: newUser
         })
-        .catch(() => {
-          this.isCheck = true;
-        });
-    };
-  }
-};
+          .then(function(response) {
+            if (response.status === 200) {
+              localStorage.setItem("token", response.data.token);
+              localStorage.setItem("listPage", response.data.listPage);
+              _this.$router.push({
+                path: "/"
+              });
+            }
+          })
+          .catch(() => {
+            this.isCheck = true;
+          });
+      };
+    }
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3,
-.h3 {
-  font-size: 1.1875rem !important;
-}
-.btn-group-lg > .btn,
-.btn-lg {
-  font-size: unset;
-}
-.btn-danger {
-  background-color: #fd3995;
-  border-color: #fd3995;
-}
-/* .btn-primary {
-  background-color: #fd3995!important;
-  border-color: unset !important;
-} */
+  h3,
+  .h3 {
+    font-size: 1.1875rem !important;
+  }
+  .btn-group-lg > .btn,
+  .btn-lg {
+    font-size: unset;
+  }
+  .btn-danger {
+    background-color: #fd3995;
+    border-color: #fd3995;
+  }
+  /* .btn-primary {
+    background-color: #fd3995!important;
+    border-color: unset !important;
+  } */
 </style>

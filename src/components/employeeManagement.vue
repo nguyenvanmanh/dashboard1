@@ -2,45 +2,32 @@
   <v-app id="inspire">
     <v-layout>
       <v-flex>
+        <v-snackbar v-model="snackbar">
+          {{ snackbarText }}
+          <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
+        </v-snackbar>
         <v-data-table
           :headers="headersTitle"
           :items="users"
-          :search="search"
           sort-by="userId"
           class="elevation-1"
+          hide-default-footer
           data-app
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
-              <!-- Implement search bar-->
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
               <v-divider class="mx-4" inset vertical></v-divider>
-              <div class="flex-grow-1"></div>
-              <!--End searchbar-->
-              <!--Implement Active and All radio buttons-->
-              <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
-                <v-radio label="Inactive Users" value="0"></v-radio>
-                <v-radio label="Active Users" value="1"></v-radio>
-                <v-radio label="All" value="2"></v-radio>
-              </v-radio-group>
-              <!--End radio buttons-->
               <!-- User management's Edit Information Table -->
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">ADD NEW USER</v-btn>
+                  <v-icon
+                    large
+                    dark
+                    color="blue lighten-2"
+                    v-on="on"
+                    title="Add a new user."
+                  >library_add</v-icon>
                 </template>
                 <v-card>
                   <v-card-title>
@@ -64,7 +51,9 @@
                         <v-row cols="12" sm="6" md="4">
                           <v-text-field
                             v-model="editedItem.password"
-                            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                            :append-icon="
+                              show1 ? 'visibility' : 'visibility_off'
+                            "
                             :type="show1 ? 'text' : 'password'"
                             name="input-10-1"
                             label="Password"
@@ -75,7 +64,9 @@
                         <v-row cols="12" sm="6" md="4">
                           <v-text-field
                             v-model="editedItem.verified_password"
-                            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                            :append-icon="
+                              show1 ? 'visibility' : 'visibility_off'
+                            "
                             :type="show1 ? 'text' : 'password'"
                             name="input-10-1"
                             label="Verify your password "
@@ -123,250 +114,753 @@
                 </v-card>
               </v-dialog>
               <!--End  User management's Edit Information Table -->
+              <!-- Implement search bar-->
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                :label="`Search by ${searchField}`"
+                single-line
+                hide-details
+              ></v-text-field>
+              <!-- <div class="form-group has-feedback">
+                <input
+                  ref="searchInput"
+                  type="text"
+                  class="form-control"
+                  name="search"
+                  id="search"
+                  :placeholder="'search by '+ searchField"
+                  @change="searchUser()"
+                />
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+              </div>-->
+
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn dropdown-toggle"
+                  data-toggle="dropdown"
+                  title="View users"
+                >Search By</button>
+                <div class="dropdown-menu">
+                  <v-radio-group
+                    v-model="searchField"
+                    row
+                    :mandatory="false"
+                    style="margin-top: 2%"
+                  >
+                    <v-radio class="dropdown-item" label="Email" value="email"></v-radio>
+                    <v-radio class="dropdown-item" label="Name" value="name"></v-radio>
+                    <v-radio class="dropdown-item" label="Username" value="userName"></v-radio>
+                  </v-radio-group>
+                </div>
+              </div>
+
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <!--End searchbar-->
+              <!--Implement Active and All radio buttons-->
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-primary dropdown-toggle bg-trans-gradient"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  title="View users"
+                >View Users</button>
+                <div class="dropdown-menu">
+                  <v-radio-group v-model="radios" row :mandatory="false" style="margin-top: 2%">
+                    <v-radio class="dropdown-item" label="Inactive" value="0"></v-radio>
+                    <v-radio class="dropdown-item" label="Active" value="1"></v-radio>
+                    <v-radio class="dropdown-item" label="All" value="2"></v-radio>
+                  </v-radio-group>
+                </div>
+              </div>
+              <!--End radio buttons-->
             </v-toolbar>
           </template>
           <!--Action Icon-->
           <template v-slot:item.action="{ item }">
-            <v-icon v-if="item.isActivated === 1">mdi-lock-open-variant</v-icon>
-            <v-icon v-if="item.isActivated === 0 || null" @click="showDialog">mdi-lock</v-icon>
-            <v-icon @click="showDialog">mdi-account-edit-outline</v-icon>
-            <v-icon @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon
+              title="Deactivate this user."
+              v-if="item.isActivated === 1"
+              @click="showPopupForActive(item)"
+            >mdi-lock-open-variant</v-icon>
+            <v-icon
+              title="Activate this user."
+              v-if="item.isActivated === 0 || null"
+              @click="showPopupForInactive(item)"
+            >mdi-lock</v-icon>
+            <v-icon
+              title="Set department and role."
+              @click="showDialog(item)"
+            >mdi-account-edit-outline</v-icon>
+            <v-icon title="Edit user's information." @click="editItem(item)">mdi-pencil</v-icon>
           </template>
           <!-- End Action Icon-->
         </v-data-table>
+        <data-footer
+          :totalElement="totalElements"
+          :rowPerPageProps="rowPerPage"
+          v-on:updateTable="updateTable($event)"
+          :curPage="getCurPage"
+        ></data-footer>
         <!--Set Department table pop up (Icon is supervised_user_circle ) -->
-        <v-dialog v-model="dialog1" max-width="600px">
+        <v-dialog v-model="dialog1" max-width="900px">
           <v-card>
             <v-card-title>
-              <span class="headline">User's Department & Role</span>
+              <span class="headline">
+                User's Department & Role of
+                <strong>{{userNameRow}}</strong>
+              </span>
             </v-card-title>
             <v-card-text>
               <v-container id="dropdown-example">
-                <v-row>
-                  <v-col cols="12" sm="6">
-                    <p>Department</p>
-                    <v-overflow-btn
-                      class="my-2"
-                      :items="departmentName"
-                      label="Trung tâm phần mềm 1"
-                      target="#dropdown-example"
-                    ></v-overflow-btn>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <p>Role</p>
-                    <v-overflow-btn
-                      class="my-2"
-                      :items="roleName"
-                      label="Developer"
-                      target="#dropdown-example"
-                    ></v-overflow-btn>
-                  </v-col>
-                </v-row>
+                <!-- datatable start -->
+                <v-data-table
+                  :headers="dataHeader"
+                  :items="dataDptRol"
+                  hide-default-footer
+                  class="elevation-1"
+                >
+                  <template v-slot:item.action="{ item }">
+                    <a
+                      @click="deleteItem(item)"
+                      class="btn btn-sm btn-outline-danger mr-2"
+                      title="Delete Record"
+                      style="text-align: center"
+                    >
+                      <i class="fal fa-times"></i>
+                    </a>
+                  </template>
+                </v-data-table>
+              </v-container>
+              <v-container id="dropdown-example">
+                <v-simple-table>
+                  <template v-slot:default>
+                    <p>Set department & role for this user :</p>
+                    <v-row>
+                      <v-col cols="12" sm="5">
+                        <v-select
+                          v-model="selectDep"
+                          :items="listAllDepFilter"
+                          item-text="departmentName"
+                          item-value="departmentId"
+                          label="Select Department"
+                          persistent-hint
+                          return-object
+                          single-line
+                          @change="depChoice = changeDepSel(selectDep.departmentName,selectDep.departmentId)"
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="12" sm="5">
+                        <v-select
+                          v-model="selectRol"
+                          :items="listAllRole"
+                          item-text="roleName"
+                          item-value="roleId"
+                          label="Select Role"
+                          persistent-hint
+                          return-object
+                          single-line
+                          @change="rolChoice = changeRoleSel(selectRol.roleName,selectRol.roleId)"
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="12" sm="2">
+                        <button
+                          style="margin-top:10px"
+                          type="button"
+                          class="btn btn-success"
+                          @click="addDptRol()"
+                        >Add</button>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-simple-table>
               </v-container>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog1  = false">Close</v-btn>
-              <v-btn color="blue darken-1" text @click="dialog1= false">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog1 = false">Close</v-btn>
+              <v-btn color="blue darken-1" text @click="saveChoiceRole()">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <!--End Set Department table pop up-->
+        <!-- Show dialog for deactivating users -->
+        <v-dialog v-model="dialog2" max-width="400px">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>Activate User</v-card-title>
+            <p></p>
+            <v-card-text>Are you sure, you want to activate this user ?</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialog2 = false">Cancel</v-btn>
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- /.End deactivating users -->
+        <!-- Show dialog for activating users -->
+        <v-dialog v-model="dialog3" max-width="400px">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>Deactivate User</v-card-title>
+            <p></p>
+            <v-card-text>Are you sure, you want to deactivate this user ?</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialog3 = false">Cancel</v-btn>
+              <v-btn color="primary" text @click="reactivate_deactivate">I agree</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- /End activating users -->
       </v-flex>
     </v-layout>
+    <!-- <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action> -->
   </v-app>
 </template>
 <script>
-import axios from "axios";
-import * as API from "../service/API"
+  import axios from "axios";
+  import * as API from "../service/API";
+  import AlertAction from "./share/Alert";
+  import DataTable from "./share/DataTable";
+  import DataFooter from "./campaign/my-footer";
 
-export default {
-  data() {
-    return {
-      dialog: false,
-      dialog1: false,
-      modal: false,
-      check_activate: false,
-      check_inactivate: false,
-      show1: false,
-      search: "",
-      radios: "2",
-      departmentName: ['DU1','DU2','DU3','DU4','DU5','DU6','DU7','DU8','DU9','DU10','DU11','DU12'],
-      roleName: ['Admin','Manager','Teamlead','PM','BA','SA','Developer','Tester','Directer'],
-      headersTitle: [
-        {
-          text: "UserID",
-          align: "left",
-          sortable: false,
-          value: "userId"
+  export default {
+    data() {
+      return {
+        totalElements: null,
+        rowPerPage: 10,
+        item: {},
+        itemData: {},
+        dialog: false,
+        dialog1: false,
+        dialog2: false,
+        dialog3: false,
+        modal: false,
+        check_activate: false,
+        check_inactivate: false,
+        show1: false,
+        search: "",
+        radios: "2",
+        show: true,
+        typeAlert: "",
+        messageAlert: "",
+        failAlert: "none",
+        successAlert: "none",
+        dataDptRol: [],
+        headersTitle: [
+          {
+            text: "UserID",
+            align: "left",
+            sortable: false,
+            value: "id"
+          },
+          { text: "Firstname", value: "firstName" },
+          { text: "Lastname", value: "lastName" },
+          { text: "Email", value: "email" },
+          { text: "UserName", value: "username" },
+          // { text: "Password", value: "password" },
+          { text: "Date of Birth", value: "dob" },
+          // { text: "Department", value: "departmentCodeAll" },
+          // { text: "Registed Date", value: "registeredDate" },
+          // { text: "Activated Date", value: "activatedDate" },
+          // { text: "End Date", value: "endDate" },
+          { text: "Seniority", value: "seniority" },
+          { text: "Actions", value: "action", sortable: false }
+        ],
+        dataHeader: [
+          {
+            text: "Department",
+            value: "department"
+          },
+          { text: "Role", value: "role" },
+          { text: "Actions", value: "action" }
+        ],
+        searchField: "userName",
+        users: [],
+        editedIndex: -1,
+        editedItem: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          username: "",
+          password: "",
+          dob: "",
+          departmentCodeAll: "",
+          registeredDate: ""
         },
-        { text: "Firstname", value: "firstName" },
-        { text: "Lastname", value: "lastName" },
-        { text: "Email", value: "email" },
-        { text: "UserName", value: "username" },
-        // { text: "Password", value: "password" },
-        { text: "Date of Birth", value: "dob" },
-        { text: "Department", value: "departmentCodeAll" },
-        { text: "Registed Date", value: "registeredDate" },
-        // { text: "Activated Date", value: "activatedDate" },
-        // { text: "End Date", value: "endDate" },
-        { text: "Seniority", value: "seniority" },
-        { text: "Actions", value: "action", sortable: false }
-      ],
-      users: [],
-      editedIndex: -1,
-      editedItem: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        username: "",
-        password: "",
-        dob: "",
-        departmentCodeAll: "",
-        registeredDate: ""
+        defaultItem: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          username: "",
+          password: "",
+          dob: "",
+          departmentCodeAll: "",
+          registeredDate: ""
+        },
+        listDepartmentRole: [],
+        listAllRole: [],
+        listAllDep: [],
+        selectDep: [],
+        selectRol: [],
+        depChoice: "",
+        rolChoice: "",
+        oldListDepRole: [],
+        userId: "",
+        listAllDepFilter: [],
+        userNameRow: "",
+        pageChild: 1,
+        snackbar: false,
+        snackbarText: ""
+      };
+    },
+
+    mounted: {},
+
+    computed: {
+      formTitle() {
+        return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      }
+    },
+    watch: {
+      search() {
+        this.searchUser();
       },
-      defaultItem: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        username: "",
-        password: "",
-        dob: "",
-        departmentCodeAll: "",
-        registeredDate: ""
-      }
-    };
-  },
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
-  },
-  watch: {
-    dialog(val) {
-      val || this.close();
+      dialog(val) {
+        val || this.close();
+      },
+      radios: "changeUsersStatus"
     },
-    radios: "changeUsersStatus"
-  },
-  created() {
-    this.initialize();
-  },
+    created() {
+      this.initialize();
+    },
 
-  methods: {
-    // get employee's information from database by using axios
-    fetchUsers() {
-      axios
-        .get( API.BASEURL + "/rest/users/list", {
-          headers: { Authorization: localStorage.getItem("token") }
-        })
-        .then(response => {
-          this.users = response.data;
+    mounted() {
+      this.fetchAllDepartment();
+      this.fetchAllRole();
+    },
+
+    components: {
+      DataFooter,
+      DataTable
+      // AlertAction
+    },
+    methods: {
+      // get employee's information from database by using axios
+      fetchUsers() {
+        axios
+          .get(API.BASEURL + "/rest/users/list", {
+            headers: { Authorization: localStorage.getItem("token") }
+          })
+          .then(response => {
+            this.users = response.data.listUser;
+            this.totalElements = response.data.totalElements;
+          });
+      },
+      initialize() {
+        this.fetchUsers();
+      },
+      // Edit Employee's Information
+      editItem(item) {
+        this.editedIndex = this.users.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        localStorage.setItem("userId", item.userId);
+        this.dialog = true;
+      },
+      // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
+      showDialog(item) {
+        this.userId = item.id;
+        this.userNameRow = item.username;
+        // get list data of department
+        let listDataDptRol = item.listDepartmentDTO
+          .filter(item => {
+            return item.stayOrLeave === 1;
+          })
+          .map((dpm, index) => {
+            let dupDep = {
+              departmentId: dpm.id,
+              departmentName: dpm.name
+            };
+            return {
+              department: dpm.name,
+              role: dpm.roleDTO.name,
+              departmentId: dpm.id,
+              roleId: dpm.roleDTO.id
+            };
+          });
+        this.dialog1 = true;
+        this.dataDptRol = listDataDptRol;
+
+        //get list ID of Department duplicate
+        let listDepIdDup = listDataDptRol.map(item => {
+          return item.departmentId;
         });
-    },
-    initialize() {
-      this.fetchUsers();
-    },
-    // Edit Employee's Information
-    editItem(item) {
-      this.editedIndex = this.users.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      localStorage.setItem("userId", item.userId);
-      this.dialog = true;
-    },
-    // Show dialog "Set Department table pop up (Icon is supervised_user_circle )""
-    showDialog() {
-      this.dialog1 = true;
-    },
-    // Close dilog Edited employee's information
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-    // Save dialog Edited employee's information
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.users[this.editedIndex], this.editedItem);
+
+        // get all list department not duplication
+        this.listAllDepFilter = this.listAllDep
+          .filter(dep => {
+            return listDepIdDup.indexOf(dep.departmentId) == -1;
+          })
+          .map(dep => {
+            return dep;
+          });
+        /**
+         * this block of code is follow huong's request
+         * old code: this.oldListDepRole = Object.assign([], listDataDptRol);
+         */
+        // this.oldListDepRole = item.listDepartmentDTO.map((dpm, index) => {
+        //   let dupDep = {
+        //     departmentId: dpm.id,
+        //     departmentName: dpm.name
+        //   };
+        //   return {
+        //     department: dpm.name,
+        //     role: dpm.roleDTO.name,
+        //     departmentId: dpm.id,
+        //     roleId: dpm.roleDTO.id
+        //   };
+        // });
+        this.oldListDepRole = item.listDepartmentDTO;
+      },
+
+      // Show dialog to deactivate users
+      showPopupForInactive(item) {
+        this.dialog2 = true;
+        this.itemData = item;
+      },
+      // Show dialog to ctivate users
+      showPopupForActive(item) {
+        this.itemData = item;
+        this.dialog3 = true;
+      },
+      // Close dilog Edited employee's information
+      close() {
+        this.dialog = false;
+        this.listAllDepFilter = [];
+        this.selectDep = [];
+        this.selectRol = [];
+        this.depChoice = "";
+        this.oldListDepRole = [];
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1;
+        }, 300);
+      },
+      // Save dialog Edited employee's information
+      save() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.users[this.editedIndex], this.editedItem);
+          axios
+            .post(API.BASEURL + "/rest/users/edit", this.editedItem)
+            .then(response => {
+              if (response.status === 200) {
+                this.users = response.data.listUser;
+                this.typeAlert = "success";
+                this.messageAlert = "Edit Success";
+                this.show = !this.show;
+              } else {
+                this.typeAlert = "fail";
+                this.messageAlert = e.toString();
+                this.show = !this.show;
+              }
+            });
+        } else {
+          this.users.push(this.editedItem);
+          axios
+            .post(API.BASEURL + "/rest/users/add", this.editedItem)
+            .then(response => {
+              if (response.status === 200) {
+                // do not reload the page
+                this.users = response.data.listUser;
+              }
+            });
+        }
+        this.close();
+      },
+      //Active & Inactive Users Button
+      changeUsersStatus() {
+        //Active vs Inactive Users-> load corresponding data
+        let self = this;
+        //O is inactive dept
+        if (this.radios === "1") {
+          axios
+            .get(`${API.BASEURL}/rest/users/list/1`)
+
+            .then(function(response) {
+              self.users = response.data.listUser;
+            })
+            .catch(err => {
+              // eslint-disable-next-line
+            });
+        }
+        if (this.radios === "0") {
+          axios
+            .get(`${API.BASEURL}/rest/users/list/0`)
+
+            .then(function(response) {
+              // eslint-disable-next-line
+              self.users = response.data.listUser;
+            })
+
+            .catch(err => {});
+        }
+        if (this.radios === "2") {
+          axios
+            .get(`${API.BASEURL}/rest/users/list`)
+
+            .then(function(response) {
+              // eslint-disable-next-line
+              self.users = response.data.listUser;
+            })
+
+            .catch(err => {
+              // eslint-disable-next-line
+            });
+        }
+      },
+
+      fetAllListUser(page) {
         axios
-          .post( API.BASEURL+"/rest/users/edit", this.editedItem)
+          .get(
+            `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
+              page.rowPerPage
+            }`
+          )
+          .then(function(response) {
+            // eslint-disable-next-line
+            self.users = response.data.listUser;
+          })
+          .catch(err => {
+            // eslint-disable-next-line
+          });
+      },
+      //Reactivate && deactivate Users
+      reactivate_deactivate() {
+        //this.itemData.isActivated=0;
+
+        axios
+          .post(API.BASEURL + "/rest/users/activate-deactivate-user", {
+            id: this.itemData.id,
+            isActivated: this.itemData.isActivated
+          })
           .then(response => {
-            if (response.status === 200) {
-              alert(`Update user's information successfully !`);
-              window.location.reload();
-            }
+            // this.fetAllListUser({
+            //   rowPerpage: this.rowPerPage,
+            //   currentPage: this.pageChild
+            // });
           })
-          .catch(error => {
-            // eslint-disable-next-line
-            console.log(error.response);
+          .catch(err => {
+            if (err.response.status === 417) {
+              // 417 error  = must set department first
+              this.snackbarText = "user's department must set before activate";
+              this.snackbar = true;
+            }
           });
-      } else {
-        this.users.push(this.editedItem);
+        this.dialog2 = false;
+        this.dialog3 = false;
+      },
+
+      addDptRol() {
+        if (this.depChoice !== "" && this.rolChoice !== "") {
+          this.dataDptRol.push({
+            department: this.depChoice.departmentName,
+            departmentId: this.depChoice.departmentID,
+            roleId: this.rolChoice.roleId,
+            role: this.rolChoice.roleName
+          });
+
+          let idxDpm;
+          this.listAllDepFilter.map((item, index) => {
+            if (item.departmentId === this.depChoice.departmentID) {
+              idxDpm = index;
+            }
+          });
+          this.listAllDepFilter.splice(idxDpm, 1);
+          this.depChoice = "";
+        }
+      },
+
+      changeDepSel(depName, depID) {
+        return {
+          departmentID: depID,
+          departmentName: depName
+        };
+      },
+
+      changeRoleSel(rolName, rolId) {
+        return {
+          roleName: rolName,
+          roleId: rolId
+        };
+      },
+      updateTable(page) {
         axios
-          .post( API.BASEURL + "/rest/users/add", this.editedItem)
+          .get(
+            `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
+              page.rowPerPage
+            }`,
+            {
+              headers: { Authorization: localStorage.getItem("token") }
+            }
+          )
           .then(response => {
-            if (response.status === 200) {
-              alert(`Add a new user successfully !`);
-              window.location.reload();
-            }
+            this.users = response.data.listUser;
+            this.totalElements = response.data.totalElements;
           });
-      }
-      this.close();
-    },
-    //Active & Inactive Users Button
-    changeUsersStatus() {
-      //Active vs Inactive Users-> load corresponding data
-      let self = this;
-      //O is inactive dept
-      if (this.radios === "1") {
+      },
+      getCurPage(page) {
+        this.pageChild = page;
+      },
+      fetchAllDepartment() {
         axios
-          .get(`${API.BASEURL}/rest/users/list/1`)
-
-          .then(function(response) {
-            self.users = response.data;
+          .get(`${API.BASEURL}/rest/list-all-department-with/page-no=${0}&page-size=${10}`)
+          .then(response => {
+            // debugger;
+            this.listAllDep = response.data.list.map((item, index) => {
+              return {
+                departmentName: item.name,
+                departmentId: item.id
+              };
+            });
           })
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
-      if (this.radios === "0") {
+          .catch(err => {});
+      },
+
+      fetchAllRole() {
+        let page =0;
+        let size=20;
         axios
-          .get(`${API.BASEURL}/rest/users/list/0`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data;
+          .get(`${API.BASEURL}/rest/list-all-role-with/page-no=${page}&page-size=${size}`)
+          .then(response => {
+            this.listAllRole = response.data.list.map(item => {
+              return {
+                roleName: item.name,
+                roleId: item.id
+              };
+            });
           })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      }
-      if (this.radios === "2") {
+          .catch(err => {});
+      },
+      searchUser() {
+        this.search;
+        this.searchField;
         axios
-          .get(`${API.BASEURL}/rest/users/list`)
-
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data;
-          })
-
-          .catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+          .get(
+            `${API.BASEURL}/rest/users/search?nameField=${
+              this.searchField
+            }&value=${this.search}`
+          )
+          .then(res => {
+            this.users = res.data.listUser;
           });
+      },
+      saveChoiceRole() {
+        let oldlist = this.oldListDepRole.map((item, index) => {
+          return {
+            departmentId: item.id,
+            roleId: item.roleDTO.id
+          };
+        });
+        let newList = this.dataDptRol.map((item, index) => {
+          return {
+            departmentId: item.departmentId,
+            roleId: item.roleId
+          };
+        });
+        // send data to API
+        let data = {
+          userId: this.userId,
+          oldList: oldlist,
+          newList: newList
+        };
+        axios
+          .post(`${API.BASEURL}/rest/update-department-role`, data, {
+            headers: { Authorization: localStorage.getItem("token") }
+          })
+          .then(response => {
+            this.fetAllListUser({
+              rowPerpage: this.rowPerPage,
+              currentPage: this.pageChild
+            });
+          })
+          .catch(err => {});
+
+        this.dialog1 = false;
+      },
+      deleteItem(item) {
+        let index = this.dataDptRol.indexOf(item);
+        this.dataDptRol.splice(index, 1);
+        this.listAllDepFilter.push({
+          departmentName: item.department,
+          departmentId: item.departmentId
+        });
       }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.v-application .primary {
-  background-color: #1e90ff !important;
-}
+  .v-application .primary {
+    background-color: #1e90ff !important;
+  }
+  .search-form .form-group {
+    float: right !important;
+    transition: all 0.35s, border-radius 0s;
+    width: 32px;
+    height: 32px;
+    background-color: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+  }
+  .search-form .form-group input.form-control {
+    padding-right: 20px;
+    border: 0 none;
+    background: transparent;
+    box-shadow: none;
+    display: block;
+  }
+  .search-form .form-group input.form-control::-webkit-input-placeholder {
+    display: none;
+  }
+  .search-form .form-group input.form-control:-moz-placeholder {
+    /* Firefox 18- */
+    display: none;
+  }
+  .search-form .form-group input.form-control::-moz-placeholder {
+    /* Firefox 19+ */
+    display: none;
+  }
+  .search-form .form-group input.form-control:-ms-input-placeholder {
+    display: none;
+  }
+  .search-form .form-group:hover,
+  .search-form .form-group.hover {
+    width: 100%;
+    border-radius: 4px 25px 25px 4px;
+  }
+  .search-form .form-group span.form-control-feedback {
+    position: absolute;
+    top: -1px;
+    right: -2px;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    color: #3596e0;
+    left: initial;
+    font-size: 14px;
+  }
 </style>
-
