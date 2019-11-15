@@ -632,7 +632,7 @@
       fetAllListUser(page) {
         axios
           .get(
-            `${API.BASEURL}/rest/users/list?${page.currentPage}&size=${
+            `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
               page.rowPerPage
             }`
           )
@@ -723,9 +723,10 @@
       },
       fetchAllDepartment() {
         axios
-          .get(`${API.BASEURL}/rest/getAllListDepartment`)
+          .get(`${API.BASEURL}/rest/list-all-department-with/page-no=${0}&page-size=${10}`)
           .then(response => {
-            this.listAllDep = response.data.map((item, index) => {
+            // debugger;
+            this.listAllDep = response.data.list.map((item, index) => {
               return {
                 departmentName: item.name,
                 departmentId: item.id
@@ -736,10 +737,12 @@
       },
 
       fetchAllRole() {
+        let page =0;
+        let size=20;
         axios
-          .get(`${API.BASEURL}/rest/getAllListRole`)
+          .get(`${API.BASEURL}/rest/list-all-role-with/page-no=${page}&page-size=${size}`)
           .then(response => {
-            this.listAllRole = response.data.map(item => {
+            this.listAllRole = response.data.list.map(item => {
               return {
                 roleName: item.name,
                 roleId: item.id

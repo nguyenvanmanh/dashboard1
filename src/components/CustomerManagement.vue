@@ -206,8 +206,8 @@ export default {
       { name: "Name ", dataFormat: "firstName", width: "" },
       { name: "Date of Birth ", dataFormat: "dob", width: "" },
       { name: "Email", dataFormat: "email", width: "" },
-      { name: "Address", dataFormat: "address", width: "" },
-      { name: "Company", dataFormat: "company", width: "" },
+      { name: "Address", dataFormat: "address", width: "", toolTip:true },
+      { name: "Company", dataFormat: "company", width: "", toolTip:true },
       { name: "Action", dataFormat: "", width: "15" }
     ],
     firstNameInput: "",
@@ -465,7 +465,6 @@ export default {
           [this.search_type]: this.search_text
         })
         .then(response => {
-          console.log(response.data);
           this.dataCustomer = response.data.content;
           this.totalPages = response.data.totalPages;
           this.currentPage = 0;

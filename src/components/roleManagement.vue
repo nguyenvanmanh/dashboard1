@@ -30,7 +30,12 @@
             <ul>
               <li v-for="(page, index) in pages" :key="index">
                 <div>
-                  <v-checkbox :key="index" v-model="selected" :value="page" :label="page"></v-checkbox>
+                  <v-checkbox
+                    :key="index"
+                    v-model="selected"
+                    :value="page"
+                    :label="page"
+                  ></v-checkbox>
                 </div>
               </li>
             </ul>
@@ -38,8 +43,16 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogs.setRole = false" right>Close</v-btn>
-          <v-btn color="blue darken-1" text right @click="SaveDialog">Save</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialogs.setRole = false"
+            right
+            >Close</v-btn
+          >
+          <v-btn color="blue darken-1" text right @click="SaveDialog"
+            >Save</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -74,14 +87,16 @@
                       flat
                       color="grey darken-2"
                       @click="openEditRoleDialog(dataRow.row)"
-                    >edit</v-icon>
+                      >edit</v-icon
+                    >
                     <v-icon
                       dark
                       flat
                       class="mx-3"
                       color="grey darken-2"
                       @click="dialogs.setRole = true"
-                    >delete</v-icon>
+                      >delete</v-icon
+                    >
                   </td>
                 </template>
               </DataTable>
@@ -112,115 +127,115 @@
 </template>
 
 <script>
-  import * as API from "../service/API";
-  import DataTable from "./share/DataTable";
-  export default {
-    components: {
-      DataTable
-    },
-    mounted() {
-      API.getRoles().then(res => {
-        this.data = res.data;
-        this.rolePermissions = [];
-        res.data.map(item => {
-          // console.log("map");
-          API.getPagesRoleId(item.id).then(res2 => {
-            this.rolePermissions.push({
-              id: item.id,
-              listPages: res2.data
-            });
+import * as API from "../service/API";
+import DataTable from "./share/DataTable";
+export default {
+  components: {
+    DataTable
+  },
+  mounted() {
+    API.getRoles(1, 10).then(res => {
+      this.data = res.data.list;
+      this.rolePermissions = [];
+      res.data.map(item => {
+        // console.log("map");
+        API.getPagesRoleId(item.id).then(res2 => {
+          this.rolePermissions.push({
+            id: item.id,
+            listPages: res2.data
           });
         });
       });
-      API.getListPages().then(
-        res => (this.pages = res.data.map(item => item.url))
-      );
+    });
+    API.getListPages().then(
+      res => (this.pages = res.data.map(item => item.url))
+    );
+  },
+  methods: {
+    openAddRoleDialog() {
+      this.dialogs.mode = "create";
+      this.role = {};
+      this.selected = [];
     },
-    methods: {
-      openAddRoleDialog() {
-        this.dialogs.mode = "create";
-        this.role = {};
-        this.selected = [];
-      },
-      openEditRoleDialog(role) {
-        this.dialogs.mode = "edit";
-        this.dialogs.setRole = true;
-        this.role.name = role.name;
-        this.role.code = role.code;
-        this.role.id = role.id;
-        let selectedItem = this.rolePermissions.find(item => {
-          if (item.id === role.id) {
-            return item;
-          }
-        });
-        this.selected = selectedItem.listPages;
-        // console.log(this.selected);
-      },
-      SaveDialog() {
-        if (this.dialogs.mode === "edit") {
-          // TODO: API call to edit role
-        } else if (this.dialogs.mode === "create") {
-          // TODO: API call to add role
+    openEditRoleDialog(role) {
+      this.dialogs.mode = "edit";
+      this.dialogs.setRole = true;
+      this.role.name = role.name;
+      this.role.code = role.code;
+      this.role.id = role.id;
+      let selectedItem = this.rolePermissions.find(item => {
+        if (item.id === role.id) {
+          return item;
         }
-        this.dialogs.setRole = false;
-        this.dialogs.mode = null;
+      });
+      this.selected = selectedItem.listPages;
+      // console.log(this.selected);
+    },
+    SaveDialog() {
+      if (this.dialogs.mode === "edit") {
+        // TODO: API call to edit role
+      } else if (this.dialogs.mode === "create") {
+        // TODO: API call to add role
       }
-    },
-    data() {
-      return {
-        rolePermissions: [],
-        pages: [],
-        selected: [],
-        dialogs: {
-          setRole: false,
-          addRole: false,
-          mode: null
-        },
-        role: {},
-        headers: [
-          { name: "#", dataFormat: "", width: "5" },
-          { name: "id", dataFormat: "id", width: "5" },
-          { name: "Name", dataFormat: "name", width: "" },
-          { name: "Code", dataFormat: "code", width: "" },
-          { name: "Action", dataFormat: "", width: "15" }
-        ],
-        data: []
-      };
-    },
-    computed: {}
-  };
+      this.dialogs.setRole = false;
+      this.dialogs.mode = null;
+    }
+  },
+  data() {
+    return {
+      rolePermissions: [],
+      pages: [],
+      selected: [],
+      dialogs: {
+        setRole: false,
+        addRole: false,
+        mode: null
+      },
+      role: {},
+      headers: [
+        { name: "#", dataFormat: "", width: "5" },
+        { name: "id", dataFormat: "id", width: "5" },
+        { name: "Name", dataFormat: "name", width: "" },
+        { name: "Code", dataFormat: "code", width: "" },
+        { name: "Action", dataFormat: "", width: "15" }
+      ],
+      data: []
+    };
+  },
+  computed: {}
+};
 </script>
 
 <style scoped>
-  .flexs {
-    height: 30px;
-    align-self: auto;
-  }
-  .pages {
-    color: black;
-    align-self: center;
-    height: 20px;
-    margin: 0;
-    padding: 0;
-  }
-  ul li {
-    list-style: none;
-    padding: 0;
-    color: black;
-  }
-  .v-input--selection-controls,
-  .v-input--selection-controls__ripple,
-  .v-input__control div.v-input__slot {
-    padding: 0;
-    margin: 0 !important;
-  }
-  .v-messages .theme--light {
-    visibility: hidden;
-  }
-  .v-input__control {
-    height: 320px !important;
-  }
-  .v-label {
-    color: black;
-  }
+.flexs {
+  height: 30px;
+  align-self: auto;
+}
+.pages {
+  color: black;
+  align-self: center;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+}
+ul li {
+  list-style: none;
+  padding: 0;
+  color: black;
+}
+.v-input--selection-controls,
+.v-input--selection-controls__ripple,
+.v-input__control div.v-input__slot {
+  padding: 0;
+  margin: 0 !important;
+}
+.v-messages .theme--light {
+  visibility: hidden;
+}
+.v-input__control {
+  height: 320px !important;
+}
+.v-label {
+  color: black;
+}
 </style>

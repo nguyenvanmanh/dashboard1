@@ -44,8 +44,10 @@ export function deleteCampaign(id) {
   });
 }
 
-export function getRoles() {
-  return axios.get(`${BASEURL}/rest/getAllListRole`);
+export function getRoles(pageNo, pageSize) {
+  return axios.get(
+    `${BASEURL}/rest/list-all-role-with/page-no=${pageNo}&page-size=${pageSize}`
+  );
 }
 export function getListPages() {
   return axios.get(`${BASEURL}/rest/getAllListPages`);
