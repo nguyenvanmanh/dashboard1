@@ -3649,9 +3649,9 @@
     name: "dashboard",
     created() {
       if (localStorage.getItem("token")) {
-        this.$router.push({
-          path: "/"
-        });
+        // this.$router.push({
+        //   path: "/"
+        // });
       } else {
         this.$router.push({
           path: "/login"

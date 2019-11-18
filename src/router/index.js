@@ -17,7 +17,7 @@ import CustomerManagement from "../components/CustomerManagement";
 Vue.use(Router);
 
 export default new Router({
-  mode: "history",
+  // mode: "history",
   routes: [
     {
       path: "/",
