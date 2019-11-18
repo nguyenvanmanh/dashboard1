@@ -3663,7 +3663,7 @@
         localStorage.removeItem("token");
         localStorage.removeItem("listPage");
         this.listPage = "";
-        this.$router.push({ path: "login" });
+        this.$router.push({ path: "/login" });
       }
     },
     data: () => ({

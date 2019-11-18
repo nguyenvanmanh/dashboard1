@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-dialog scrollable max-width="600px" v-model="dialogs.setRole">
       <v-card>
-        <v-card-title>Set permission for this role</v-card-title>
+        <v-card-title>{{ formTitle }}</v-card-title>
         <v-card-text>
           <v-container fluid>
             <v-row>
@@ -77,8 +77,16 @@
               ></loading>-->
               <!-- datatable start -->
               <DataTable :data="data" :header="headers">
-                <template slot="#">
-                  <td>#</td>
+                <template slot="#" slot-scope="dataRow">
+                  <td>
+                    {{
+                      data
+                        .map(function(x) {
+                          return x.id;
+                        })
+                        .indexOf(dataRow.row.id)
+                    }}
+                  </td>
                 </template>
                 <template slot="Action" slot-scope="dataRow">
                   <td>
@@ -94,7 +102,7 @@
                       flat
                       class="mx-3"
                       color="grey darken-2"
-                      @click="dialogs.setRole = true"
+                      @click="deleteRole(dataRow.row)"
                       >delete</v-icon
                     >
                   </td>
@@ -118,26 +126,28 @@
       </div>
     </div>
 
-    <!-- <alert-action
+    <alert-action
       :message="messageAlert"
       :typeAlert="typeAlert"
       :show="show"
-    ></alert-action>-->
+    ></alert-action>
   </v-app>
 </template>
 
 <script>
 import * as API from "../service/API";
+import AlertAction from "./share/Alert";
 import DataTable from "./share/DataTable";
 export default {
   components: {
-    DataTable
+    DataTable,
+    AlertAction
   },
   mounted() {
     API.getRoles(1, 10).then(res => {
       this.data = res.data.list;
       this.rolePermissions = [];
-      res.data.map(item => {
+      res.data.list.map(item => {
         // console.log("map");
         API.getPagesRoleId(item.id).then(res2 => {
           this.rolePermissions.push({
@@ -154,6 +164,7 @@ export default {
   methods: {
     openAddRoleDialog() {
       this.dialogs.mode = "create";
+      this.dialogs.setRole = true;
       this.role = {};
       this.selected = [];
     },
@@ -171,11 +182,46 @@ export default {
       this.selected = selectedItem.listPages;
       // console.log(this.selected);
     },
+    deleteRole(role) {
+      API.editRole({ id: role.id, isActivated: 0 })
+        .then(res => {
+          //
+          this.data = res.data;
+        })
+        .catch(res => {
+          this.show = !this.show;
+          this.messageAlert = res.request.responseText;
+          this.typeAlert = "fail";
+        });
+    },
     SaveDialog() {
       if (this.dialogs.mode === "edit") {
         // TODO: API call to edit role
+        API.editRole(this.role)
+          .then(res => {
+            //
+            this.data = res.data;
+          })
+          .catch(res => {
+            this.show = !this.show;
+            this.messageAlert = res.request.responseText;
+            this.typeAlert = "fail";
+          });
       } else if (this.dialogs.mode === "create") {
         // TODO: API call to add role
+        API.addNewRole(this.role).then(res => {
+          let key = "Success!!!";
+          this.data = res.data[key];
+          this.rolePermissions = [];
+          this.data.map(item => {
+            API.getPagesRoleId(item.id).then(res2 => {
+              this.rolePermissions.push({
+                id: item.id,
+                listPages: res2.data
+              });
+            });
+          });
+        });
       }
       this.dialogs.setRole = false;
       this.dialogs.mode = null;
@@ -183,6 +229,9 @@ export default {
   },
   data() {
     return {
+      typeAlert: "",
+      show: false,
+      messageAlert: "",
       rolePermissions: [],
       pages: [],
       selected: [],
@@ -202,7 +251,11 @@ export default {
       data: []
     };
   },
-  computed: {}
+  computed: {
+    formTitle() {
+      return this.dialogs.mode === "edit" ? "Edit Role" : "Create Role";
+    }
+  }
 };
 </script>
 
