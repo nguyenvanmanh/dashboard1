@@ -161,7 +161,6 @@
                   </v-radio-group>
                 </div>
               </div>
-
               <v-divider class="mx-4" inset vertical></v-divider>
               <!--End searchbar-->
               <!--Implement Active and All radio buttons-->
@@ -352,7 +351,7 @@
         show1: false,
         search: "",
         radios: "2",
-        show: false,
+        show: true,
         typeAlert: "",
         messageAlert: "",
         failAlert: "none",
@@ -630,24 +629,8 @@
         }
       },
 
-      fetAllListUser(page) {
-        let self = this;
-        axios
-          .get(
-            `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
-              page.rowPerPage
-            }`
-          )
-          .then(function(response) {
-            // eslint-disable-next-line
-            self.users = response.data.listUser;
-            // this.users = response.data.listUser;
-          })
-          .catch(err => {
-            // eslint-disable-next-line
-          });
-      },
       //Reactivate && deactivate Users
+
       reactivate_deactivate() {
         //this.itemData.isActivated=0;
         axios
@@ -678,6 +661,24 @@
           });
         this.dialog2 = false;
         this.dialog3 = false;
+      },
+
+      fetAllListUser(page) {
+        let self = this;
+        axios
+          .get(
+            `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
+              page.rowPerPage
+            }`
+          )
+          .then(function(response) {
+            // eslint-disable-next-line
+            self.users = response.data.listUser;
+            // this.users = response.data.listUser;
+          })
+          .catch(err => {
+            // eslint-disable-next-line
+          });
       },
 
       addDptRol() {
@@ -714,7 +715,6 @@
         };
       },
       updateTable(page) {
-        this.rowPerPage = parseInt(page.rowPerPage);
         axios
           .get(
             `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
@@ -794,6 +794,7 @@
             roleId: item.roleId
           };
         });
+
         // send data to API
         let data = {
           userId: this.userId,
@@ -809,11 +810,88 @@
               rowPerpage: this.rowPerPage,
               currentPage: this.pageChild
             });
+            this.typeAlert = "success";
+            this.messageAlert = "Delete Success";
+            this.show = !this.show;
           })
-          .catch(err => {});
+          .catch(err => {
+            this.typeAlert = "fail";
+            this.messageAlert = err.toString();
+            this.show = !this.show;
+          });
 
         this.dialog1 = false;
       },
+      updateTable(page) {
+        this.rowPerPage = parseInt(page.rowPerPage);
+        axios
+          .get(
+            `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
+              page.rowPerPage
+            }`,
+            {
+              headers: { Authorization: localStorage.getItem("token") }
+            }
+          )
+          .then(response => {
+            this.users = response.data.listUser;
+            this.totalElements = response.data.totalElements;
+          });
+      },
+      getCurPage(page) {
+        this.pageChild = page;
+      },
+      fetchAllDepartment() {
+        axios
+          .get(
+            `${
+              API.BASEURL
+            }/rest/list-all-department-with/page-no=${0}&page-size=${10}`
+          )
+          .then(response => {
+            // debugger;
+            this.listAllDep = response.data.list.map((item, index) => {
+              return {
+                departmentName: item.name,
+                departmentId: item.id
+              };
+            });
+          })
+          .catch(err => {});
+      },
+
+      fetchAllRole() {
+        let page = 0;
+        let size = 20;
+        axios
+          .get(
+            `${
+              API.BASEURL
+            }/rest/list-all-role-with/page-no=${page}&page-size=${size}`
+          )
+          .then(response => {
+            this.listAllRole = response.data.list.map(item => {
+              return {
+                roleName: item.name,
+                roleId: item.id
+              };
+            });
+          })
+          .catch(err => {});
+      },
+
+      searchUser() {
+        axios
+          .get(
+            `${API.BASEURL}/rest/users/search?nameField=${
+              this.searchField
+            }&value=${this.search}`
+          )
+          .then(res => {
+            this.users = res.data.listUser;
+          });
+      },
+
       deleteItem(item) {
         let index = this.dataDptRol.indexOf(item);
         this.dataDptRol.splice(index, 1);
