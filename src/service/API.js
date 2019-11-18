@@ -55,3 +55,9 @@ export function getListPages() {
 export function getPagesRoleId(id) {
   return axios.get(`${BASEURL}/rest/getPagesRoleId/${id}`);
 }
+export function addNewRole(role) {
+  return axios.post(`${BASEURL}/rest/add-new-role`, role);
+}
+export function editRole(role) {
+  return axios.post(`${BASEURL}/rest/update-role-information`, role);
+}
