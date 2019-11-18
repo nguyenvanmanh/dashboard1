@@ -13,6 +13,7 @@
           class="elevation-1"
           hide-default-footer
           data-app
+          :items-per-page="rowPerPage"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -324,7 +325,7 @@
         <!-- /End activating users -->
       </v-flex>
     </v-layout>
-    <!-- <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action> -->
+    <alert-action :message="messageAlert" :typeAlert="typeAlert" :show="show"></alert-action>
   </v-app>
 </template>
 <script>
@@ -351,7 +352,7 @@
         show1: false,
         search: "",
         radios: "2",
-        show: true,
+        show: false,
         typeAlert: "",
         messageAlert: "",
         failAlert: "none",
@@ -452,8 +453,8 @@
 
     components: {
       DataFooter,
-      DataTable
-      // AlertAction
+      DataTable,
+      AlertAction
     },
     methods: {
       // get employee's information from database by using axios
@@ -649,23 +650,30 @@
       //Reactivate && deactivate Users
       reactivate_deactivate() {
         //this.itemData.isActivated=0;
-
         axios
           .post(API.BASEURL + "/rest/users/activate-deactivate-user", {
             id: this.itemData.id,
             isActivated: this.itemData.isActivated
           })
           .then(response => {
-            // this.fetAllListUser({
-            //   rowPerpage: this.rowPerPage,
-            //   currentPage: this.pageChild
-            // });
+            this.show = !this.show;
+            this.typeAlert = "success";
+            this.messageAlert =
+              (this.itemData.isActivated === 1 ? "deactived " : "Activated ") +
+              this.itemData.username;
+            this.fetAllListUser({
+              rowPerpage: this.rowPerPage,
+              currentPage: this.pageChild
+            });
           })
           .catch(err => {
             if (err.response.status === 417) {
               // 417 error  = must set department first
-              this.snackbarText = "user's department must set before activate";
-              this.snackbar = true;
+              // this.snackbarText = "user's department must set before activate";
+              // this.snackbar = true;
+              this.show = !this.show;
+              this.typeAlert = "fail";
+              this.messageAlert = "user's department must set before activate";
             }
           });
         this.dialog2 = false;
@@ -706,6 +714,7 @@
         };
       },
       updateTable(page) {
+        this.rowPerPage = parseInt(page.rowPerPage);
         axios
           .get(
             `${API.BASEURL}/rest/users/list?page=${page.currentPage}&size=${
@@ -725,7 +734,11 @@
       },
       fetchAllDepartment() {
         axios
-          .get(`${API.BASEURL}/rest/list-all-department-with/page-no=${0}&page-size=${10}`)
+          .get(
+            `${
+              API.BASEURL
+            }/rest/list-all-department-with/page-no=${0}&page-size=${10}`
+          )
           .then(response => {
             // debugger;
             this.listAllDep = response.data.list.map((item, index) => {
@@ -739,10 +752,14 @@
       },
 
       fetchAllRole() {
-        let page =0;
-        let size=20;
+        let page = 0;
+        let size = 20;
         axios
-          .get(`${API.BASEURL}/rest/list-all-role-with/page-no=${page}&page-size=${size}`)
+          .get(
+            `${
+              API.BASEURL
+            }/rest/list-all-role-with/page-no=${page}&page-size=${size}`
+          )
           .then(response => {
             this.listAllRole = response.data.list.map(item => {
               return {
@@ -754,8 +771,6 @@
           .catch(err => {});
       },
       searchUser() {
-        this.search;
-        this.searchField;
         axios
           .get(
             `${API.BASEURL}/rest/users/search?nameField=${

@@ -3649,9 +3649,9 @@
     name: "dashboard",
     created() {
       if (localStorage.getItem("token")) {
-        this.$router.push({
-          path: "/"
-        });
+        // this.$router.push({
+        //   path: "/"
+        // });
       } else {
         this.$router.push({
           path: "/login"
@@ -3663,7 +3663,7 @@
         localStorage.removeItem("token");
         localStorage.removeItem("listPage");
         this.listPage = "";
-        this.$router.push({ path: "login" });
+        this.$router.push({ path: "/login" });
       }
     },
     data: () => ({
